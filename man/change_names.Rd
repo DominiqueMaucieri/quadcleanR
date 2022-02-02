@@ -7,16 +7,16 @@
 change_names(data, labelset, from, to)
 }
 \arguments{
-\item{data}{the data frame that you want to change the name of}
+\item{data}{The data frame that you want to change the name of.}
 
-\item{labelset}{the data frame containing labels that you want to change and what you want them to be changed to}
+\item{labelset}{The data frame containing labels that you want to change and what you want them to be changed to.}
 
-\item{from}{the name of the column in the label set data frame containing the original names}
+\item{from}{The name of the column in the label set data frame containing the original names.}
 
-\item{to}{the name of the column in the label set data frame containing new names that the original names will be changed to}
+\item{to}{The name of the column in the label set data frame containing new names that the original names will be changed to.}
 }
 \value{
-a data frame containing new column names
+A data frame containing new column names.
 }
 \description{
 Using a new data frame of labels, change column names in one function
