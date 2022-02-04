@@ -1,10 +1,11 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+<!-- badges: start -->
+
+[![R-CMD-check](https://github.com/DominiqueMaucieri/quadcleanR/workflows/R-CMD-check/badge.svg)](https://github.com/DominiqueMaucieri/quadcleanR/actions)
+<!-- badges: end -->
 
 # quadcleanR
-
-<!-- badges: start -->
-<!-- badges: end -->
 
 The goal of quadcleanR is to …
 
@@ -23,7 +24,7 @@ devtools::install_github("DominiqueMaucieri/quadcleanR")
 This is a basic example which shows you how to solve a common problem:
 
 ``` r
-# library(quadcleanR)
+library(quadcleanR)
 ## basic example code
 ```
 
