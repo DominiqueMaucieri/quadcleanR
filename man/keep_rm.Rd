@@ -60,9 +60,19 @@ coral_cover <- data.frame(Sites, Transect, Acropora.sp, Gardineroseris.sp,
                          Psammocora.sp, Leptastrea.sp, Notes)
 
 #Removing Notes column
-keep_rm(coral_cover, c("Notes") , "col", FALSE, FALSE, TRUE)
+keep_rm(data = coral_cover, values = c("Notes") , select = "col",
+   keep = FALSE, drop_levels = FALSE, exact = TRUE)
 
 #Selecting site One and dropping extra levels
-Site_One <- keep_rm(coral_cover, c("One") , "row", TRUE, TRUE, TRUE, "Sites")
+Site_One <- keep_rm(data = coral_cover, values = c("One") , select = "row",
+   keep = TRUE, drop_levels = TRUE, exact = TRUE, "Sites")
 levels(Site_One$Sites)
+
+#Removing Deep sites
+Shallow_Sites <- keep_rm(data = coral_cover, values = c("-Shallow") , select ="row",
+   keep = FALSE, drop_levels = TRUE, exact = FALSE, "Transect")
+
+#Selecting only species data
+Species <- keep_rm(data = coral_cover, values = c(".sp") , select ="col",
+   keep = TRUE, drop_levels = TRUE, exact = FALSE)
 }

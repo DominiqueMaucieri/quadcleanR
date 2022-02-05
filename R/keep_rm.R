@@ -37,11 +37,21 @@
 #'                          Psammocora.sp, Leptastrea.sp, Notes)
 #'
 #'#Removing Notes column
-#'keep_rm(coral_cover, c("Notes") , "col", FALSE, FALSE, TRUE)
+#'keep_rm(data = coral_cover, values = c("Notes") , select = "col",
+#'    keep = FALSE, drop_levels = FALSE, exact = TRUE)
 #'
 #'#Selecting site One and dropping extra levels
-#'Site_One <- keep_rm(coral_cover, c("One") , "row", TRUE, TRUE, TRUE, "Sites")
+#'Site_One <- keep_rm(data = coral_cover, values = c("One") , select = "row",
+#'    keep = TRUE, drop_levels = TRUE, exact = TRUE, "Sites")
 #'levels(Site_One$Sites)
+#'
+#'#Removing Deep sites
+#'Shallow_Sites <- keep_rm(data = coral_cover, values = c("-Shallow") , select ="row",
+#'    keep = FALSE, drop_levels = TRUE, exact = FALSE, "Transect")
+#'
+#'#Selecting only species data
+#'Species <- keep_rm(data = coral_cover, values = c(".sp") , select ="col",
+#'    keep = TRUE, drop_levels = TRUE, exact = FALSE)
 
 keep_rm <- function(data, values, select, keep = TRUE, drop_levels = TRUE, exact = TRUE, colname){
 
@@ -76,6 +86,38 @@ keep_rm <- function(data, values, select, keep = TRUE, drop_levels = TRUE, exact
     }
   }
 
-  if(exact == FALSE){}
+  if(exact == FALSE){
+    if(keep == TRUE){
+      if(select == "row"){
+        values_vector <- c(values)
+        data_keep <- data[grepl(paste(values_vector,collapse="|"), data[[colname]]),]
+        if(drop_levels == TRUE) data_keep <- droplevels(data_keep)
 
+      }
+      if(select == "col"){
+        values_vector <- c(values)
+        keep_names <- colnames(data)[grepl(paste(values_vector,collapse="|"), colnames(data))]
+        data_keep <- data[,keep_names]
+        if(drop_levels == TRUE) data_keep <- droplevels(data_keep)
+
+      }
+      return(data_keep)
+    }
+    if(keep == FALSE){
+      if(select == "row"){
+        values_vector <- c(values)
+        data_rm <- data[!grepl(paste(values_vector,collapse="|"), data[[colname]]),]
+        if(drop_levels == TRUE) data_rm <- droplevels(data_rm)
+
+      }
+      if(select == "col"){
+        values_vector <- c(values)
+        keep_names <- colnames(data)[!grepl(paste(values_vector,collapse="|"), colnames(data))]
+        data_rm <- data[,keep_names]
+        if(drop_levels == TRUE) data_rm <- droplevels(data_rm)
+
+      }
+      return(data_rm)
+    }
+  }
 }

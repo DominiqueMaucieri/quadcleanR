@@ -24,3 +24,18 @@ expect_equal(length(levels(exact_rm_row$Sites)), as.integer(3))
 
 exact_rm_col <- keep_rm(coral_cover, c("Notes") , "col", FALSE, FALSE, TRUE)
 expect_equal(ncol(exact_rm_col), as.integer(6))
+
+
+partial_keep_row <- keep_rm(coral_cover, c("-Deep", 2), "row", TRUE, TRUE, FALSE, "Transect")
+expect_equal(nrow(partial_keep_row), as.integer(4))
+expect_equal(length(levels(partial_keep_row$Transect)), as.integer(2))
+
+partial_keep_col <- keep_rm(coral_cover, c(".sp", "Not"), "col", TRUE, TRUE, FALSE)
+expect_equal(ncol(partial_keep_col), as.integer(5))
+
+partial_rm_row <- keep_rm(coral_cover, c("-Shallow"), "row", FALSE, FALSE, FALSE, "Transect")
+expect_equal(nrow(partial_rm_row), as.integer(3))
+expect_equal(length(levels(partial_rm_row$Transect)), as.integer(3))
+
+partial_rm_col <- keep_rm(coral_cover, c(".sp", "Not"), "col", FALSE, FALSE, FALSE)
+expect_equal(ncol(partial_rm_col), as.integer(2))
