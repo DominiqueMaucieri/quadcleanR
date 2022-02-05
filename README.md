@@ -8,8 +8,8 @@
 [![R-CMD-check](https://github.com/DominiqueMaucieri/quadcleanR/workflows/R-CMD-check/badge.svg)](https://github.com/DominiqueMaucieri/quadcleanR/actions)
 [![Codecov test
 coverage](https://codecov.io/gh/DominiqueMaucieri/quadcleanR/branch/main/graph/badge.svg)](https://app.codecov.io/gh/DominiqueMaucieri/quadcleanR?branch=main)
-[![License:
-MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: GPL
+v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 <!-- badges: end -->
 
 ## Overview
