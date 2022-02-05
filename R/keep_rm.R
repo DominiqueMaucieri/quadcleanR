@@ -14,7 +14,7 @@
 #'    selected rows or columns to be kept. If keep == FAUSE the presence of
 #'    the `values` will cause the selected rows or columns to be removed.
 #' @param drop_levels If drop_levels == TRUE, factor levels that have been
-#'    removed will be dropped.
+#'    removed will be dropped. Only applicable when select == "row"
 #' @param exact If exact == TRUE only exact matches will be selected. If exact
 #'    == FALSE matches will be selected if they contain the characters in the
 #'    `values` vector.
@@ -64,7 +64,6 @@ keep_rm <- function(data, values, select, keep = TRUE, drop_levels = TRUE, exact
       }
       if(select == "col"){
         data_keep <- data[,values]
-        if(drop_levels == TRUE) data_keep <- droplevels(data_keep)
 
       }
       return(data_keep)
@@ -79,7 +78,6 @@ keep_rm <- function(data, values, select, keep = TRUE, drop_levels = TRUE, exact
       if(select == "col"){
         keep_names <- colnames(data)[!colnames(data) %in% values]
         data_rm <- data[,keep_names]
-        if(drop_levels == TRUE) data_rm <- droplevels(data_rm)
 
       }
       return(data_rm)
@@ -98,7 +96,6 @@ keep_rm <- function(data, values, select, keep = TRUE, drop_levels = TRUE, exact
         values_vector <- c(values)
         keep_names <- colnames(data)[grepl(paste(values_vector,collapse="|"), colnames(data))]
         data_keep <- data[,keep_names]
-        if(drop_levels == TRUE) data_keep <- droplevels(data_keep)
 
       }
       return(data_keep)
@@ -114,7 +111,6 @@ keep_rm <- function(data, values, select, keep = TRUE, drop_levels = TRUE, exact
         values_vector <- c(values)
         keep_names <- colnames(data)[!grepl(paste(values_vector,collapse="|"), colnames(data))]
         data_rm <- data[,keep_names]
-        if(drop_levels == TRUE) data_rm <- droplevels(data_rm)
 
       }
       return(data_rm)

@@ -30,7 +30,7 @@ selected rows or columns to be kept. If keep == FAUSE the presence of
 the \code{values} will cause the selected rows or columns to be removed.}
 
 \item{drop_levels}{If drop_levels == TRUE, factor levels that have been
-removed will be dropped.}
+removed will be dropped. Only applicable when select == "row"}
 
 \item{exact}{If exact == TRUE only exact matches will be selected. If exact
 == FALSE matches will be selected if they contain the characters in the
