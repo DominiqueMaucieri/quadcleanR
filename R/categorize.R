@@ -1,0 +1,77 @@
+#' @title Categorize data based on contents of a column
+#' @description Using a column within the data frame, categorize rows in a binary
+#'     of yes or no, or customize with a set of category names.
+#'
+#' @param data The data frame.
+#' @param column The column name which contains the data on which to categorize
+#'     rows.
+#' @param values The characters or parts of characters to use to classify rows.
+#' @param name The name of the now column of categories
+#' @param binary If `binary == TRUE`, the `name` column will be returned with "Yes"
+#'     denoting the presence of characters or parts of characters specified by
+#'     `values` are present in the row, while "No" denotes that there are no
+#'     characters or parts of characters specified in `values` present in the row.
+#'     If `binary ==  FALSE` there must be `categories provided` which will be used
+#'     to classify the presence of characters or parts of characters specified in
+#'     `values`.
+#' @param categories The factor names denoting the presence of the characters or
+#'     parts of characters specified by `values`. These must be specified in the
+#'     same order as the corresponding value element.
+#'
+#' @return A data frame with new categorization column
+#' @export
+#'
+#' @examples
+#' Sites <- as.factor(c("One", "One", "One", "Two", "Two", "Three"))
+#' Transect <- as.factor(c("1-Deep", "1-Shallow", "2-Shallow", "1-Shallow", "1-Deep", "1-Deep"))
+#' Acropora.sp <- c(0.1, 0.6, 0.4, 0.9, 0.2, 0.5)
+#' Gardineroseris.sp <- c(0.4, 0.9, 0.5, 0.23, 0.5, NA)
+#' Psammocora.sp <- c(0.9, 0.6, 0.5, 0.8, 0.1, 0.4)
+#' Leptastrea.sp <- c(0.5, 0.7, 0.4, 0.8, 0.2, NA)
+#' Notes <- c(NA, NA, "saw octopus", NA, "white balance corrected", NA)
+#' coral_cover <- data.frame(Sites, Transect, Acropora.sp, Gardineroseris.sp,
+#'                           Psammocora.sp, Leptastrea.sp, Notes)
+#'
+#' # Classify shallow transects in a binary column
+#' categorize(data = coral_cover, column = "Transect", values = "Shallow",
+#'     name = "Shallow", binary = TRUE)
+#'
+#' # Classify depth of transect in a new column based on transect name
+#' categorize(data = coral_cover, column = "Transect", values = c("Shallow", "Deep"),
+#'     name = "Depth", binary = FALSE, categories = c("S", "D"))
+#'
+#'
+
+categorize <- function(data, column, values, name, binary = TRUE, categories){
+
+  key_column <- match(as.factor(column), names(data))
+  num_column <- ncol(data)
+  data[[name]] <- "error"
+  values_vector <- c(values)
+
+  if(binary == TRUE){
+    for(i in 1:nrow(data)){
+      if(grepl(paste(values_vector,collapse="|"), data[[column]][i]) == TRUE) {
+        data[[name]][i] <- "Yes"} else {
+        data[[name]][i] <- "No"
+      }
+    }
+  }
+
+  if(binary == FALSE){
+    cat_vector <- c(categories)
+    for (i in 1:nrow(data)) {
+      for(j in 1:length(values_vector)){
+        if(grepl(values_vector[j], data[[column]][i]) == TRUE) {
+          data[[name]][i] <- cat_vector[j]
+        }
+      }
+    }
+  }
+
+  data[[name]] <- as.factor(data[[name]])
+  order_column <- c(1:key_column, num_column + 1, (key_column + 1):num_column)
+  data <- data[,order_column]
+
+  return(data)
+}
