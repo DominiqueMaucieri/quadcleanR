@@ -19,6 +19,6 @@ expect_warning(useable_obs(coral_cover, c("Blurry", "Unk"), print_max = TRUE),  
 test2 <- useable_obs(coral_cover, c("Blurry", "Unk"), rm_unusable = FALSE)
 expect_match(colnames(test2[9]), "unusable")
 
-test3 <- useable_obs(coral_cover, c("Blurry", "Unk"), max = TRUE, cutoff = 8)
-expect_match(nrow(test3), 4)
+# test3 <- useable_obs(coral_cover, c("Blurry", "Unk"), max = TRUE, cutoff = 8)
+# expect_match(nrow(test3), 4)
 
