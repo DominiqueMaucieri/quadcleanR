@@ -2,3 +2,6 @@ url: https://dominiquemaucieri.github.io/quadcleanR/
 template:
   bootstrap: 5
 
+deploy:
+  install_metadata: true
+
