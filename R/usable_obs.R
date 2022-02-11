@@ -4,10 +4,7 @@ useable_obs <- function(data, unusable, max = FALSE, cutoff, print_max = FALSE, 
   unusable_vector <- c(unusable)
   data[["unusable"]] <- "error"
 
-  for (i in 1:nrow(data)) {
-    data[["unusable"]][i] <- sum(data[i,colnames(data) %in% unusable_vector])
-
-  }
+  data$unusable <- rowSums(data[,colnames(data) %in% unusable_vector])
 
   if(rm_unusable == TRUE){
     data <- data[!colnames(data) %in% unusable_vector]
@@ -15,15 +12,18 @@ useable_obs <- function(data, unusable, max = FALSE, cutoff, print_max = FALSE, 
   }
   if(rm_unusable == FALSE){warning('duplication exists in the data frame')}
   if(max == TRUE){
-    data <- data[data[["unusable"]] <= cutoff,]
-
     if(print_max == TRUE){
-      data_rm <- data[data[["unusable"]] > cutoff,]
-      return(data)
+      data_rm <- data[data$unusable > cutoff,]
+      rownames(data_rm) <- NULL
       return(data_rm)
 
     }
-    return(data)
+    if(print_max == FALSE){
+      data <- data[data$unusable <= cutoff,]
+      rownames(data) <- NULL
+      return(data)
+
+    }
   }
   if(max == FALSE){
     if(print_max == TRUE){warning('no max specified')}
