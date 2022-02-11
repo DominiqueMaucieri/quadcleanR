@@ -1,5 +1,7 @@
 
-#' Title
+#' @title Extract usable observations.
+#' @description Sum columns containing unusable identified points and remove
+#'     rows that contain more than the specified cutoff of unusable points.
 #'
 #' @param data A data frame in wide format.
 #' @param unusable A vector of column names using unusable identified points.

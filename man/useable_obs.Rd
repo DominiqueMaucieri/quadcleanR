@@ -2,7 +2,7 @@
 % Please edit documentation in R/usable_obs.R
 \name{useable_obs}
 \alias{useable_obs}
-\title{Title}
+\title{Extract usable observations.}
 \usage{
 useable_obs(
   data,
@@ -39,7 +39,8 @@ A data frame of containing summed unusable points. Data frame can be
 specified if it returns data above or below a threshold of unusable points.
 }
 \description{
-Title
+Sum columns containing unusable identified points and remove
+rows that contain more than the specified cutoff of unusable points.
 }
 \examples{
 #create data set for example
