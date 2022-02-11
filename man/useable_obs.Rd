@@ -44,7 +44,8 @@ Title
 \examples{
 #create data set for example
 Sites <- as.factor(c("One", "One", "Two", "Two", "Three", "Three"))
-Transect <- as.factor(c("1-Shallow", "2-Shallow", "1-Shallow", "2-Shallow", "1-Shallow", "2-Shallow"))
+Transect <- as.factor(c("1-Shallow", "2-Shallow", "1-Shallow", "2-Shallow",
+    "1-Shallow", "2-Shallow"))
 Acropora.sp <- c(1, 2, 3, 4, 5, 6)
 Gardineroseris.sp <- c(6, 1, 2, 3, 4, 5)
 Psammocora.sp <- c(5, 6, 1, 2, 3, 4)
