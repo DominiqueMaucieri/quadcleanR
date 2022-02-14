@@ -16,7 +16,8 @@ expect_equal(test1[,7], c(5, 7, 9, 11, 7, 3))
 
 expect_warning(useable_obs(coral_cover, c("Blurry", "Unk"), print_max = TRUE),  "no max specified")
 
-test2 <- useable_obs(coral_cover, c("Blurry", "Unk"), rm_unusable = FALSE)
+expect_warning(useable_obs(coral_cover, c("Blurry", "Unk"), rm_unusable = FALSE), "duplication exists in the data frame")
+test2 <- suppressWarnings(useable_obs(coral_cover, c("Blurry", "Unk"), rm_unusable = FALSE))
 expect_match(colnames(test2[9]), "unusable")
 
 test3 <- useable_obs(coral_cover, c("Blurry", "Unk"), max = TRUE, cutoff = 8)

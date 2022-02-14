@@ -11,6 +11,9 @@ knitr::opts_chunk$set(
   fig.path = "man/figures/README-",
   out.width = "100%"
 )
+
+
+
 ```
 
 # quadcleanR
@@ -23,6 +26,7 @@ knitr::opts_chunk$set(
 
 ## Overview
 
+to do: Needs to answer what the package does, why to use it, how to use it, how to get it 
 
 ## Installation
 

@@ -14,6 +14,9 @@ v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/li
 
 ## Overview
 
+to do: Needs to answer what the package does, why to use it, how to use
+it, how to get it
+
 ## Installation
 
 ## Cheat Sheet
