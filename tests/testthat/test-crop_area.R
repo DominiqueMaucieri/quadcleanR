@@ -46,4 +46,11 @@ test3 <- crop_area(data = coral_annotations, row = "row",
 
 expect_true(nrow(test3) < nrow(test2))
 expect_true(length(unique(test3$site)) < length(unique(test2$site)))
-expect_true(length(test3$obs) < length(test2$obs))
+
+
+test4 <- crop_area(data = coral_annotations, row = "row",
+                   column = "column", id = "site", dim = c(0.5, 0.5),
+                   obs_rm = TRUE, obs_range = c(20, 30))
+
+expect_true(nrow(test4) < nrow(test1))
+expect_true(length(unique(test4$site)) < length(unique(test1$site)))
