@@ -3,6 +3,7 @@
 export(categorize)
 export(change_names)
 export(cover_calc)
+export(crop_area)
 export(keep_rm)
 export(rm_chr)
 export(useable_obs)
