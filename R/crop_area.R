@@ -204,6 +204,7 @@ crop_area <- function(data, row, column, id, dim, obs_rm = FALSE, obs_range, res
 
       }
     }
+
   }
 
   rownames(data_crop) <- NULL

@@ -20,7 +20,7 @@ label <- c(sample(x = tags, size = 100, replace = TRUE),
            sample(x = tags, size = 100, replace = TRUE),
            sample(x = tags, size = 100, replace = TRUE))
 coral_annotations <- data.frame(site, row, column, label)
-
+coral_annotations$site <- as.factor(coral_annotations$site)
 
 test1 <- crop_area(data = coral_annotations, row = "row",
                              column = "column", id = "site", dim = c(0.5, 0.5))
@@ -46,6 +46,4 @@ test3 <- crop_area(data = coral_annotations, row = "row",
 
 expect_true(nrow(test3) < nrow(test2))
 expect_true(length(unique(test3$site)) < length(unique(test2$site)))
-
-
-
+expect_true(length(test3$obs) < length(test2$obs))
