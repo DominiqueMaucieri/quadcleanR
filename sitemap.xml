@@ -28,6 +28,9 @@
     <loc>https://dominiquemaucieri.github.io/quadcleanR/reference/change_names.html</loc>
   </url>
   <url>
+    <loc>https://dominiquemaucieri.github.io/quadcleanR/reference/coral_labelset.html</loc>
+  </url>
+  <url>
     <loc>https://dominiquemaucieri.github.io/quadcleanR/reference/cover_calc.html</loc>
   </url>
   <url>
@@ -41,6 +44,15 @@
   </url>
   <url>
     <loc>https://dominiquemaucieri.github.io/quadcleanR/reference/rm_chr.html</loc>
+  </url>
+  <url>
+    <loc>https://dominiquemaucieri.github.io/quadcleanR/reference/softcoral_LQuads.html</loc>
+  </url>
+  <url>
+    <loc>https://dominiquemaucieri.github.io/quadcleanR/reference/softcoral_SQuads.html</loc>
+  </url>
+  <url>
+    <loc>https://dominiquemaucieri.github.io/quadcleanR/reference/softcoral_annotations.html</loc>
   </url>
   <url>
     <loc>https://dominiquemaucieri.github.io/quadcleanR/reference/useable_obs.html</loc>
