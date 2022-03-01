@@ -81,12 +81,31 @@ unique(SQuad_site40$Site)
 ```
 
 
-Sometimes you may not want every year and every site of the data, so you may want to subset some of them out. For this example I don't want to subset any of these out, but I will demonstrate how to subset out based on values later, when we get to the large quadrats. Now to prep for the addition of the large quadrats, I want to update the column names for this data frame. I will use a label set document, but you could also make this in r by joining a series of vectors. 
+Sometimes you may not want every year and every site of the data, so you may want to subset some of them out. For this example I don't want to subset any of these out, but I will demonstrate how to subset out based on values later, when we get to the large quadrats. 
+
+
+Now to prep for the addition of the large quadrats, I want to update the column names for this data frame. The column names are currently set as the tag shorthand used during the annotation process, but now I want them to better reflect the actual substrate names.
 
 ```{r all labelset, message=FALSE}
 
 data(coral_labelset)
+head(coral_labelset)
 
 ```
+
+This is what my label set document looks like, but you could also make this in R by joining a series of vectors. Now lets fix the column names.
+
+```{r}
+
+SQuad_colnames <- change_names(SQuad_site40, coral_labelset, "short_name", "full_name")
+names(SQuad_colnames)
+
+```
+
+Much better.
+
+
+
+
 
 

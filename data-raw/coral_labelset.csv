@@ -1,7 +1,7 @@
 ﻿short_name,full_name,functional_group
 AVRA,Avrainvillea,Algae
 Caul,Caulerpa,Algae
-CCA,Crustose_coralline_algae),Algae
+CCA,Crustose_coralline_algae,Algae
 Dict,Dictyota,Algae
 DICTY,Dictyosphaeria,Algae
 Hali,Halimeda,Algae
@@ -12,6 +12,8 @@ Pad,Padina,Algae
 Peysson,Peyssonnelia,Algae
 Turf,Turf_algae,Algae
 TURFH,Turf_algae_on_hard_substrate,Algae
+X.MOEN,Montipora_encrusting,Hard_coral
+X.MOFO,Montipora_foliose,Hard_coral
 *MOEN,Montipora_encrusting,Hard_coral
 *MOFO,Montipora_foliose,Hard_coral
 AcCor,Acropora_corymbose,Hard_coral
@@ -59,6 +61,7 @@ B_Sando,Bleached_Sandolitha,Hard_coral
 B_UnkCoral,Bleached_unknown_hard_coral,Hard_coral
 BAT,Bleached_Acropora_tabulate,Hard_coral
 BGard,Bleached_Gardineroseris,Hard_coral
+BlAcro.Cor,Bleached_Acropora_corymbose,Hard_coral
 BlAcro-Cor,Bleached_Acropora_corymbose,Hard_coral
 Blisop,Bleached_Isopora,Hard_coral
 BlTurbFol,Bleached_Turbinaria_foliose,Hard_coral
@@ -103,7 +106,7 @@ UnkCoral,unknown_hard_coral,Hard_coral
 CYAN,Cyanobacteria_films,Other
 Rubble,Broken_coral_rubble,Other
 Sand,Sand,Other
-SCRO,Substrate:_Consolidated_(hard)_Rock,Other
+SCRO,Consolidated_hard_rock,Other
 Sediment,Sediment,Other
 SHAD,Shadow,Other
 Trans,Transect_hardware,Other
