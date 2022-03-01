@@ -77,7 +77,245 @@
 
     
     
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
+<p>This vignette will walk you through cleaning up quadrat data to produce easy to analyze data frames.</p>
+<p>A little about the data:</p>
+<p>The data being cleaned will be the <code>softcoral_SQuads</code> and this vignette will build off of the cropping vignette as well. Data was collected by the Baum Lab and Kiritimati Field Teams and is the uncleaned version of data found in Maucieri and Baum 2021. Biological Conservation. The <code>softcoral_SQuads</code> data are from photo quadrats (0.9m by 0.6m) which were randomly annotated with 54 random points each, while the <code>softcoral_annotations</code> data are from photo quadrats (1m by 1m) which were randomly annotated with 100 random points each. At each of these annotated points, the substrate was identified. Photo quadrats were collected on Kiritimati Island in the Republic of Kiribati and document coral cover over time and space. The annotations and output of the data frame were produced using <a href="https://coralnet.ucsd.edu/" class="external-link">CoralNet</a> and all annotations were done manually, by trained researchers.</p>
+<p>So this vignette will follow the following steps:</p>
+<ol style="list-style-type: decimal">
+<li><p>Take the small quadrats (<code>softcoral_SQuads</code>) and show how to clean the data</p></li>
+<li><p>Then crop the large quadrat data (<code>softcoral_annotations</code>) and clean it too</p></li>
+<li><p>Join the two together to produce a large, easy to use data frame for future analyses.</p></li>
+</ol>
+<p>First lets load the package, the dplyr package, tidyr package and the data</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/DominiqueMaucieri/quadcleanR" class="external-link">quadcleanR</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span>
 
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"softcoral_SQuads"</span><span class="op">)</span></code></pre></div>
+<p>Now let me point out some unique aspects of this data:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">softcoral_SQuads</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">##   Image.ID              Image.name Annotation.status Points AcCor AcDig Acr_arb</span>
+<span class="co">## 1  1009261 KI2007_site10_Q1-10.jpg         Confirmed     54     0     0       0</span>
+<span class="co">## 2  1009252  KI2007_site10_Q1-1.jpg         Confirmed     54     0     0       0</span>
+<span class="co">## 3  1009253  KI2007_site10_Q1-2.jpg         Confirmed     54     0     0       0</span>
+<span class="co">## 4  1009254  KI2007_site10_Q1-3.jpg         Confirmed     54     0     0       0</span>
+<span class="co">## 5  1009255  KI2007_site10_Q1-4.jpg         Confirmed     54     0     0       0</span>
+<span class="co">## 6  1009256  KI2007_site10_Q1-5.jpg         Confirmed     54     0     0       0</span>
+<span class="co">##   Acrop AcroTab Astreo B_Acr_arb B_Acro B_Astre BAT B_Cosc B_Echin B_FavHal</span>
+<span class="co">## 1     0       0      0         0      0       0   0      0       0        0</span>
+<span class="co">## 2     0       0      0         0      0       0   0      0       0        0</span>
+<span class="co">## 3     0       0      0         0      0       0   0      0       0        0</span>
+<span class="co">## 4     0       0      0         0      0       0   0      0       0        0</span>
+<span class="co">## 5     0       0      0         0      0       0   0      0       0        0</span>
+<span class="co">## 6     0       0      0         0      0       0   0      0       0        0</span>
+<span class="co">##   B_Favia B_FaviaM B_FaviaS B_FaviaSt B_Favites B_FavPent B_Fung BGard B_GonEd</span>
+<span class="co">## 1       0        0        0         0         0         0      0     0       0</span>
+<span class="co">## 2       0        0        0         0         0         0      0     0       0</span>
+<span class="co">## 3       0        0        0         0         0         0      0     0       0</span>
+<span class="co">## 4       0        0        0         0         0         0      0     0       0</span>
+<span class="co">## 5       0        0        0         0         0         0      0     0       0</span>
+<span class="co">## 6       0        0        0         0         0         0      0     0       0</span>
+<span class="co">##   B_Herpo B_HYDNO B_HyExe BlAcro.Cor B_Lepta B_Lepto Blisop B_Lobo BlTurbFol</span>
+<span class="co">## 1       0       0       0          0       0       0      0      0         0</span>
+<span class="co">## 2       0       0       0          0       0       0      0      0         0</span>
+<span class="co">## 3       0       0       0          0       0       0      0      0         0</span>
+<span class="co">## 4       0       0       0          0       0       0      0      0         0</span>
+<span class="co">## 5       0       0       0          0       0       0      0      0         0</span>
+<span class="co">## 6       0       0       0          0       0       0      0      0         0</span>
+<span class="co">##   B_MOEN B_MOFO B_Monta B_Monti B_Oxyp B_Paly B_PaveDUER B_Pavona B_PEYDO</span>
+<span class="co">## 1      0      0       0       0      0      0          0        0       0</span>
+<span class="co">## 2      0      0       0       0      0      0          0        0       0</span>
+<span class="co">## 3      0      0       0       0      0      0          0        0       0</span>
+<span class="co">## 4      0      0       0       0      0      0          0        0       0</span>
+<span class="co">## 5      0      0       0       0      0      0          0        0       0</span>
+<span class="co">## 6      0      0       0       0      0      0          0        0       0</span>
+<span class="co">##   B_Plat B_PMEAN B_Pocillo B_Porit B_Psam B_PVAR B_Sando B_UnkCoral Cirr COSC</span>
+<span class="co">## 1      0       0         0       0      0      0       0          0    0    0</span>
+<span class="co">## 2      0       0         0       0      0      0       0          0    0    0</span>
+<span class="co">## 3      0       0         0       0      0      0       0          0    0    0</span>
+<span class="co">## 4      0       0         0       0      0      0       0          0    0    0</span>
+<span class="co">## 5      0       0         0       0      0      0       0          0    0    0</span>
+<span class="co">## 6      0       0         0       0      0      0       0          0    0    0</span>
+<span class="co">##   ECHIN Fav FavHal Favia FaviaM FaviaS FaviaSt FavPent Fung Gardin GonEd Herpo</span>
+<span class="co">## 1     0   0      0     0      0      0       0       0    0      0     0     0</span>
+<span class="co">## 2     0   0      0     0      0      0       0       0    0      0     0     0</span>
+<span class="co">## 3     0   0      0     0      0      0       0       0    0      0     0     0</span>
+<span class="co">## 4     0   0      0     0      0      0       0       0    0      0     0     0</span>
+<span class="co">## 5     0   0      0     0      0      0       0       0    0      0     0     0</span>
+<span class="co">## 6     0   0      0     0      0      0       0       0    0      0     0     0</span>
+<span class="co">##   HYDNO HyExe Isopora Lepta Lepto Lobo X.MOEN X.MOFO Monta Monti Oxyp Paly</span>
+<span class="co">## 1     0     0       0     0     0    0      0      0     0     0    0    0</span>
+<span class="co">## 2     0     0       0     0     0    0      0      0     0     0    0    0</span>
+<span class="co">## 3     0     0       0     0     0    0      0      0     0     0    0    0</span>
+<span class="co">## 4     0     0       0     0     0    0      0      0     0     0    0    0</span>
+<span class="co">## 5     0     0       0     0     0    0      0      0     0     0    0    0</span>
+<span class="co">## 6     0     0       0     0     0    0      0      0     0     0    0    0</span>
+<span class="co">##   PaveDUER Pavon PEYDO Plat Plero PMEAN Pocill Porit Psam PVAR Sando Tuba TURB</span>
+<span class="co">## 1        0     0     0    0     0     0      0     0    0    0     0    0    0</span>
+<span class="co">## 2        0     0     0    0     0     0      0     0    0    0     0    0    0</span>
+<span class="co">## 3        0     0     0    0     0     0      0     0    0    0     0    0    0</span>
+<span class="co">## 4        0     0     0    0     0     0      0     0    0    0     0    0    0</span>
+<span class="co">## 5        0     0     0    0     0     0      0     0    0    0     0    0    0</span>
+<span class="co">## 6        0     0     0    0     0     0      0     0    0    0     0    0    0</span>
+<span class="co">##   UnkCoral ANEM B_Clad B_Sinu Clad EncBry EUR HYDCO Hydra Mille MOBI Sarco SECO</span>
+<span class="co">## 1        0    0      0      0    0      0   0     0     0     0    0     0    0</span>
+<span class="co">## 2        0    0      0      0    0      0   0     0     0     0    0     0    0</span>
+<span class="co">## 3        0    0      0      0    0      0   0     0     0     0    0     0    0</span>
+<span class="co">## 4        0    0      0      0    0      0   0     0     0     0    0     0    0</span>
+<span class="co">## 5        0    0      0      0    0      0   0     0     0     0    0     0    0</span>
+<span class="co">## 6        0    0      0      0    0      0   0     0     0     0    0     0    0</span>
+<span class="co">##   Sinu Sponge Stylas UnkTUN XmasW ZOAN B_Sarco Sand Sediment SCRO B_Loph CYAN</span>
+<span class="co">## 1    0      0      0      0     0    0       0    0        0    0      0    0</span>
+<span class="co">## 2    0      0      0      0     0    0       0    0        0    0      0    0</span>
+<span class="co">## 3    0      0      0      0     0    0       0    0        0    0      0    0</span>
+<span class="co">## 4    0      0      0      0     0    0       0    0        0    0      0    0</span>
+<span class="co">## 5    0      0      0      0     0    0       0    0        0    0      0    0</span>
+<span class="co">## 6    0      0      0      0     0    0       0    0        0    0      0    0</span>
+<span class="co">##   Loph Rubble  SHAD Trans   Unc AVRA Caul CCA Dict DICTY Hali Lobph Macro Mdict</span>
+<span class="co">## 1    0      0 3.704     0 1.852    0    0   0    0     0    0     0     0     0</span>
+<span class="co">## 2    0      0 0.000     0 0.000    0    0   0    0     0    0     0     0     0</span>
+<span class="co">## 3    0      0 0.000     0 0.000    0    0   0    0     0    0     0     0     0</span>
+<span class="co">## 4    0      0 1.852     0 1.852    0    0   0    0     0    0     0     0     0</span>
+<span class="co">## 5    0      0 0.000     0 0.000    0    0   0    0     0    0     0     0     0</span>
+<span class="co">## 6    0      0 0.000     0 0.000    0    0   0    0     0    0     0     0     0</span>
+<span class="co">##   Pad Peysson Turf TURFH Unidentified</span>
+<span class="co">## 1   0       0    0     0       48.444</span>
+<span class="co">## 2   0       0    0     0       54.000</span>
+<span class="co">## 3   0       0    0     0       54.000</span>
+<span class="co">## 4   0       0    0     0       50.296</span>
+<span class="co">## 5   0       0    0     0       54.000</span>
+<span class="co">## 6   0       0    0     0       54.000</span></code></pre>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">softcoral_SQuads</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">##        Image.ID          Image.name Annotation.status Points AcCor AcDig</span>
+<span class="co">## 2517    1403339 KI2011_site9_Q5.jpg         Confirmed     54     0     0</span>
+<span class="co">## 2518    1403340 KI2011_site9_Q6.jpg         Confirmed     54     0     0</span>
+<span class="co">## 2519    1403341 KI2011_site9_Q7.jpg         Confirmed     54     0     0</span>
+<span class="co">## 2520    1403342 KI2011_site9_Q8.jpg         Confirmed     54     0     0</span>
+<span class="co">## 2521    1403343 KI2011_site9_Q9.jpg         Confirmed     54     0     0</span>
+<span class="co">## 2522 ALL IMAGES                                           NA     0     0</span>
+<span class="co">##      Acr_arb Acrop AcroTab Astreo B_Acr_arb B_Acro B_Astre BAT B_Cosc B_Echin</span>
+<span class="co">## 2517       0     0       0      0         0      0       0   0      0       0</span>
+<span class="co">## 2518       0     0       0      0         0      0       0   0      0       0</span>
+<span class="co">## 2519       0     0       0      0         0      0       0   0      0       0</span>
+<span class="co">## 2520       0     0       0      0         0      0       0   0      0       0</span>
+<span class="co">## 2521       0     0       0      0         0      0       0   0      0       0</span>
+<span class="co">## 2522       0     0       0      0         0      0       0   0      0       0</span>
+<span class="co">##      B_FavHal B_Favia B_FaviaM B_FaviaS B_FaviaSt B_Favites B_FavPent B_Fung</span>
+<span class="co">## 2517        0       0        0        0         0         0         0      0</span>
+<span class="co">## 2518        0       0        0        0         0         0         0      0</span>
+<span class="co">## 2519        0       0        0        0         0         0         0      0</span>
+<span class="co">## 2520        0       0        0        0         0         0         0      0</span>
+<span class="co">## 2521        0       0        0        0         0         0         0      0</span>
+<span class="co">## 2522        0       0        0        0         0         0         0      0</span>
+<span class="co">##      BGard B_GonEd B_Herpo B_HYDNO B_HyExe BlAcro.Cor B_Lepta B_Lepto Blisop</span>
+<span class="co">## 2517     0       0       0       0       0          0       0       0      0</span>
+<span class="co">## 2518     0       0       0       0       0          0       0       0      0</span>
+<span class="co">## 2519     0       0       0       0       0          0       0       0      0</span>
+<span class="co">## 2520     0       0       0       0       0          0       0       0      0</span>
+<span class="co">## 2521     0       0       0       0       0          0       0       0      0</span>
+<span class="co">## 2522     0       0       0       0       0          0       0       0      0</span>
+<span class="co">##      B_Lobo BlTurbFol B_MOEN B_MOFO B_Monta B_Monti B_Oxyp B_Paly B_PaveDUER</span>
+<span class="co">## 2517      0         0      0      0       0       0      0      0          0</span>
+<span class="co">## 2518      0         0      0      0       0       0      0      0          0</span>
+<span class="co">## 2519      0         0      0      0       0       0      0      0          0</span>
+<span class="co">## 2520      0         0      0      0       0       0      0      0          0</span>
+<span class="co">## 2521      0         0      0      0       0       0      0      0          0</span>
+<span class="co">## 2522      0         0      0      0       0       0      0      0          0</span>
+<span class="co">##      B_Pavona B_PEYDO B_Plat B_PMEAN B_Pocillo B_Porit B_Psam B_PVAR B_Sando</span>
+<span class="co">## 2517        0       0      0       0         0       0      0      0       0</span>
+<span class="co">## 2518        0       0      0       0         0       0      0      0       0</span>
+<span class="co">## 2519        0       0      0       0         0       0      0      0       0</span>
+<span class="co">## 2520        0       0      0       0         0       0      0      0       0</span>
+<span class="co">## 2521        0       0      0       0         0       0      0      0       0</span>
+<span class="co">## 2522        0       0      0       0         0       0      0      0       0</span>
+<span class="co">##      B_UnkCoral Cirr COSC ECHIN Fav FavHal Favia FaviaM FaviaS FaviaSt FavPent</span>
+<span class="co">## 2517          0    0    0     0   0      0     0      0      0       0       0</span>
+<span class="co">## 2518          0    0    0     0   0      0     0      0      0       0       0</span>
+<span class="co">## 2519          0    0    0     0   0      0     0      0      0       0       0</span>
+<span class="co">## 2520          0    0    0     0   0      0     0      0      0       0       0</span>
+<span class="co">## 2521          0    0    0     0   0      0     0      0      0       0       0</span>
+<span class="co">## 2522          0    0    0     0   0      0     0      0      0       0       0</span>
+<span class="co">##      Fung Gardin GonEd Herpo HYDNO HyExe Isopora Lepta Lepto Lobo X.MOEN X.MOFO</span>
+<span class="co">## 2517    0      0     0     0     0     0       0     0     0    0      0      0</span>
+<span class="co">## 2518    0      0     0     0     0     0       0     0     0    0      0      0</span>
+<span class="co">## 2519    0      0     0     0     0     0       0     0     0    0      0      0</span>
+<span class="co">## 2520    0      0     0     0     0     0       0     0     0    0      0      0</span>
+<span class="co">## 2521    0      0     0     0     0     0       0     0     0    0      0      0</span>
+<span class="co">## 2522    0      0     0     0     0     0       0     0     0    0      0      0</span>
+<span class="co">##      Monta Monti Oxyp Paly PaveDUER Pavon PEYDO Plat Plero PMEAN Pocill Porit</span>
+<span class="co">## 2517     0     0    0    0        0     0     0    0     0     0      0     0</span>
+<span class="co">## 2518     0     0    0    0        0     0     0    0     0     0      0     0</span>
+<span class="co">## 2519     0     0    0    0        0     0     0    0     0     0      0     0</span>
+<span class="co">## 2520     0     0    0    0        0     0     0    0     0     0      0     0</span>
+<span class="co">## 2521     0     0    0    0        0     0     0    0     0     0      0     0</span>
+<span class="co">## 2522     0     0    0    0        0     0     0    0     0     0      0     0</span>
+<span class="co">##      Psam PVAR Sando Tuba TURB UnkCoral ANEM B_Clad B_Sinu Clad EncBry EUR</span>
+<span class="co">## 2517    0    0     0    0    0        0    0      0      0    0      0   0</span>
+<span class="co">## 2518    0    0     0    0    0        0    0      0      0    0      0   0</span>
+<span class="co">## 2519    0    0     0    0    0        0    0      0      0    0      0   0</span>
+<span class="co">## 2520    0    0     0    0    0        0    0      0      0    0      0   0</span>
+<span class="co">## 2521    0    0     0    0    0        0    0      0      0    0      0   0</span>
+<span class="co">## 2522    0    0     0    0    0        0    0      0      0    0      0   0</span>
+<span class="co">##      HYDCO Hydra Mille MOBI Sarco SECO Sinu Sponge Stylas UnkTUN XmasW ZOAN</span>
+<span class="co">## 2517     0     0     0    0     0    0    0      0      0      0     0    0</span>
+<span class="co">## 2518     0     0     0    0     0    0    0      0      0      0     0    0</span>
+<span class="co">## 2519     0     0     0    0     0    0    0      0      0      0     0    0</span>
+<span class="co">## 2520     0     0     0    0     0    0    0      0      0      0     0    0</span>
+<span class="co">## 2521     0     0     0    0     0    0    0      0      0      0     0    0</span>
+<span class="co">## 2522     0     0     0    0     0    0    0      0      0      0     0    0</span>
+<span class="co">##      B_Sarco Sand Sediment SCRO B_Loph CYAN Loph Rubble SHAD Trans Unc AVRA</span>
+<span class="co">## 2517       0    0        0    0      0    0    0      0    0 5.556   0    0</span>
+<span class="co">## 2518       0    0        0    0      0    0    0      0    0 5.556   0    0</span>
+<span class="co">## 2519       0    0        0    0      0    0    0      0    0 1.852   0    0</span>
+<span class="co">## 2520       0    0        0    0      0    0    0      0    0 0.000   0    0</span>
+<span class="co">## 2521       0    0        0    0      0    0    0      0    0 0.000   0    0</span>
+<span class="co">## 2522       0    0        0    0      0    0    0      0    0 0.000   0    0</span>
+<span class="co">##      Caul CCA Dict DICTY Hali Lobph Macro Mdict Pad Peysson Turf TURFH</span>
+<span class="co">## 2517    0   0    0     0    0     0     0     0   0       0    0     0</span>
+<span class="co">## 2518    0   0    0     0    0     0     0     0   0       0    0     0</span>
+<span class="co">## 2519    0   0    0     0    0     0     0     0   0       0    0     0</span>
+<span class="co">## 2520    0   0    0     0    0     0     0     0   0       0    0     0</span>
+<span class="co">## 2521    0   0    0     0    0     0     0     0   0       0    0     0</span>
+<span class="co">## 2522    0   0    0     0    0     0     0     0   0       0    0     0</span>
+<span class="co">##      Unidentified</span>
+<span class="co">## 2517       48.444</span>
+<span class="co">## 2518       48.444</span>
+<span class="co">## 2519       52.148</span>
+<span class="co">## 2520       54.000</span>
+<span class="co">## 2521       54.000</span>
+<span class="co">## 2522       54.000</span></code></pre>
+<p>This data as an <code>Image.ID</code> column which was arbitrarily added to this data set, so we are going to remove that as it holds no scientific value. There is also a final row which sums all quadrats but since we will be removing quadrats and points to clean these data up, we will remove that final row as well. The <code>Image.name</code> column is the unique ID for each photo quadrat, but it is very messy and not easy to use, so we will make this into new columns and add more information. <code>Annotation.status</code> is a column from <a href="https://coralnet.ucsd.edu/" class="external-link">CoralNet</a> which tells if the annotations in each photo quadrat have been confirmed by human researchers or are only based on AI. The <code>Points</code> column tells us how many randomly annotated points there are in each quadrat, and since they are all 54, we know these data are from the smaller quadrats. The rest of the columns are the different coral and substrate IDs and how many points where annotated for each tag in each photo.</p>
+<p>So first, lets remove unneeded columns and make sure we are only working with “Confirmed” annotations.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">SQuad_confirmed</span> <span class="op">&lt;-</span> <span class="va">softcoral_SQuads</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Annotation.status</span> <span class="op">==</span> <span class="st">"Confirmed"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">Image.ID</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p>Now we will separate the <code>Image.name</code> column into more descriptive columns.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">SQuad_separated</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/separate.html" class="external-link">separate</a></span><span class="op">(</span><span class="va">SQuad_confirmed</span>, <span class="va">Image.name</span>, sep<span class="op">=</span><span class="st">"_"</span>, into<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Field.Season"</span>, <span class="st">"Site"</span>,<span class="st">"Quadrat"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p>There will be 3 rows with discarded pieces because the quadrats have an _ in them, but that is okay, they will still be unique quadrat names so we don’t need to worry about that. But if you notice, there are still .jpg and .jpeg in the quadrat names, so lets remove those, and change the naming of siteT19 to site40</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">SQuad_nojpg</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rm_chr.html">rm_chr</a></span><span class="op">(</span><span class="va">SQuad_separated</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">".jpg"</span>, <span class="st">".jpeg"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">SQuad_site40</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/change_values.html">change_values</a></span><span class="op">(</span><span class="va">SQuad_nojpg</span>, <span class="st">"Site"</span>, <span class="st">"siteT19"</span>, <span class="st">"site40"</span><span class="op">)</span></code></pre></div>
+<p>Now lets look at the levels of some of my columns.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">SQuad_site40</span><span class="op">$</span><span class="va">Field.Season</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## [1] "KI2007" "KI2009" "KI2010" "KI2011"</span></code></pre>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">SQuad_site40</span><span class="op">$</span><span class="va">Site</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">##  [1] "site10" "site11" "site12" "site13" "site14" "site15" "site16" "site17"</span>
+<span class="co">##  [9] "site18" "site19" "site1"  "site20" "site21" "site22" "site23" "site24"</span>
+<span class="co">## [17] "site25" "site26" "site27" "site28" "site29" "site2"  "site30" "site31"</span>
+<span class="co">## [25] "site32" "site33" "site34" "site35" "site36" "site37" "site3"  "site4" </span>
+<span class="co">## [33] "site5"  "site6"  "site7"  "site8"  "site9"  "site38" "site39" "site40"</span></code></pre>
+<p>Sometimes you may not want every year and every site of the data, so you may want to subset some of them out. For this example I don’t want to subset any of these out, but I will demonstrate how to subset out based on values later, when we get to the large quadrats. Now to prep for the addition of the large quadrats, I want to update the column names for this data frame. I will use a label set document, but you could also make this in r by joining a series of vectors.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">coral_labelset</span><span class="op">)</span></code></pre></div>
+</div>
   </main>
 </div>
 
