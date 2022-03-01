@@ -1,7 +1,5 @@
-## code to prepare `DATASET` dataset goes here
 
 library(here)
-library(readxl)
 
 softcoral_annotations <- read.csv(here::here("data-raw", "softcoral_annotations.csv"))
 
@@ -21,7 +19,7 @@ usethis::use_data(softcoral_SQuads, overwrite = TRUE,
                   compress = "xz")
 
 
-coral_labelset <- read_excel(here::here("data-raw", "coral_labelset.xlsx"))
+coral_labelset <- read.csv(here::here("data-raw", "coral_labelset.csv"))
 
 usethis::use_data(coral_labelset, overwrite = TRUE,
                   compress = "xz")
