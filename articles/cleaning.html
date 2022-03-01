@@ -312,9 +312,91 @@
 <span class="co">## [17] "site25" "site26" "site27" "site28" "site29" "site2"  "site30" "site31"</span>
 <span class="co">## [25] "site32" "site33" "site34" "site35" "site36" "site37" "site3"  "site4" </span>
 <span class="co">## [33] "site5"  "site6"  "site7"  "site8"  "site9"  "site38" "site39" "site40"</span></code></pre>
-<p>Sometimes you may not want every year and every site of the data, so you may want to subset some of them out. For this example I don’t want to subset any of these out, but I will demonstrate how to subset out based on values later, when we get to the large quadrats. Now to prep for the addition of the large quadrats, I want to update the column names for this data frame. I will use a label set document, but you could also make this in r by joining a series of vectors.</p>
+<p>Sometimes you may not want every year and every site of the data, so you may want to subset some of them out. For this example I don’t want to subset any of these out, but I will demonstrate how to subset out based on values later, when we get to the large quadrats.</p>
+<p>Now to prep for the addition of the large quadrats, I want to update the column names for this data frame. The column names are currently set as the tag shorthand used during the annotation process, but now I want them to better reflect the actual substrate names.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">coral_labelset</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">coral_labelset</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">coral_labelset</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">##   short_name                full_name functional_group</span>
+<span class="co">## 1       AVRA             Avrainvillea            Algae</span>
+<span class="co">## 2       Caul                 Caulerpa            Algae</span>
+<span class="co">## 3        CCA Crustose_coralline_algae            Algae</span>
+<span class="co">## 4       Dict                 Dictyota            Algae</span>
+<span class="co">## 5      DICTY           Dictyosphaeria            Algae</span>
+<span class="co">## 6       Hali                 Halimeda            Algae</span></code></pre>
+<p>This is what my label set document looks like, but you could also make this in R by joining a series of vectors. Now lets fix the column names.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">SQuad_colnames</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/change_names.html">change_names</a></span><span class="op">(</span><span class="va">SQuad_site40</span>, <span class="va">coral_labelset</span>, <span class="st">"short_name"</span>, <span class="st">"full_name"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">SQuad_colnames</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">##   [1] "Field.Season"                   "Site"                          </span>
+<span class="co">##   [3] "Quadrat"                        "Annotation.status"             </span>
+<span class="co">##   [5] "Points"                         "Acropora_corymbose"            </span>
+<span class="co">##   [7] "Acropora_digitate"              "Acropora_arborescent"          </span>
+<span class="co">##   [9] "Acropora"                       "Acropora_tabulate"             </span>
+<span class="co">##  [11] "Astreopora"                     "Bleached_Acropora_arborescent" </span>
+<span class="co">##  [13] "Bleached_Acropora"              "Bleached_Astreopora"           </span>
+<span class="co">##  [15] "Bleached_Acropora_tabulate"     "Bleached_Coscinarea"           </span>
+<span class="co">##  [17] "Bleached_Echinophyllia"         "Bleached_Favites_halicora"     </span>
+<span class="co">##  [19] "Bleached_Favia"                 "Bleached_Favia_matthai"        </span>
+<span class="co">##  [21] "Bleached_Favia_speciosa"        "Bleached_Goniastrea_stelligera"</span>
+<span class="co">##  [23] "Bleached_Favites"               "Bleached_Favites_pentagona"    </span>
+<span class="co">##  [25] "Bleached_Fungia"                "Bleached_Gardineroseris"       </span>
+<span class="co">##  [27] "Bleached_Goniastrea_edwardsi"   "Bleached_Herpolitha"           </span>
+<span class="co">##  [29] "Bleached_Hydnophora"            "Bleached_Hydnophora_exesa"     </span>
+<span class="co">##  [31] "Bleached_Acropora_corymbose"    "Bleached_Leptastrea"           </span>
+<span class="co">##  [33] "Bleached_Leptoseris"            "Bleached_Isopora"              </span>
+<span class="co">##  [35] "Bleached_Lobophyllia"           "Bleached_Turbinaria_foliose"   </span>
+<span class="co">##  [37] "Bleached_Montipora_encrusting"  "Bleached_Montipora_foliose"    </span>
+<span class="co">##  [39] "Bleached_Montastraea"           "Bleached_Montipora"            </span>
+<span class="co">##  [41] "Bleached_Oxypora"               "Bleached_Palythoa"             </span>
+<span class="co">##  [43] "Bleached_Pavona_duerdeni"       "Bleached_Pavona"               </span>
+<span class="co">##  [45] "Bleached_Pocillopora_eydouxi"   "Bleached_Platygyra"            </span>
+<span class="co">##  [47] "Bleached_Pocillopora_meandrina" "Bleached_Pocillopora"          </span>
+<span class="co">##  [49] "Bleached_Porites"               "Bleached_Psammocora"           </span>
+<span class="co">##  [51] "Bleached_Pavona_varians"        "Bleached_Sandolitha"           </span>
+<span class="co">##  [53] "Bleached_unknown_hard_coral"    "Cirrhipathes"                  </span>
+<span class="co">##  [55] "Coscinaraea"                    "Echinophyllia"                 </span>
+<span class="co">##  [57] "Favites"                        "Favites_halicora"              </span>
+<span class="co">##  [59] "Favia"                          "Dipsastraea_matthai"           </span>
+<span class="co">##  [61] "Favia_speciosa"                 "Favia_stelligera"              </span>
+<span class="co">##  [63] "Favites_pentagona"              "Fungia"                        </span>
+<span class="co">##  [65] "Gardineroseris"                 "Goniastrea_edwardsi"           </span>
+<span class="co">##  [67] "Herpolitha"                     "Hydnophora"                    </span>
+<span class="co">##  [69] "Hydnophora_exesa"               "Isopora"                       </span>
+<span class="co">##  [71] "Leptastrea"                     "Leptoseris"                    </span>
+<span class="co">##  [73] "Lobophyllia"                    "Montipora_encrusting"          </span>
+<span class="co">##  [75] "Montipora_foliose"              "Montastraea"                   </span>
+<span class="co">##  [77] "Montipora"                      "Oxypora"                       </span>
+<span class="co">##  [79] "Palythoa"                       "Pavona_duerdeni"               </span>
+<span class="co">##  [81] "Pavona"                         "Pocillopora_eydouxi"           </span>
+<span class="co">##  [83] "Platygyra"                      "Plerogyra"                     </span>
+<span class="co">##  [85] "Pocillopora_meandrina"          "Pocillopora"                   </span>
+<span class="co">##  [87] "Porites"                        "Psammocora"                    </span>
+<span class="co">##  [89] "Pavona_varians"                 "Sandolitha"                    </span>
+<span class="co">##  [91] "Tubastrea"                      "Turbinaria"                    </span>
+<span class="co">##  [93] "unknown_hard_coral"             "Sea_anemone"                   </span>
+<span class="co">##  [95] "Bleached_Cladiella"             "Bleached_Sinularia"            </span>
+<span class="co">##  [97] "Cladiella"                      "Encrusting_Bryozoan"           </span>
+<span class="co">##  [99] "Sea_urchin"                     "Hydrocoral"                    </span>
+<span class="co">## [101] "Hydroid"                        "Millepora"                     </span>
+<span class="co">## [103] "Bivalves"                       "Sarcophyton"                   </span>
+<span class="co">## [105] "Sea_cucumber"                   "Sinularia"                     </span>
+<span class="co">## [107] "Sponge"                         "Stylaster"                     </span>
+<span class="co">## [109] "Unknown_Tunicate"               "Christmas_Tree_Worm"           </span>
+<span class="co">## [111] "Zoanthid"                       "Bleached_Sarcophyton"          </span>
+<span class="co">## [113] "Sand"                           "Sediment"                      </span>
+<span class="co">## [115] "Consolidated_hard_rock"         "Bleached_Lobophytum"           </span>
+<span class="co">## [117] "Cyanobacteria_films"            "Lobophytum"                    </span>
+<span class="co">## [119] "Broken_coral_rubble"            "Shadow"                        </span>
+<span class="co">## [121] "Transect_hardware"              "Unclear"                       </span>
+<span class="co">## [123] "Avrainvillea"                   "Caulerpa"                      </span>
+<span class="co">## [125] "Crustose_coralline_algae"       "Dictyota"                      </span>
+<span class="co">## [127] "Dictyosphaeria"                 "Halimeda"                      </span>
+<span class="co">## [129] "Lobophora"                      "Macroalgae"                    </span>
+<span class="co">## [131] "Microdictyon"                   "Padina"                        </span>
+<span class="co">## [133] "Peyssonnelia"                   "Turf_algae"                    </span>
+<span class="co">## [135] "Turf_algae_on_hard_substrate"   "Unidentified"</span></code></pre>
+<p>Much better.</p>
 </div>
   </main>
 </div>
