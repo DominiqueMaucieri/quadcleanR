@@ -95,28 +95,43 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/DominiqueMaucieri/quadcleanR" class="external-link">quadcleanR</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="randomized-data">Randomized Data<a class="anchor" aria-label="anchor" href="#randomized-data"></a>
+</h2>
+<p>First we will start by randomizing data to help illustrate what is going on here. In this example we will randomize 4 quadrats of data. These quadrats will each have 100 identifications within them, each with a random row and column location. We will set the quadrat size as being within a 2000x2000 pixel quadrat, and randomly identify each identification as one of 4 soft coral genera: Cladiella, Sinularia, Sarcophyton and Lobophytum.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#Creating the data file</span>
-<span class="va">tags</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Clad"</span>, <span class="st">"Sinu"</span>, <span class="st">"Sarco"</span>, <span class="st">"Loph"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="co">#Creating a vector of the soft coral genera</span>
+<span class="va">tags</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Cladiella"</span>, <span class="st">"Sinularia"</span>, <span class="st">"Sarcophyton"</span>, <span class="st">"Lobophytum"</span><span class="op">)</span>
 
+<span class="co">#Creating a vector of quadrat names</span>
 <span class="va">rep</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Q1"</span>, times <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>,
-          <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Q1"</span>, times <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>,
-          <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Q1"</span>, times <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>,
-          <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Q1"</span>, times <span class="op">=</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span>
-<span class="va">row</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2000</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">100</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
-         <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2000</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">100</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
-         <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2000</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">100</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
-         <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2000</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">100</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
-<span class="va">column</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2000</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">100</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
-            <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2000</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">100</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
-            <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2000</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">100</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
-            <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2000</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">100</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
+          <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Q2"</span>, times <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>,
+          <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Q3"</span>, times <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>,
+          <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Q4"</span>, times <span class="op">=</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span>
+
+<span class="co">#Creating a vector of randomized row locations</span>
+<span class="va">row</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">2000</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">100</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
+         <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">2000</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">100</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
+         <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">2000</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">100</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
+         <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">2000</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">100</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
+
+<span class="co">#Creating a vector of randomized column locations</span>
+<span class="va">column</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">2000</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">100</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
+            <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">2000</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">100</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
+            <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">2000</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">100</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
+            <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">2000</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">100</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
+
+<span class="co">#Creating a vector of randomized identification labels</span>
 <span class="va">label</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">tags</span>, size <span class="op">=</span> <span class="fl">100</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
            <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">tags</span>, size <span class="op">=</span> <span class="fl">100</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
            <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">tags</span>, size <span class="op">=</span> <span class="fl">100</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
            <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">tags</span>, size <span class="op">=</span> <span class="fl">100</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
+
+<span class="co">#Joining vectors into a data frame</span>
 <span class="va">coral_annotations</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">rep</span>, <span class="va">row</span>, <span class="va">column</span>, <span class="va">label</span><span class="op">)</span>
 
+<span class="co">#Plotting each quadrat</span>
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">coral_annotations</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>,<span class="op">]</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">column</span>, y <span class="op">=</span> <span class="va">row</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_classic</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
@@ -136,100 +151,292 @@
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_classic</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">""</span>, x <span class="op">=</span> <span class="st">""</span>, title <span class="op">=</span> <span class="st">"Quadrat 4"</span><span class="op">)</span></code></pre></div>
-<p><img src="cropping_files/figure-html/create%20data%20set-1.png" width="45%"><img src="cropping_files/figure-html/create%20data%20set-2.png" width="45%"><img src="cropping_files/figure-html/create%20data%20set-3.png" width="45%"><img src="cropping_files/figure-html/create%20data%20set-4.png" width="45%"></p>
+<p><img src="cropping_files/figure-html/randomized%20data-1.png" width="45%"><img src="cropping_files/figure-html/randomized%20data-2.png" width="45%"><img src="cropping_files/figure-html/randomized%20data-3.png" width="45%"><img src="cropping_files/figure-html/randomized%20data-4.png" width="45%"></p>
+<p>These plots show where each identification was randomly placed within our quadrats. Now we will crop this area to 50% of the original length and width. There are two ways of doing this, the first, if we know haw large each quadrat is, we can specify this exact size, or estimate based on the maximum row and column locations.</p>
+<p>First we will examine this by just estimating the size:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># crop_area_coral &lt;- crop_area(data = coral_annotations, row = "row",</span>
-<span class="co">#                              column = "column", id = "site", dim = c(0.5, 0.5))</span>
-<span class="co"># </span>
-<span class="co"># site_1 &lt;- subset(crop_area_coral, site == "Site1")</span>
-<span class="co"># site_2 &lt;- subset(crop_area_coral, site == "Site2")</span>
-<span class="co"># site_3 &lt;- subset(crop_area_coral, site == "Site3")</span>
-<span class="co"># site_4 &lt;- subset(crop_area_coral, site == "Site4")</span>
-<span class="co"># </span>
-<span class="co"># plot(x = coral_annotations$column[1:100], y = coral_annotations$row[1:100],</span>
-<span class="co">#      ylab = "", xlab = "", main = "Site1") +</span>
-<span class="co">#   points(site_1$column, site_1$row, col = "red") +</span>
-<span class="co">#   polygon(x = c(0, 0, 0.5*max(coral_annotations$column[1:100]),</span>
-<span class="co">#                 0.5*max(coral_annotations$column[1:100])),</span>
-<span class="co">#          y = c(0, 0.5*max(coral_annotations$row[1:100]),</span>
-<span class="co">#                 0.5*max(coral_annotations$row[1:100]), 0),</span>
-<span class="co">#           border = "red",</span>
-<span class="co">#           lwd = 2)</span>
-<span class="co"># plot(x = coral_annotations$column[101:200], y = coral_annotations$row[101:200],</span>
-<span class="co">#      ylab = "", xlab = "", main = "Site2") +</span>
-<span class="co">#   points(site_2$column, site_2$row, col = "red") +</span>
-<span class="co">#   polygon(x = c(0, 0, 0.5*max(coral_annotations$column[101:200]),</span>
-<span class="co">#                 0.5*max(coral_annotations$column[101:200])),</span>
-<span class="co">#           y = c(0, 0.5*max(coral_annotations$row[101:200]),</span>
-<span class="co">#                 0.5*max(coral_annotations$row[101:200]), 0),</span>
-<span class="co">#           border = "red",</span>
-<span class="co">#           lwd = 2)</span>
-<span class="co"># plot(x = coral_annotations$column[201:300], y = coral_annotations$row[201:300],</span>
-<span class="co">#      ylab = "", xlab = "", main = "Site3") +</span>
-<span class="co">#   points(site_3$column, site_3$row, col = "red") +</span>
-<span class="co">#   polygon(x = c(0, 0, 0.5*max(coral_annotations$column[201:300]),</span>
-<span class="co">#                 0.5*max(coral_annotations$column[201:300])),</span>
-<span class="co">#           y = c(0, 0.5*max(coral_annotations$row[201:300]),</span>
-<span class="co">#                 0.5*max(coral_annotations$row[201:300]), 0),</span>
-<span class="co">#           border = "red",</span>
-<span class="co">#           lwd = 2)</span>
-<span class="co"># plot(x = coral_annotations$column[301:400], y = coral_annotations$row[301:400],</span>
-<span class="co">#      ylab = "", xlab = "", main = "Site4") +</span>
-<span class="co">#   points(site_4$column, site_4$row, col = "red") +</span>
-<span class="co">#   polygon(x = c(0, 0, 0.5*max(coral_annotations$column[301:400]),</span>
-<span class="co">#                 0.5*max(coral_annotations$column[301:400])),</span>
-<span class="co">#           y = c(0, 0.5*max(coral_annotations$row[301:400]),</span>
-<span class="co">#                 0.5*max(coral_annotations$row[301:400]), 0),</span>
-<span class="co">#           border = "red",</span>
-<span class="co">#           lwd = 2)</span>
-<span class="co"># </span>
-<span class="co"># coral_annotations$col_dim &lt;- 2000</span>
-<span class="co"># coral_annotations$row_dim &lt;- 2000</span>
-<span class="co"># </span>
-<span class="co"># crop_area_coral_2 &lt;- crop_area(data = coral_annotations, row = "row",</span>
-<span class="co">#                                column = "column", id = "site", dim = c(0.5, 0.5),</span>
-<span class="co">#                                res = TRUE, res_dim_x = "col_dim", res_dim_y = "row_dim")</span>
-<span class="co"># </span>
-<span class="co"># site_1_2 &lt;- subset(crop_area_coral_2, site == "Site1")</span>
-<span class="co"># site_2_2 &lt;- subset(crop_area_coral_2, site == "Site2")</span>
-<span class="co"># site_3_2 &lt;- subset(crop_area_coral_2, site == "Site3")</span>
-<span class="co"># site_4_2 &lt;- subset(crop_area_coral_2, site == "Site4")</span>
-<span class="co"># </span>
-<span class="co"># </span>
-<span class="co"># plot(x = coral_annotations$column[1:100], y = coral_annotations$row[1:100],</span>
-<span class="co">#      ylab = "", xlab = "", main = "Site1") +</span>
-<span class="co">#   points(site_1_2$column, site_1_2$row, col = "red") +</span>
-<span class="co">#   polygon(x = c(0, 0, 0.5*2000, 0.5*2000),</span>
-<span class="co">#           y = c(0, 0.5*2000, 0.5*2000, 0),</span>
-<span class="co">#           border = "red",</span>
-<span class="co">#           lwd = 2)</span>
-<span class="co"># plot(x = coral_annotations$column[101:200], y = coral_annotations$row[101:200],</span>
-<span class="co">#      ylab = "", xlab = "", main = "Site2") +</span>
-<span class="co">#   points(site_2_2$column, site_2_2$row, col = "red") +</span>
-<span class="co">#   polygon(x = c(0, 0, 0.5*2000, 0.5*2000),</span>
-<span class="co">#           y = c(0, 0.5*2000, 0.5*2000, 0),</span>
-<span class="co">#           border = "red",</span>
-<span class="co">#           lwd = 2)</span>
-<span class="co"># plot(x = coral_annotations$column[201:300], y = coral_annotations$row[201:300],</span>
-<span class="co">#      ylab = "", xlab = "", main = "Site3") +</span>
-<span class="co">#   points(site_3_2$column, site_3_2$row, col = "red") +</span>
-<span class="co">#   polygon(x = c(0, 0, 0.5*2000, 0.5*2000),</span>
-<span class="co">#           y = c(0, 0.5*2000, 0.5*2000, 0),</span>
-<span class="co">#           border = "red",</span>
-<span class="co">#           lwd = 2)</span>
-<span class="co"># plot(x = coral_annotations$column[301:400], y = coral_annotations$row[301:400],</span>
-<span class="co">#      ylab = "", xlab = "", main = "Site4") +</span>
-<span class="co">#   points(site_4_2$column, site_4_2$row, col = "red") +</span>
-<span class="co">#   polygon(x = c(0, 0, 0.5*2000, 0.5*2000),</span>
-<span class="co">#           y = c(0, 0.5*2000, 0.5*2000, 0),</span>
-<span class="co">#           border = "red",</span>
-<span class="co">#           lwd = 2)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">crop_area_coral_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/crop_area.html">crop_area</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">coral_annotations</span>, row <span class="op">=</span> <span class="st">"row"</span>,
+                             column <span class="op">=</span> <span class="st">"column"</span>, id <span class="op">=</span> <span class="st">"rep"</span>, dim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span>
+
+
+
+<span class="co">#Plotting each quadrat</span>
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">coral_annotations</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, <span class="op">]</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">column</span>, y <span class="op">=</span> <span class="va">row</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_classic</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">""</span>, x <span class="op">=</span> <span class="st">""</span>, title <span class="op">=</span> <span class="st">"Quadrat 1"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_rect</a></span><span class="op">(</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>
+      xmin <span class="op">=</span> <span class="fl">0</span>,
+      xmax <span class="op">=</span> <span class="fl">0.5</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">column</span><span class="op">)</span>,
+      ymin <span class="op">=</span> <span class="fl">0</span>,
+      ymax <span class="op">=</span>  <span class="fl">0.5</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">row</span><span class="op">)</span>
+    <span class="op">)</span>,
+    color <span class="op">=</span> <span class="st">"black"</span>,
+    alpha <span class="op">=</span> <span class="fl">0</span>
+  <span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">crop_area_coral_1</span>, <span class="va">rep</span> <span class="op">==</span> <span class="st">"Q1"</span><span class="op">)</span>,
+             color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span>
+
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">coral_annotations</span><span class="op">[</span><span class="fl">101</span><span class="op">:</span><span class="fl">200</span>, <span class="op">]</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">column</span>, y <span class="op">=</span> <span class="va">row</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_classic</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">""</span>, x <span class="op">=</span> <span class="st">""</span>, title <span class="op">=</span> <span class="st">"Quadrat 2"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_rect</a></span><span class="op">(</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>
+      xmin <span class="op">=</span> <span class="fl">0</span>,
+      xmax <span class="op">=</span> <span class="fl">0.5</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">column</span><span class="op">)</span>,
+      ymin <span class="op">=</span> <span class="fl">0</span>,
+      ymax <span class="op">=</span>  <span class="fl">0.5</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">row</span><span class="op">)</span>
+    <span class="op">)</span>,
+    color <span class="op">=</span> <span class="st">"black"</span>,
+    alpha <span class="op">=</span> <span class="fl">0</span>
+  <span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">crop_area_coral_1</span>, <span class="va">rep</span> <span class="op">==</span> <span class="st">"Q2"</span><span class="op">)</span>,
+             color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span>
+
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">coral_annotations</span><span class="op">[</span><span class="fl">201</span><span class="op">:</span><span class="fl">300</span>, <span class="op">]</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">column</span>, y <span class="op">=</span> <span class="va">row</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_classic</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">""</span>, x <span class="op">=</span> <span class="st">""</span>, title <span class="op">=</span> <span class="st">"Quadrat 3"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_rect</a></span><span class="op">(</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>
+      xmin <span class="op">=</span> <span class="fl">0</span>,
+      xmax <span class="op">=</span> <span class="fl">0.5</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">column</span><span class="op">)</span>,
+      ymin <span class="op">=</span> <span class="fl">0</span>,
+      ymax <span class="op">=</span>  <span class="fl">0.5</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">row</span><span class="op">)</span>
+    <span class="op">)</span>,
+    color <span class="op">=</span> <span class="st">"black"</span>,
+    alpha <span class="op">=</span> <span class="fl">0</span>
+  <span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">crop_area_coral_1</span>, <span class="va">rep</span> <span class="op">==</span> <span class="st">"Q3"</span><span class="op">)</span>,
+             color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span>
+
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">coral_annotations</span><span class="op">[</span><span class="fl">301</span><span class="op">:</span><span class="fl">400</span>, <span class="op">]</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">column</span>, y <span class="op">=</span> <span class="va">row</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_classic</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">""</span>, x <span class="op">=</span> <span class="st">""</span>, title <span class="op">=</span> <span class="st">"Quadrat 4"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_rect</a></span><span class="op">(</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>
+      xmin <span class="op">=</span> <span class="fl">0</span>,
+      xmax <span class="op">=</span> <span class="fl">0.5</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">column</span><span class="op">)</span>,
+      ymin <span class="op">=</span> <span class="fl">0</span>,
+      ymax <span class="op">=</span>  <span class="fl">0.5</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">row</span><span class="op">)</span>
+    <span class="op">)</span>,
+    color <span class="op">=</span> <span class="st">"black"</span>,
+    alpha <span class="op">=</span> <span class="fl">0</span>
+  <span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">crop_area_coral_1</span>, <span class="va">rep</span> <span class="op">==</span> <span class="st">"Q4"</span><span class="op">)</span>,
+             color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></code></pre></div>
+<p><img src="cropping_files/figure-html/randomized%20crop-1.png" width="45%"><img src="cropping_files/figure-html/randomized%20crop-2.png" width="45%"><img src="cropping_files/figure-html/randomized%20crop-3.png" width="45%"><img src="cropping_files/figure-html/randomized%20crop-4.png" width="45%"></p>
+<p>These plots show the cropped coral points in red and the full uncropped quadrats in red, showing how the cropped points are grouped in the bottom corner, maintaining spatial relationships.</p>
+<p>Now the same cropping, but specifying the dimensions of the quadrat</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">coral_annotations</span><span class="op">[[</span><span class="st">"col_dim"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">2000</span>
+<span class="va">coral_annotations</span><span class="op">[[</span><span class="st">"row_dim"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">2000</span>
+
+<span class="va">crop_area_coral_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/crop_area.html">crop_area</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">coral_annotations</span>, row <span class="op">=</span> <span class="st">"row"</span>,
+                               column <span class="op">=</span> <span class="st">"column"</span>, id <span class="op">=</span> <span class="st">"rep"</span>, dim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.5</span><span class="op">)</span>,
+                               res <span class="op">=</span> <span class="cn">TRUE</span>, res_dim_x <span class="op">=</span> <span class="st">"col_dim"</span>, res_dim_y <span class="op">=</span> <span class="st">"row_dim"</span><span class="op">)</span>
+
+
+
+<span class="co">#Plotting each quadrat</span>
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">coral_annotations</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, <span class="op">]</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">column</span>, y <span class="op">=</span> <span class="va">row</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_classic</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">""</span>, x <span class="op">=</span> <span class="st">""</span>, title <span class="op">=</span> <span class="st">"Quadrat 1"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_rect</a></span><span class="op">(</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>
+      xmin <span class="op">=</span> <span class="fl">0</span>,
+      xmax <span class="op">=</span> <span class="fl">0.5</span> <span class="op">*</span> <span class="fl">2000</span>,
+      ymin <span class="op">=</span> <span class="fl">0</span>,
+      ymax <span class="op">=</span>  <span class="fl">0.5</span> <span class="op">*</span> <span class="fl">2000</span>
+    <span class="op">)</span>,
+    color <span class="op">=</span> <span class="st">"black"</span>,
+    alpha <span class="op">=</span> <span class="fl">0</span>
+  <span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">crop_area_coral_2</span>, <span class="va">rep</span> <span class="op">==</span> <span class="st">"Q1"</span><span class="op">)</span>,
+             color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span>
+
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">coral_annotations</span><span class="op">[</span><span class="fl">101</span><span class="op">:</span><span class="fl">200</span>, <span class="op">]</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">column</span>, y <span class="op">=</span> <span class="va">row</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_classic</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">""</span>, x <span class="op">=</span> <span class="st">""</span>, title <span class="op">=</span> <span class="st">"Quadrat 2"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_rect</a></span><span class="op">(</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>
+      xmin <span class="op">=</span> <span class="fl">0</span>,
+      xmax <span class="op">=</span> <span class="fl">0.5</span> <span class="op">*</span> <span class="fl">2000</span>,
+      ymin <span class="op">=</span> <span class="fl">0</span>,
+      ymax <span class="op">=</span>  <span class="fl">0.5</span> <span class="op">*</span> <span class="fl">2000</span>
+    <span class="op">)</span>,
+    color <span class="op">=</span> <span class="st">"black"</span>,
+    alpha <span class="op">=</span> <span class="fl">0</span>
+  <span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">crop_area_coral_2</span>, <span class="va">rep</span> <span class="op">==</span> <span class="st">"Q2"</span><span class="op">)</span>,
+             color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span>
+
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">coral_annotations</span><span class="op">[</span><span class="fl">201</span><span class="op">:</span><span class="fl">300</span>, <span class="op">]</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">column</span>, y <span class="op">=</span> <span class="va">row</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_classic</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">""</span>, x <span class="op">=</span> <span class="st">""</span>, title <span class="op">=</span> <span class="st">"Quadrat 3"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_rect</a></span><span class="op">(</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>
+      xmin <span class="op">=</span> <span class="fl">0</span>,
+      xmax <span class="op">=</span> <span class="fl">0.5</span> <span class="op">*</span> <span class="fl">2000</span>,
+      ymin <span class="op">=</span> <span class="fl">0</span>,
+      ymax <span class="op">=</span>  <span class="fl">0.5</span> <span class="op">*</span> <span class="fl">2000</span>
+    <span class="op">)</span>,
+    color <span class="op">=</span> <span class="st">"black"</span>,
+    alpha <span class="op">=</span> <span class="fl">0</span>
+  <span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">crop_area_coral_2</span>, <span class="va">rep</span> <span class="op">==</span> <span class="st">"Q3"</span><span class="op">)</span>,
+             color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span>
+
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">coral_annotations</span><span class="op">[</span><span class="fl">301</span><span class="op">:</span><span class="fl">400</span>, <span class="op">]</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">column</span>, y <span class="op">=</span> <span class="va">row</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_classic</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">""</span>, x <span class="op">=</span> <span class="st">""</span>, title <span class="op">=</span> <span class="st">"Quadrat 4"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_rect</a></span><span class="op">(</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>
+      xmin <span class="op">=</span> <span class="fl">0</span>,
+      xmax <span class="op">=</span> <span class="fl">0.5</span> <span class="op">*</span> <span class="fl">2000</span>,
+      ymin <span class="op">=</span> <span class="fl">0</span>,
+      ymax <span class="op">=</span>  <span class="fl">0.5</span> <span class="op">*</span> <span class="fl">2000</span>
+    <span class="op">)</span>,
+    color <span class="op">=</span> <span class="st">"black"</span>,
+    alpha <span class="op">=</span> <span class="fl">0</span>
+  <span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">crop_area_coral_2</span>, <span class="va">rep</span> <span class="op">==</span> <span class="st">"Q4"</span><span class="op">)</span>,
+             color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></code></pre></div>
+<p><img src="cropping_files/figure-html/randomized%20crop%20with%20dimensions-1.png" width="45%"><img src="cropping_files/figure-html/randomized%20crop%20with%20dimensions-2.png" width="45%"><img src="cropping_files/figure-html/randomized%20crop%20with%20dimensions-3.png" width="45%"><img src="cropping_files/figure-html/randomized%20crop%20with%20dimensions-4.png" width="45%"></p>
+<p>By specifying the dimensions of the dimensions of the quadrat, the cropping will be more accurate than when it is estimated, though as you can see, if the dimension are unknown, which may occur if using photoquadrats and pixel locations, the estimated method is still very accurate.</p>
+</div>
+<div class="section level2">
+<h2 id="coral-data">Coral Data<a class="anchor" aria-label="anchor" href="#coral-data"></a>
+</h2>
+<p>Now for a real example. This data is published in <a href="#References">Maucieri and Baum 2021</a> and archived in the <a href="https://github.com/baumlab/Maucieri_Baum_2021_BioCon" class="external-link">GitHub repository</a> for the paper. In this study, quadrat sizes were switched in 2013. Prior to 2013, they were 0.9cm by 0.6cm and after they were changed to 1m by 1m. However, these quadrats were randomly annotated, using 54 and 100 points respectively, so that each quadrat had a density of 1point/cm<sup>2</sup>. This method of cropping quadrats was developed to deal with these different sized quadrats and to make them both 0.9cm by 0.6cm or 54cm<sup>2</sup>.</p>
+<p>First lets load the data.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">softcoral_annotations</span><span class="op">)</span></code></pre></div>
+<p>There are quite a few quadrats, which we will visualize the first 4 of as with the previous example</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ex_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">softcoral_annotations</span>, <span class="va">Name</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">softcoral_annotations</span><span class="op">$</span><span class="va">Name</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>
+<span class="va">ex_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">softcoral_annotations</span>, <span class="va">Name</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">softcoral_annotations</span><span class="op">$</span><span class="va">Name</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span>
+<span class="va">ex_3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">softcoral_annotations</span>, <span class="va">Name</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">softcoral_annotations</span><span class="op">$</span><span class="va">Name</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span>
+<span class="va">ex_4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">softcoral_annotations</span>, <span class="va">Name</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">softcoral_annotations</span><span class="op">$</span><span class="va">Name</span><span class="op">)</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span><span class="op">)</span>
+
+<span class="co">#Plotting each quadrat</span>
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">ex_1</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Column</span>, y <span class="op">=</span> <span class="va">Row</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_classic</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">""</span>, x <span class="op">=</span> <span class="st">""</span>, title <span class="op">=</span> <span class="st">"KI2013_site14_Q10"</span><span class="op">)</span>
+
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">ex_2</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Column</span>, y <span class="op">=</span> <span class="va">Row</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_classic</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">""</span>, x <span class="op">=</span> <span class="st">""</span>, title <span class="op">=</span> <span class="st">"KI2013_site14_Q11"</span><span class="op">)</span> 
+
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">ex_3</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Column</span>, y <span class="op">=</span> <span class="va">Row</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_classic</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">""</span>, x <span class="op">=</span> <span class="st">""</span>, title <span class="op">=</span> <span class="st">"KI2013_site14_Q12"</span><span class="op">)</span> 
+
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">ex_4</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Column</span>, y <span class="op">=</span> <span class="va">Row</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_classic</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">""</span>, x <span class="op">=</span> <span class="st">""</span>, title <span class="op">=</span> <span class="st">"KI2013_site14_Q13"</span><span class="op">)</span> </code></pre></div>
+<p><img src="cropping_files/figure-html/visualize%20soft%20coral-1.png" width="45%"><img src="cropping_files/figure-html/visualize%20soft%20coral-2.png" width="45%"><img src="cropping_files/figure-html/visualize%20soft%20coral-3.png" width="45%"><img src="cropping_files/figure-html/visualize%20soft%20coral-4.png" width="45%"></p>
+<p>Now what you may notice, is that the axes will differ between the photos. This is because the quadrat photos were cropped before uploading to <a href="https://coralnet.ucsd.edu/" class="external-link">CoralNet</a> which allowed for easy randomized annotations. Due to this, the number of pixels for each photo quadrat will differ, and is mostly unknown. This is why there is the ability to estimate the length and width in pixels within the <code><a href="../reference/crop_area.html">crop_area()</a></code> function.</p>
+<p>For this example, I will also be specifying <code>obs_range</code> as being between 36:64, so that quadrats with very high or very low numbers of points within the subsetted area will not be included. Now to crop each of these 1m by 1m quadrats to 0.9m by 0.6m:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">crop_area_softcoral</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/crop_area.html">crop_area</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">softcoral_annotations</span>, row <span class="op">=</span> <span class="st">"Row"</span>,
+                             column <span class="op">=</span> <span class="st">"Column"</span>, id <span class="op">=</span> <span class="st">"Name"</span>, dim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">0.6</span><span class="op">)</span>, 
+                             obs_range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">36</span>,<span class="fl">64</span><span class="op">)</span><span class="op">)</span>
+
+<span class="va">ex_1_sub</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">crop_area_softcoral</span>, <span class="va">Name</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">softcoral_annotations</span><span class="op">$</span><span class="va">Name</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>
+<span class="va">ex_2_sub</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">crop_area_softcoral</span>, <span class="va">Name</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">softcoral_annotations</span><span class="op">$</span><span class="va">Name</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span>
+<span class="va">ex_3_sub</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">crop_area_softcoral</span>, <span class="va">Name</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">softcoral_annotations</span><span class="op">$</span><span class="va">Name</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span>
+<span class="va">ex_4_sub</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">crop_area_softcoral</span>, <span class="va">Name</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">softcoral_annotations</span><span class="op">$</span><span class="va">Name</span><span class="op">)</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span><span class="op">)</span>
+
+
+<span class="co">#Plotting each quadrat</span>
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">ex_1</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Column</span>, y <span class="op">=</span> <span class="va">Row</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_classic</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">""</span>, x <span class="op">=</span> <span class="st">""</span>, title <span class="op">=</span> <span class="st">"KI2013_site14_Q10"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_rect</a></span><span class="op">(</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>
+      xmin <span class="op">=</span> <span class="fl">0</span>,
+      xmax <span class="op">=</span> <span class="fl">0.6</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">Column</span><span class="op">)</span>,
+      ymin <span class="op">=</span> <span class="fl">0</span>,
+      ymax <span class="op">=</span>  <span class="fl">0.9</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">Row</span><span class="op">)</span>
+    <span class="op">)</span>,
+    color <span class="op">=</span> <span class="st">"black"</span>,
+    alpha <span class="op">=</span> <span class="fl">0</span>
+  <span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">ex_1_sub</span>,
+             color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span>
+
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">ex_2</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Column</span>, y <span class="op">=</span> <span class="va">Row</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_classic</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">""</span>, x <span class="op">=</span> <span class="st">""</span>, title <span class="op">=</span> <span class="st">"KI2013_site14_Q11"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_rect</a></span><span class="op">(</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>
+      xmin <span class="op">=</span> <span class="fl">0</span>,
+      xmax <span class="op">=</span> <span class="fl">0.6</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">Column</span><span class="op">)</span>,
+      ymin <span class="op">=</span> <span class="fl">0</span>,
+      ymax <span class="op">=</span>  <span class="fl">0.9</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">Row</span><span class="op">)</span>
+    <span class="op">)</span>,
+    color <span class="op">=</span> <span class="st">"black"</span>,
+    alpha <span class="op">=</span> <span class="fl">0</span>
+  <span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">ex_2_sub</span>,
+             color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span>
+
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">ex_3</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Column</span>, y <span class="op">=</span> <span class="va">Row</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_classic</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">""</span>, x <span class="op">=</span> <span class="st">""</span>, title <span class="op">=</span> <span class="st">"KI2013_site14_Q12"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_rect</a></span><span class="op">(</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>
+      xmin <span class="op">=</span> <span class="fl">0</span>,
+      xmax <span class="op">=</span> <span class="fl">0.6</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">Column</span><span class="op">)</span>,
+      ymin <span class="op">=</span> <span class="fl">0</span>,
+      ymax <span class="op">=</span>  <span class="fl">0.9</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">Row</span><span class="op">)</span>
+    <span class="op">)</span>,
+    color <span class="op">=</span> <span class="st">"black"</span>,
+    alpha <span class="op">=</span> <span class="fl">0</span>
+  <span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">ex_3_sub</span>,
+             color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span>
+
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">ex_4</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Column</span>, y <span class="op">=</span> <span class="va">Row</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_classic</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">""</span>, x <span class="op">=</span> <span class="st">""</span>, title <span class="op">=</span> <span class="st">"KI2013_site14_Q13"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_rect</a></span><span class="op">(</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>
+      xmin <span class="op">=</span> <span class="fl">0</span>,
+      xmax <span class="op">=</span> <span class="fl">0.6</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">Column</span><span class="op">)</span>,
+      ymin <span class="op">=</span> <span class="fl">0</span>,
+      ymax <span class="op">=</span>  <span class="fl">0.9</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">Row</span><span class="op">)</span>
+    <span class="op">)</span>,
+    color <span class="op">=</span> <span class="st">"black"</span>,
+    alpha <span class="op">=</span> <span class="fl">0</span>
+  <span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">ex_4_sub</span>,
+             color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></code></pre></div>
+<p><img src="cropping_files/figure-html/randomized%20crop%20soft%20corals-1.png" width="45%"><img src="cropping_files/figure-html/randomized%20crop%20soft%20corals-2.png" width="45%"><img src="cropping_files/figure-html/randomized%20crop%20soft%20corals-3.png" width="45%"><img src="cropping_files/figure-html/randomized%20crop%20soft%20corals-4.png" width="45%"></p>
+<p>And thats it, now all the quadrats are cropped to 0.9m by 0.6m quadrats, plus quadrats with a randomly high or low number of quadrats have been removed.</p>
 </div>
 <div class="section level2">
 <h2 id="references">
 <a name="References"></a>References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
 <p>Anderson, S., and L. F. Marcus. 1993. Effect of quadrat size on measurements of species density. Journal of Biogeography 20: 421-428.</p>
+<p>Maucieri, D.G., and J.K. Baum. 2021. Impacts of heat stress on soft corals, an overlooked and highly vulnerable component of coral reef ecosystems, at a central equatorial Pacific atoll. Biological Conservation 262: 1-10. <a href="https://doi.org/10.1016/j.biocon.2021.109328" class="external-link uri">https://doi.org/10.1016/j.biocon.2021.109328</a></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
