@@ -405,7 +405,7 @@ ggplot(ex_4, aes(x = Column, y = Row)) +
 ```
 
 
-And thats it, now all the quadrats are cropped to 0.9m by 0.6m quadrats, plus quadrats with a randomly high or low number of quadrats have been removed. 
+And that's it, now all the quadrats are cropped to 0.9m by 0.6m quadrats, plus quadrats with a randomly high or low number of points have been removed. 
 
 
 # <a name="References" />References
