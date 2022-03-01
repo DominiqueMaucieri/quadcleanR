@@ -5,7 +5,7 @@
 #'     frames. Data was collected by the [Baum Lab](https://www.juliakbaum.org/)
 #'     and Kiritimati Field Teams. Data is the uncleaned version of data found in
 #'     [Maucieri and Baum 2021. Biological Conservation.](https://doi.org/10.1016/j.biocon.2021.109328)
-#'     The data are from photo quadrats (0.6m by 0.9m) which were randomly annotated
+#'     The data are from photo quadrats (0.9m by 0.6m) which were randomly annotated
 #'     with 54 random points each. At each of these annotated points, the substrate
 #'     was identified. Photo quadrats were collected on Kiritimati Island in the
 #'     Republic of Kiribati and document coral cover over time and space. The

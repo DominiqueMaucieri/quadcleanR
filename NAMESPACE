@@ -2,6 +2,7 @@
 
 export(categorize)
 export(change_names)
+export(change_values)
 export(cover_calc)
 export(crop_area)
 export(keep_rm)

@@ -6,3 +6,87 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
+
+# Introduction
+
+This vignette will walk you through cleaning up quadrat data to produce easy to analyze data frames.
+
+A little about the data:
+
+The data being cleaned will be the `softcoral_SQuads` and this vignette will build off of the cropping vignette as well. Data was collected by the Baum Lab and Kiritimati Field Teams and is the uncleaned version of data found in Maucieri and Baum 2021. Biological Conservation. The `softcoral_SQuads` data are from photo quadrats (0.9m by 0.6m) which were randomly annotated with 54 random points each, while the `softcoral_annotations` data are from photo quadrats (1m by 1m) which were randomly annotated with 100 random points each. At each of these annotated points, the substrate was identified. Photo quadrats were collected on Kiritimati Island in the Republic of Kiribati and document coral cover over time and space. The annotations and output of the data frame were produced using [CoralNet](https://coralnet.ucsd.edu/) and all annotations were done manually, by trained researchers.
+
+So this vignette will follow the following steps:
+
+1. Take the small quadrats (`softcoral_SQuads`) and show how to clean the data
+
+2. Then crop the large quadrat data (`softcoral_annotations`) and clean it too
+
+3. Join the two together to produce a large, easy to use data frame for future analyses. 
+
+First lets load the package, the dplyr package, tidyr package and the data
+
+```{r load package, message = FALSE, warning = FALSE}
+
+library(quadcleanR)
+library(dplyr)
+library(tidyr)
+
+data("softcoral_SQuads")
+
+```
+
+
+Now let me point out some unique aspects of this data:
+
+```{r head and tail, message = FALSE}
+
+head(softcoral_SQuads)
+tail(softcoral_SQuads)
+
+```
+This data as an `Image.ID` column which was arbitrarily added to this data set, so we are going to remove that as it holds no scientific value. There is also a final row which sums all quadrats but since we will be removing quadrats and points to clean these data up, we will remove that final row as well. The `Image.name` column is the unique ID for each photo quadrat, but it is very messy and not easy to use, so we will make this into new columns and add more information. `Annotation.status` is a column from [CoralNet](https://coralnet.ucsd.edu/) which tells if the annotations in each photo quadrat have been confirmed by human researchers or are only based on AI. The `Points` column tells us how many randomly annotated points there are in each quadrat, and since they are all 54, we know these data are from the smaller quadrats. The rest of the columns are the different coral and substrate IDs and how many points where annotated for each tag in each photo.
+
+So first, lets remove unneeded columns and make sure we are only working with "Confirmed" annotations.
+
+```{r confirmed annotation status}
+
+SQuad_confirmed <- softcoral_SQuads %>% filter(Annotation.status == "Confirmed") %>% select(-c(Image.ID))
+
+```
+
+Now we will separate the `Image.name` column into more descriptive columns.
+
+```{r separating ID, warning=FALSE}
+
+SQuad_separated <- separate(SQuad_confirmed, Image.name, sep="_", into=c("Field.Season", "Site","Quadrat"))
+
+```
+
+There will be 3 rows with discarded pieces because the quadrats have an _ in them, but that is okay, they will still be unique quadrat names so we don't need to worry about that. But if you notice, there are still .jpg and .jpeg in the quadrat names, so lets remove those, and change the naming of siteT19 to site40
+
+```{r remove jpg and T19}
+
+SQuad_nojpg <- rm_chr(SQuad_separated, c(".jpg", ".jpeg"))
+SQuad_site40 <- change_values(SQuad_nojpg, "Site", "siteT19", "site40")
+
+```
+
+Now lets look at the levels of some of my columns. 
+
+```{r view levels}
+
+unique(SQuad_site40$Field.Season)
+unique(SQuad_site40$Site)
+
+```
+
+
+Sometimes you may not want every year and every site of the data, so you may want to subset some of them out. For this example I don't want to subset any of these out, but I will demonstrate how to subset out based on values later, when we get to the large quadrats. Now to prep for the addition of the large quadrats, I want to update the column names for this data frame. I will use a label set document, but you could also make this in r by joining a series of vectors. 
+
+```{r all labelset, message=FALSE}
+
+data(coral_labelset)
+
+```
+
+
