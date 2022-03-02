@@ -38,12 +38,8 @@
 <li class="nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
-<li class="active nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/cleaning.html">Cleaning Quadrat Data</a>
-    <a class="dropdown-item" href="../articles/cropping.html">Crop Quadrats by Area</a>
-  </div>
+<li class="active nav-item">
+  <a class="nav-link" href="../articles/index.html">Articles</a>
 </li>
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
@@ -94,6 +90,7 @@
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/DominiqueMaucieri/quadcleanR" class="external-link">quadcleanR</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-gregmisc/gtools" class="external-link">gtools</a></span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"softcoral_SQuads"</span><span class="op">)</span></code></pre></div>
 <p>Now let me point out some unique aspects of this data:</p>
@@ -293,7 +290,7 @@
 <p>This data as an <code>Image.ID</code> column which was arbitrarily added to this data set, so we are going to remove that as it holds no scientific value. There is also a final row which sums all quadrats but since we will be removing quadrats and points to clean these data up, we will remove that final row as well. The <code>Image.name</code> column is the unique ID for each photo quadrat, but it is very messy and not easy to use, so we will make this into new columns and add more information. <code>Annotation.status</code> is a column from <a href="https://coralnet.ucsd.edu/" class="external-link">CoralNet</a> which tells if the annotations in each photo quadrat have been confirmed by human researchers or are only based on AI. The <code>Points</code> column tells us how many randomly annotated points there are in each quadrat, and since they are all 54, we know these data are from the smaller quadrats. The rest of the columns are the different coral and substrate IDs and how many points where annotated for each tag in each photo.</p>
 <p>So first, lets remove unneeded columns and make sure we are only working with “Confirmed” annotations.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">SQuad_confirmed</span> <span class="op">&lt;-</span> <span class="va">softcoral_SQuads</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Annotation.status</span> <span class="op">==</span> <span class="st">"Confirmed"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">Image.ID</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">SQuad_confirmed</span> <span class="op">&lt;-</span> <span class="va">softcoral_SQuads</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Annotation.status</span> <span class="op">==</span> <span class="st">"Confirmed"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">Image.ID</span>, <span class="va">Points</span>, <span class="va">Annotation.status</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>Now we will separate the <code>Image.name</code> column into more descriptive columns.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">SQuad_separated</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/separate.html" class="external-link">separate</a></span><span class="op">(</span><span class="va">SQuad_confirmed</span>, <span class="va">Image.name</span>, sep<span class="op">=</span><span class="st">"_"</span>, into<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Field.Season"</span>, <span class="st">"Site"</span>,<span class="st">"Quadrat"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
@@ -315,7 +312,7 @@
 <p>Sometimes you may not want every year and every site of the data, so you may want to subset some of them out. For this example I don’t want to subset any of these out, but I will demonstrate how to subset out based on values later, when we get to the large quadrats.</p>
 <p>Now to prep for the addition of the large quadrats, I want to update the column names for this data frame. The column names are currently set as the tag shorthand used during the annotation process, but now I want them to better reflect the actual substrate names.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">coral_labelset</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"coral_labelset"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">coral_labelset</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">##   short_name                full_name functional_group</span>
 <span class="co">## 1       AVRA             Avrainvillea            Algae</span>
@@ -329,74 +326,125 @@
 <code class="sourceCode R"><span class="va">SQuad_colnames</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/change_names.html">change_names</a></span><span class="op">(</span><span class="va">SQuad_site40</span>, <span class="va">coral_labelset</span>, <span class="st">"short_name"</span>, <span class="st">"full_name"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">SQuad_colnames</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">##   [1] "Field.Season"                   "Site"                          </span>
-<span class="co">##   [3] "Quadrat"                        "Annotation.status"             </span>
-<span class="co">##   [5] "Points"                         "Acropora_corymbose"            </span>
-<span class="co">##   [7] "Acropora_digitate"              "Acropora_arborescent"          </span>
-<span class="co">##   [9] "Acropora"                       "Acropora_tabulate"             </span>
-<span class="co">##  [11] "Astreopora"                     "Bleached_Acropora_arborescent" </span>
-<span class="co">##  [13] "Bleached_Acropora"              "Bleached_Astreopora"           </span>
-<span class="co">##  [15] "Bleached_Acropora_tabulate"     "Bleached_Coscinarea"           </span>
-<span class="co">##  [17] "Bleached_Echinophyllia"         "Bleached_Favites_halicora"     </span>
-<span class="co">##  [19] "Bleached_Favia"                 "Bleached_Favia_matthai"        </span>
-<span class="co">##  [21] "Bleached_Favia_speciosa"        "Bleached_Goniastrea_stelligera"</span>
-<span class="co">##  [23] "Bleached_Favites"               "Bleached_Favites_pentagona"    </span>
-<span class="co">##  [25] "Bleached_Fungia"                "Bleached_Gardineroseris"       </span>
-<span class="co">##  [27] "Bleached_Goniastrea_edwardsi"   "Bleached_Herpolitha"           </span>
-<span class="co">##  [29] "Bleached_Hydnophora"            "Bleached_Hydnophora_exesa"     </span>
-<span class="co">##  [31] "Bleached_Acropora_corymbose"    "Bleached_Leptastrea"           </span>
-<span class="co">##  [33] "Bleached_Leptoseris"            "Bleached_Isopora"              </span>
-<span class="co">##  [35] "Bleached_Lobophyllia"           "Bleached_Turbinaria_foliose"   </span>
-<span class="co">##  [37] "Bleached_Montipora_encrusting"  "Bleached_Montipora_foliose"    </span>
-<span class="co">##  [39] "Bleached_Montastraea"           "Bleached_Montipora"            </span>
-<span class="co">##  [41] "Bleached_Oxypora"               "Bleached_Palythoa"             </span>
-<span class="co">##  [43] "Bleached_Pavona_duerdeni"       "Bleached_Pavona"               </span>
-<span class="co">##  [45] "Bleached_Pocillopora_eydouxi"   "Bleached_Platygyra"            </span>
-<span class="co">##  [47] "Bleached_Pocillopora_meandrina" "Bleached_Pocillopora"          </span>
-<span class="co">##  [49] "Bleached_Porites"               "Bleached_Psammocora"           </span>
-<span class="co">##  [51] "Bleached_Pavona_varians"        "Bleached_Sandolitha"           </span>
-<span class="co">##  [53] "Bleached_unknown_hard_coral"    "Cirrhipathes"                  </span>
-<span class="co">##  [55] "Coscinaraea"                    "Echinophyllia"                 </span>
-<span class="co">##  [57] "Favites"                        "Favites_halicora"              </span>
-<span class="co">##  [59] "Favia"                          "Dipsastraea_matthai"           </span>
-<span class="co">##  [61] "Favia_speciosa"                 "Favia_stelligera"              </span>
-<span class="co">##  [63] "Favites_pentagona"              "Fungia"                        </span>
-<span class="co">##  [65] "Gardineroseris"                 "Goniastrea_edwardsi"           </span>
-<span class="co">##  [67] "Herpolitha"                     "Hydnophora"                    </span>
-<span class="co">##  [69] "Hydnophora_exesa"               "Isopora"                       </span>
-<span class="co">##  [71] "Leptastrea"                     "Leptoseris"                    </span>
-<span class="co">##  [73] "Lobophyllia"                    "Montipora_encrusting"          </span>
-<span class="co">##  [75] "Montipora_foliose"              "Montastraea"                   </span>
-<span class="co">##  [77] "Montipora"                      "Oxypora"                       </span>
-<span class="co">##  [79] "Palythoa"                       "Pavona_duerdeni"               </span>
-<span class="co">##  [81] "Pavona"                         "Pocillopora_eydouxi"           </span>
-<span class="co">##  [83] "Platygyra"                      "Plerogyra"                     </span>
-<span class="co">##  [85] "Pocillopora_meandrina"          "Pocillopora"                   </span>
-<span class="co">##  [87] "Porites"                        "Psammocora"                    </span>
-<span class="co">##  [89] "Pavona_varians"                 "Sandolitha"                    </span>
-<span class="co">##  [91] "Tubastrea"                      "Turbinaria"                    </span>
-<span class="co">##  [93] "unknown_hard_coral"             "Sea_anemone"                   </span>
-<span class="co">##  [95] "Bleached_Cladiella"             "Bleached_Sinularia"            </span>
-<span class="co">##  [97] "Cladiella"                      "Encrusting_Bryozoan"           </span>
-<span class="co">##  [99] "Sea_urchin"                     "Hydrocoral"                    </span>
-<span class="co">## [101] "Hydroid"                        "Millepora"                     </span>
-<span class="co">## [103] "Bivalves"                       "Sarcophyton"                   </span>
-<span class="co">## [105] "Sea_cucumber"                   "Sinularia"                     </span>
-<span class="co">## [107] "Sponge"                         "Stylaster"                     </span>
-<span class="co">## [109] "Unknown_Tunicate"               "Christmas_Tree_Worm"           </span>
-<span class="co">## [111] "Zoanthid"                       "Bleached_Sarcophyton"          </span>
-<span class="co">## [113] "Sand"                           "Sediment"                      </span>
-<span class="co">## [115] "Consolidated_hard_rock"         "Bleached_Lobophytum"           </span>
-<span class="co">## [117] "Cyanobacteria_films"            "Lobophytum"                    </span>
-<span class="co">## [119] "Broken_coral_rubble"            "Shadow"                        </span>
-<span class="co">## [121] "Transect_hardware"              "Unclear"                       </span>
-<span class="co">## [123] "Avrainvillea"                   "Caulerpa"                      </span>
-<span class="co">## [125] "Crustose_coralline_algae"       "Dictyota"                      </span>
-<span class="co">## [127] "Dictyosphaeria"                 "Halimeda"                      </span>
-<span class="co">## [129] "Lobophora"                      "Macroalgae"                    </span>
-<span class="co">## [131] "Microdictyon"                   "Padina"                        </span>
-<span class="co">## [133] "Peyssonnelia"                   "Turf_algae"                    </span>
-<span class="co">## [135] "Turf_algae_on_hard_substrate"   "Unidentified"</span></code></pre>
+<span class="co">##   [3] "Quadrat"                        "Acropora_corymbose"            </span>
+<span class="co">##   [5] "Acropora_digitate"              "Acropora_arborescent"          </span>
+<span class="co">##   [7] "Acropora"                       "Acropora_tabulate"             </span>
+<span class="co">##   [9] "Astreopora"                     "Bleached_Acropora_arborescent" </span>
+<span class="co">##  [11] "Bleached_Acropora"              "Bleached_Astreopora"           </span>
+<span class="co">##  [13] "Bleached_Acropora_tabulate"     "Bleached_Coscinarea"           </span>
+<span class="co">##  [15] "Bleached_Echinophyllia"         "Bleached_Favites_halicora"     </span>
+<span class="co">##  [17] "Bleached_Favia"                 "Bleached_Favia_matthai"        </span>
+<span class="co">##  [19] "Bleached_Favia_speciosa"        "Bleached_Goniastrea_stelligera"</span>
+<span class="co">##  [21] "Bleached_Favites"               "Bleached_Favites_pentagona"    </span>
+<span class="co">##  [23] "Bleached_Fungia"                "Bleached_Gardineroseris"       </span>
+<span class="co">##  [25] "Bleached_Goniastrea_edwardsi"   "Bleached_Herpolitha"           </span>
+<span class="co">##  [27] "Bleached_Hydnophora"            "Bleached_Hydnophora_exesa"     </span>
+<span class="co">##  [29] "Bleached_Acropora_corymbose"    "Bleached_Leptastrea"           </span>
+<span class="co">##  [31] "Bleached_Leptoseris"            "Bleached_Isopora"              </span>
+<span class="co">##  [33] "Bleached_Lobophyllia"           "Bleached_Turbinaria_foliose"   </span>
+<span class="co">##  [35] "Bleached_Montipora_encrusting"  "Bleached_Montipora_foliose"    </span>
+<span class="co">##  [37] "Bleached_Montastraea"           "Bleached_Montipora"            </span>
+<span class="co">##  [39] "Bleached_Oxypora"               "Bleached_Palythoa"             </span>
+<span class="co">##  [41] "Bleached_Pavona_duerdeni"       "Bleached_Pavona"               </span>
+<span class="co">##  [43] "Bleached_Pocillopora_eydouxi"   "Bleached_Platygyra"            </span>
+<span class="co">##  [45] "Bleached_Pocillopora_meandrina" "Bleached_Pocillopora"          </span>
+<span class="co">##  [47] "Bleached_Porites"               "Bleached_Psammocora"           </span>
+<span class="co">##  [49] "Bleached_Pavona_varians"        "Bleached_Sandolitha"           </span>
+<span class="co">##  [51] "Bleached_unknown_hard_coral"    "Cirrhipathes"                  </span>
+<span class="co">##  [53] "Coscinaraea"                    "Echinophyllia"                 </span>
+<span class="co">##  [55] "Favites"                        "Favites_halicora"              </span>
+<span class="co">##  [57] "Favia"                          "Dipsastraea_matthai"           </span>
+<span class="co">##  [59] "Favia_speciosa"                 "Favia_stelligera"              </span>
+<span class="co">##  [61] "Favites_pentagona"              "Fungia"                        </span>
+<span class="co">##  [63] "Gardineroseris"                 "Goniastrea_edwardsi"           </span>
+<span class="co">##  [65] "Herpolitha"                     "Hydnophora"                    </span>
+<span class="co">##  [67] "Hydnophora_exesa"               "Isopora"                       </span>
+<span class="co">##  [69] "Leptastrea"                     "Leptoseris"                    </span>
+<span class="co">##  [71] "Lobophyllia"                    "Montipora_encrusting"          </span>
+<span class="co">##  [73] "Montipora_foliose"              "Montastraea"                   </span>
+<span class="co">##  [75] "Montipora"                      "Oxypora"                       </span>
+<span class="co">##  [77] "Palythoa"                       "Pavona_duerdeni"               </span>
+<span class="co">##  [79] "Pavona"                         "Pocillopora_eydouxi"           </span>
+<span class="co">##  [81] "Platygyra"                      "Plerogyra"                     </span>
+<span class="co">##  [83] "Pocillopora_meandrina"          "Pocillopora"                   </span>
+<span class="co">##  [85] "Porites"                        "Psammocora"                    </span>
+<span class="co">##  [87] "Pavona_varians"                 "Sandolitha"                    </span>
+<span class="co">##  [89] "Tubastrea"                      "Turbinaria"                    </span>
+<span class="co">##  [91] "unknown_hard_coral"             "Sea_anemone"                   </span>
+<span class="co">##  [93] "Bleached_Cladiella"             "Bleached_Sinularia"            </span>
+<span class="co">##  [95] "Cladiella"                      "Encrusting_Bryozoan"           </span>
+<span class="co">##  [97] "Sea_urchin"                     "Hydrocoral"                    </span>
+<span class="co">##  [99] "Hydroid"                        "Millepora"                     </span>
+<span class="co">## [101] "Bivalves"                       "Sarcophyton"                   </span>
+<span class="co">## [103] "Sea_cucumber"                   "Sinularia"                     </span>
+<span class="co">## [105] "Sponge"                         "Stylaster"                     </span>
+<span class="co">## [107] "Unknown_Tunicate"               "Christmas_Tree_Worm"           </span>
+<span class="co">## [109] "Zoanthid"                       "Bleached_Sarcophyton"          </span>
+<span class="co">## [111] "Sand"                           "Sediment"                      </span>
+<span class="co">## [113] "Consolidated_hard_rock"         "Bleached_Lobophytum"           </span>
+<span class="co">## [115] "Cyanobacteria_films"            "Lobophytum"                    </span>
+<span class="co">## [117] "Broken_coral_rubble"            "Shadow"                        </span>
+<span class="co">## [119] "Transect_hardware"              "Unclear"                       </span>
+<span class="co">## [121] "Avrainvillea"                   "Caulerpa"                      </span>
+<span class="co">## [123] "Crustose_coralline_algae"       "Dictyota"                      </span>
+<span class="co">## [125] "Dictyosphaeria"                 "Halimeda"                      </span>
+<span class="co">## [127] "Lobophora"                      "Macroalgae"                    </span>
+<span class="co">## [129] "Microdictyon"                   "Padina"                        </span>
+<span class="co">## [131] "Peyssonnelia"                   "Turf_algae"                    </span>
+<span class="co">## [133] "Turf_algae_on_hard_substrate"   "Unidentified"</span></code></pre>
 <p>Much better.</p>
+<p>Now because these are smaller quadrats with fewer annotated points, before we add in the large quadrat data, lets deal with the substrate that was not able to be accurately identified. For these photo quadrats, the Shadow, Transect_hardware and Unclear tags need to be removed and not used when we calculate percent cover. If I was going to use this data to do a diversity analysis with hard corals, I would also include unknown_hard_coral, and Bleached_unknown_hard_coral to this list, but as this data will be used for soft coral analyses, we will leave it.</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">SQuad_colnames</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate_all.html" class="external-link">mutate_at</a></span><span class="op">(</span><span class="va">SQuad_colnames</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span><span class="op">:</span><span class="fl">134</span><span class="op">)</span>, <span class="va">as.numeric</span><span class="op">)</span>
+
+<span class="va">SQuad_usable</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/useable_obs.html">useable_obs</a></span><span class="op">(</span><span class="va">SQuad_colnames</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Shadow"</span>, <span class="st">"Transect_hardware"</span>, <span class="st">"Unclear"</span><span class="op">)</span>, 
+                            max <span class="op">=</span> <span class="cn">TRUE</span>, cutoff <span class="op">=</span> <span class="fl">0.1</span><span class="op">*</span><span class="fl">54</span><span class="op">)</span>
+
+<span class="va">SQuad_removed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/useable_obs.html">useable_obs</a></span><span class="op">(</span><span class="va">SQuad_colnames</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Shadow"</span>, <span class="st">"Transect_hardware"</span>, <span class="st">"Unclear"</span><span class="op">)</span>,
+                             max <span class="op">=</span> <span class="cn">TRUE</span>, cutoff <span class="op">=</span> <span class="fl">0.1</span><span class="op">*</span><span class="fl">54</span>, print_max <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<p>By identifying how many useable points there are in each quadrat, and removing any quadrats that had over 10% of the identified points unuseable, we have removed 175 quadrats from analysis, which you can view with the <code>SQuad_removed</code> data frame.</p>
+<p>Now we can start working on the large quadrat data.</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"softcoral_annotations"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"softcoral_LQuads"</span><span class="op">)</span></code></pre></div>
+<p>I will be cropping this data as outlined in the cropping vignette, so check that out for the details, but before I crop it, I want to remove any unconfirmed quadrats just as we did for the small quads.</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">LQuad_confirmed</span> <span class="op">&lt;-</span> <span class="va">softcoral_LQuads</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Annotation.status</span> <span class="op">==</span> <span class="st">"Confirmed"</span><span class="op">)</span> 
+
+<span class="va">LQuad_sub</span> <span class="op">&lt;-</span> <span class="va">softcoral_annotations</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Name</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">LQuad_confirmed</span><span class="op">$</span><span class="va">Image.name</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p>Then we will crop the annotations data.</p>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">LQuad_cropped</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/crop_area.html">crop_area</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">LQuad_sub</span>, row <span class="op">=</span> <span class="st">"Row"</span>,
+                             column <span class="op">=</span> <span class="st">"Column"</span>, id <span class="op">=</span> <span class="st">"Name"</span>, dim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">0.6</span><span class="op">)</span>, 
+                             obs_range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">36</span>,<span class="fl">64</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p>Now I will just format this to look like the small quad data so we can join the two.</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">LQuad_wide</span> <span class="op">&lt;-</span> <span class="va">LQuad_cropped</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">obs</span>, <span class="va">Row</span>, <span class="va">Column</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Name</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">Label</span>, values_from <span class="op">=</span> <span class="va">Label</span>, values_fn <span class="op">=</span> <span class="va">length</span>, values_fill <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
+<span class="va">LQuad_wide</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">LQuad_wide</span><span class="op">)</span>
+
+<span class="va">LQuad_separated</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/separate.html" class="external-link">separate</a></span><span class="op">(</span><span class="va">LQuad_wide</span>, <span class="va">Name</span>, sep<span class="op">=</span><span class="st">"_"</span>, into<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Field.Season"</span>, <span class="st">"Site"</span>,<span class="st">"Quadrat"</span><span class="op">)</span><span class="op">)</span>
+
+<span class="va">LQuad_nojpg</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rm_chr.html">rm_chr</a></span><span class="op">(</span><span class="va">LQuad_separated</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">".jpg"</span>, <span class="st">".jpeg"</span><span class="op">)</span><span class="op">)</span>
+
+<span class="va">LQuad_colnames</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/change_names.html">change_names</a></span><span class="op">(</span><span class="va">LQuad_nojpg</span>, <span class="va">coral_labelset</span>, <span class="st">"short_name"</span>, <span class="st">"full_name"</span><span class="op">)</span>
+
+
+<span class="va">LQuad_colnames</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate_all.html" class="external-link">mutate_at</a></span><span class="op">(</span><span class="va">LQuad_colnames</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span><span class="op">:</span><span class="fl">11</span><span class="op">)</span>, <span class="va">as.numeric</span><span class="op">)</span>
+
+<span class="va">LQuad_usable</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/useable_obs.html">useable_obs</a></span><span class="op">(</span><span class="va">LQuad_colnames</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Shadow"</span>, <span class="st">"Transect_hardware"</span>, <span class="st">"Unclear"</span><span class="op">)</span>,
+                             max <span class="op">=</span> <span class="cn">TRUE</span>, cutoff <span class="op">=</span> <span class="fl">0.1</span><span class="op">*</span><span class="fl">54</span><span class="op">)</span>
+
+<span class="va">LQuad_removed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/useable_obs.html">useable_obs</a></span><span class="op">(</span><span class="va">LQuad_colnames</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Shadow"</span>, <span class="st">"Transect_hardware"</span>, <span class="st">"Unclear"</span><span class="op">)</span>,
+                             max <span class="op">=</span> <span class="cn">TRUE</span>, cutoff <span class="op">=</span> <span class="fl">0.1</span><span class="op">*</span><span class="fl">54</span>, print_max <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<p>With the large quadrats, only 4 photos needed to be removed because they had too many unuseable points.</p>
+<p>There are a few more things that need to be removed from the large quadrat data, including MPQs (Mega photo quadrats), site8.5 and DEEP photo quadrats.</p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">LQuad_noDEEP_site8.5</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/keep_rm.html">keep_rm</a></span><span class="op">(</span><span class="va">LQuad_usable</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"DEEP"</span>, <span class="st">"site8.5"</span><span class="op">)</span>, select <span class="op">=</span> <span class="st">"row"</span>, exact <span class="op">=</span> <span class="cn">FALSE</span>, colname <span class="op">=</span> <span class="st">"Site"</span>, keep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+
+<span class="va">LQuad_noMPQ</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/keep_rm.html">keep_rm</a></span><span class="op">(</span><span class="va">LQuad_noDEEP_site8.5</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"MPQ"</span><span class="op">)</span>, select <span class="op">=</span> <span class="st">"row"</span>, exact <span class="op">=</span> <span class="cn">FALSE</span>, colname <span class="op">=</span> <span class="st">"Quadrat"</span>, keep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<p>Alright, not we can join these data frames together, and continue with one large data set. As both data sets used the samle label set of names, This is easy with the <code><a href="https://rdrr.io/pkg/gtools/man/smartbind.html" class="external-link">smartbind()</a></code> function out of the <code>gtools</code> package</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">AllQuad</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/gtools/man/smartbind.html" class="external-link">smartbind</a></span><span class="op">(</span><span class="va">SQuad_removed</span>, <span class="va">LQuad_noMPQ</span>, fill <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></code></pre></div>
 </div>
   </main>
 </div>
