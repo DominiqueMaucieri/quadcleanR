@@ -5,3 +5,8 @@ template:
 deploy:
   install_metadata: true
 
+articles:
+- title: Vignettes
+  contents:
+  - cleaning
+  - cropping
