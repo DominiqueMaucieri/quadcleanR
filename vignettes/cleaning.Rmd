@@ -112,10 +112,10 @@ Now because these are smaller quadrats with fewer annotated points, before we ad
 SQuad_colnames <-  mutate_at(SQuad_colnames, c(4:134), as.numeric)
 
 SQuad_usable <- useable_obs(SQuad_colnames, c("Shadow", "Transect_hardware", "Unclear"), 
-                            max = TRUE, cutoff = 0.1*54)
+                            max = TRUE, cutoff = 10)
 
 SQuad_removed <- useable_obs(SQuad_colnames, c("Shadow", "Transect_hardware", "Unclear"),
-                             max = TRUE, cutoff = 0.1*54, print_max = TRUE)
+                             max = TRUE, cutoff = 10, print_max = TRUE)
 
 ```
 
