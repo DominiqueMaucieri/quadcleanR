@@ -30,6 +30,7 @@ First lets load the package, the dplyr package, tidyr package and the data
 library(quadcleanR)
 library(dplyr)
 library(tidyr)
+library(gtools)
 
 data("softcoral_SQuads")
 
@@ -50,7 +51,7 @@ So first, lets remove unneeded columns and make sure we are only working with "C
 
 ```{r confirmed annotation status}
 
-SQuad_confirmed <- softcoral_SQuads %>% filter(Annotation.status == "Confirmed") %>% select(-c(Image.ID))
+SQuad_confirmed <- softcoral_SQuads %>% filter(Annotation.status == "Confirmed") %>% select(-c(Image.ID, Points, Annotation.status))
 
 ```
 
@@ -86,16 +87,16 @@ Sometimes you may not want every year and every site of the data, so you may wan
 
 Now to prep for the addition of the large quadrats, I want to update the column names for this data frame. The column names are currently set as the tag shorthand used during the annotation process, but now I want them to better reflect the actual substrate names.
 
-```{r all labelset, message=FALSE}
+```{r add labelset, message=FALSE}
 
-data(coral_labelset)
+data("coral_labelset")
 head(coral_labelset)
 
 ```
 
 This is what my label set document looks like, but you could also make this in R by joining a series of vectors. Now lets fix the column names.
 
-```{r}
+```{r change colnames}
 
 SQuad_colnames <- change_names(SQuad_site40, coral_labelset, "short_name", "full_name")
 names(SQuad_colnames)
@@ -103,6 +104,105 @@ names(SQuad_colnames)
 ```
 
 Much better.
+
+Now because these are smaller quadrats with fewer annotated points, before we add in the large quadrat data, lets deal with the substrate that was not able to be accurately identified. For these photo quadrats, the Shadow, Transect_hardware and Unclear tags need to be removed and not used when we calculate percent cover. If I was going to use this data to do a diversity analysis with hard corals, I would also include unknown_hard_coral, and Bleached_unknown_hard_coral to this list, but as this data will be used for soft coral analyses, we will leave it. 
+
+```{r usable points}
+
+SQuad_colnames <-  mutate_at(SQuad_colnames, c(4:134), as.numeric)
+
+SQuad_usable <- useable_obs(SQuad_colnames, c("Shadow", "Transect_hardware", "Unclear"), 
+                            max = TRUE, cutoff = 0.1*54)
+
+SQuad_removed <- useable_obs(SQuad_colnames, c("Shadow", "Transect_hardware", "Unclear"),
+                             max = TRUE, cutoff = 0.1*54, print_max = TRUE)
+
+```
+
+By identifying how many useable points there are in each quadrat, and removing any quadrats that had over 10% of the identified points unuseable, we have removed 175 quadrats from analysis, which you can view with the `SQuad_removed` data frame.
+
+Now we can start working on the large quadrat data. 
+
+```{r large quad}
+
+data("softcoral_annotations")
+data("softcoral_LQuads")
+
+```
+
+
+I will be cropping this data as outlined in the cropping vignette, so check that out for the details, but before I crop it, I want to remove any unconfirmed quadrats just as we did for the small quads.
+
+```{r removing unconfirmed}
+
+LQuad_confirmed <- softcoral_LQuads %>% filter(Annotation.status == "Confirmed") 
+
+LQuad_sub <- softcoral_annotations %>% filter(Name %in% unique(LQuad_confirmed$Image.name))
+
+```
+
+Then we will crop the annotations data. 
+
+```{r large quad cropping}
+
+LQuad_cropped <- crop_area(data = LQuad_sub, row = "Row",
+                             column = "Column", id = "Name", dim = c(0.9, 0.6), 
+                             obs_range = c(36,64))
+```
+
+Now I will just format this to look like the small quad data so we can join the two.
+
+```{r large quad formatting}
+
+LQuad_wide <- LQuad_cropped %>% select(-c(obs, Row, Column)) %>% group_by(Name) %>% pivot_wider(names_from = Label, values_from = Label, values_fn = length, values_fill = 0)
+LQuad_wide <- as.data.frame(LQuad_wide)
+
+LQuad_separated <- separate(LQuad_wide, Name, sep="_", into=c("Field.Season", "Site","Quadrat"))
+
+LQuad_nojpg <- rm_chr(LQuad_separated, c(".jpg", ".jpeg"))
+
+LQuad_colnames <- change_names(LQuad_nojpg, coral_labelset, "short_name", "full_name")
+
+
+LQuad_colnames <-  mutate_at(LQuad_colnames, c(4:11), as.numeric)
+
+LQuad_usable <- useable_obs(LQuad_colnames, c("Shadow", "Transect_hardware", "Unclear"),
+                             max = TRUE, cutoff = 0.1*54)
+
+LQuad_removed <- useable_obs(LQuad_colnames, c("Shadow", "Transect_hardware", "Unclear"),
+                             max = TRUE, cutoff = 0.1*54, print_max = TRUE)
+
+```
+
+With the large quadrats, only 4 photos needed to be removed because they had too many unuseable points. 
+
+There are a few more things that need to be removed from the large quadrat data, including MPQs (Mega photo quadrats), site8.5 and DEEP photo quadrats. 
+
+```{r remove DEEP, site 8.5 and MPQs}
+
+LQuad_noDEEP_site8.5 <- keep_rm(LQuad_usable, c("DEEP", "site8.5"), select = "row", exact = FALSE, colname = "Site", keep = FALSE)
+
+LQuad_noMPQ <- keep_rm(LQuad_noDEEP_site8.5, c("MPQ"), select = "row", exact = FALSE, colname = "Quadrat", keep = FALSE)
+
+```
+
+Alright, not we can join these data frames together, and continue with one large data set. As both data sets used the samle label set of names, This is easy with the `smartbind()` function out of the `gtools` package
+
+```{r}
+
+AllQuad <- smartbind(SQuad_removed, LQuad_noMPQ, fill = 0)
+
+```
+
+
+
+
+
+
+
+
+
+
 
 
 
