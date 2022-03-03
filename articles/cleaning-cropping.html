@@ -6,12 +6,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="quadcleanR">
-<title>Cleaning Quadrat Data • quadcleanR</title>
+<title>Cleaning and Cropping Quadrat Data • quadcleanR</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Cleaning Quadrat Data">
+<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Cleaning and Cropping Quadrat Data">
 <meta property="og:description" content="quadcleanR">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -62,13 +62,13 @@
 
 
 
-<script src="cleaning_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+<script src="cleaning-cropping_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <main id="main"><div class="page-header">
-      <img src="" class="logo" alt=""><h1>Cleaning Quadrat Data</h1>
+      <img src="" class="logo" alt=""><h1>Cleaning and Cropping Quadrat Data</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/DominiqueMaucieri/quadcleanR/blob/HEAD/vignettes/cleaning.Rmd" class="external-link"><code>vignettes/cleaning.Rmd</code></a></small>
-      <div class="d-none name"><code>cleaning.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/DominiqueMaucieri/quadcleanR/blob/HEAD/vignettes/cleaning-cropping.Rmd" class="external-link"><code>vignettes/cleaning-cropping.Rmd</code></a></small>
+      <div class="d-none name"><code>cleaning-cropping.Rmd</code></div>
     </div>
 
     
@@ -83,7 +83,7 @@
 <ol style="list-style-type: decimal">
 <li><p>Take the small quadrats (<code>softcoral_SQuads</code>) and show how to clean the data</p></li>
 <li><p>Then crop the large quadrat data (<code>softcoral_annotations</code>) and clean it too</p></li>
-<li><p>Join the two together to produce a large, easy to use data frame for future analyses.</p></li>
+<li><p>Join the two together to produce a large, easy to use data frame for future analyses, with some further cleaning of this joint data set.</p></li>
 </ol>
 <p>First lets load the package, the dplyr package, tidyr package and the data</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -314,13 +314,20 @@
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"coral_labelset"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">coral_labelset</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">##   short_name                full_name functional_group</span>
-<span class="co">## 1       AVRA             Avrainvillea            Algae</span>
-<span class="co">## 2       Caul                 Caulerpa            Algae</span>
-<span class="co">## 3        CCA Crustose_coralline_algae            Algae</span>
-<span class="co">## 4       Dict                 Dictyota            Algae</span>
-<span class="co">## 5      DICTY           Dictyosphaeria            Algae</span>
-<span class="co">## 6       Hali                 Halimeda            Algae</span></code></pre>
+<pre><code><span class="co">##   short_name                full_name           taxonomic_name</span>
+<span class="co">## 1     Rubble      Broken_coral_rubble      Broken_coral_rubble</span>
+<span class="co">## 2       SCRO   Consolidated_hard_rock   Consolidated_hard_rock</span>
+<span class="co">## 3       Sand                     Sand                     Sand</span>
+<span class="co">## 4   Sediment                 Sediment                 Sediment</span>
+<span class="co">## 5        CCA Crustose_coralline_algae Crustose_coralline_algae</span>
+<span class="co">## 6    Peysson             Peyssonnelia             Peyssonnelia</span>
+<span class="co">##    functional_group life_history</span>
+<span class="co">## 1 Abiotic_Substrate    Not_Coral</span>
+<span class="co">## 2 Abiotic_Substrate    Not_Coral</span>
+<span class="co">## 3 Abiotic_Substrate    Not_Coral</span>
+<span class="co">## 4 Abiotic_Substrate    Not_Coral</span>
+<span class="co">## 5    Crustose_Algae    Not_Coral</span>
+<span class="co">## 6    Crustose_Algae    Not_Coral</span></code></pre>
 <p>This is what my label set document looks like, but you could also make this in R by joining a series of vectors. Now lets fix the column names.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">SQuad_colnames</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/change_names.html">change_names</a></span><span class="op">(</span><span class="va">SQuad_site40</span>, <span class="va">coral_labelset</span>, <span class="st">"short_name"</span>, <span class="st">"full_name"</span><span class="op">)</span>
@@ -370,7 +377,7 @@
 <span class="co">##  [85] "Porites"                        "Psammocora"                    </span>
 <span class="co">##  [87] "Pavona_varians"                 "Sandolitha"                    </span>
 <span class="co">##  [89] "Tubastrea"                      "Turbinaria"                    </span>
-<span class="co">##  [91] "unknown_hard_coral"             "Sea_anemone"                   </span>
+<span class="co">##  [91] "Unknown_Hard_Coral"             "Sea_anemone"                   </span>
 <span class="co">##  [93] "Bleached_Cladiella"             "Bleached_Sinularia"            </span>
 <span class="co">##  [95] "Cladiella"                      "Encrusting_Bryozoan"           </span>
 <span class="co">##  [97] "Sea_urchin"                     "Hydrocoral"                    </span>
@@ -402,7 +409,7 @@
 
 <span class="va">SQuad_removed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/useable_obs.html">useable_obs</a></span><span class="op">(</span><span class="va">SQuad_colnames</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Shadow"</span>, <span class="st">"Transect_hardware"</span>, <span class="st">"Unclear"</span><span class="op">)</span>,
                              max <span class="op">=</span> <span class="cn">TRUE</span>, cutoff <span class="op">=</span> <span class="fl">10</span>, print_max <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<p>By identifying how many useable points there are in each quadrat, and removing any quadrats that had over 10% of the identified points unuseable, we have removed 175 quadrats from analysis, which you can view with the <code>SQuad_removed</code> data frame.</p>
+<p>By identifying how many useable points there are in each quadrat, and removing any quadrats that had over 10% of the identified points unuseable, we have removed 0 quadrats from analysis, which you could view with the <code>SQuad_removed</code> data frame but as we have no quadrats to removed, it will be an empty data frame.</p>
 <p>Now we can start working on the large quadrat data.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"softcoral_annotations"</span><span class="op">)</span>
@@ -444,7 +451,14 @@
 <span class="va">LQuad_noMPQ</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/keep_rm.html">keep_rm</a></span><span class="op">(</span><span class="va">LQuad_noDEEP_site8.5</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"MPQ"</span><span class="op">)</span>, select <span class="op">=</span> <span class="st">"row"</span>, exact <span class="op">=</span> <span class="cn">FALSE</span>, colname <span class="op">=</span> <span class="st">"Quadrat"</span>, keep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 <p>Alright, not we can join these data frames together, and continue with one large data set. As both data sets used the samle label set of names, This is easy with the <code><a href="https://rdrr.io/pkg/gtools/man/smartbind.html" class="external-link">smartbind()</a></code> function out of the <code>gtools</code> package</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">AllQuad</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/gtools/man/smartbind.html" class="external-link">smartbind</a></span><span class="op">(</span><span class="va">SQuad_removed</span>, <span class="va">LQuad_noMPQ</span>, fill <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="co"># AllQuads &lt;- smartbind(SQuad_usable, LQuad_noMPQ, fill = 0) %&gt;% select(-c(unusable))</span></code></pre></div>
+<p>Now we have removed unusable annotations, so lets rescale and recalculate cover with proportion cover. This data frame has ~6500 rows so this will take a minute or two.</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># AllQuads_cover &lt;- cover_calc(AllQuads, names(AllQuads[,4:131]), prop = TRUE)</span></code></pre></div>
+<p>One thing you may notice by looking at the column names, is that these columns are not specific species, but there are duplicates of the same species, categorized into bleaching and non bleaching forms. For any kind of diversity analysis, this would inflate the number of different species, so it is important to combine different forms of the same species if diversity analyses are being done.</p>
+<p>This data frame is now nicely formatted and could be used for many community based analyses. This might be a great stopping point for some analyses, but to further clean this up I am going to convert this into long format data.</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># AllQuads_long</span></code></pre></div>
 </div>
   </main>
 </div>
