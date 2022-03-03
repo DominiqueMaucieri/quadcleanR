@@ -11,14 +11,14 @@ coral_cover <- data.frame(Sites, Transect, Acropora.sp, Gardineroseris.sp,
                           Psammocora.sp, Leptastrea.sp, Blurry, Unk)
 
 test1 <- useable_obs(coral_cover, c("Blurry", "Unk"))
-expect_match(colnames(test1[7]), "unusable")
+expect_match(colnames(test1[7]), "unuseable")
 expect_equal(test1[,7], c(5, 7, 9, 11, 7, 3))
 
 expect_warning(useable_obs(coral_cover, c("Blurry", "Unk"), print_max = TRUE),  "no max specified")
 
-expect_warning(useable_obs(coral_cover, c("Blurry", "Unk"), rm_unusable = FALSE), "duplication exists in the data frame")
-test2 <- suppressWarnings(useable_obs(coral_cover, c("Blurry", "Unk"), rm_unusable = FALSE))
-expect_match(colnames(test2[9]), "unusable")
+expect_warning(useable_obs(coral_cover, c("Blurry", "Unk"), rm_unuseable = FALSE), "duplication exists in the data frame")
+test2 <- suppressWarnings(useable_obs(coral_cover, c("Blurry", "Unk"), rm_unuseable = FALSE))
+expect_match(colnames(test2[9]), "unuseable")
 
 test3 <- useable_obs(coral_cover, c("Blurry", "Unk"), max = TRUE, cutoff = 8)
 expect_equal(nrow(test3), 4)

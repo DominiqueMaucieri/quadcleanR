@@ -1,5 +1,5 @@
 ---
-title: "Crop Quadrats by Area"
+title: "Why to Crop Quadrats by Area"
 description: >
   The function `crop_area` is powerful when working with quadrats of different 
   sizes but the same density of points. This vignette will walk through why you 
@@ -7,7 +7,7 @@ description: >
   `crop_area` function. 
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Crop Quadrats by Area}
+  %\VignetteIndexEntry{Why to Crop Quadrats by Area}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

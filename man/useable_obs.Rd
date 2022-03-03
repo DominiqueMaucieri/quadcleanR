@@ -2,45 +2,45 @@
 % Please edit documentation in R/useable_obs.R
 \name{useable_obs}
 \alias{useable_obs}
-\title{Extract usable observations.}
+\title{Extract useable observations.}
 \usage{
 useable_obs(
   data,
-  unusable,
+  unuseable,
   max = FALSE,
   cutoff,
   print_max = FALSE,
-  rm_unusable = TRUE
+  rm_unuseable = TRUE
 )
 }
 \arguments{
 \item{data}{A data frame in wide format.}
 
-\item{unusable}{A vector of column names using unusable identified points.}
+\item{unuseable}{A vector of column names using unuseable identified points.}
 
 \item{max}{If max = FALSE, no threshold will be examined. If max = TRUE, a
 threshold cutoff needs to be provided where rows containing more than the
 cutoff will be removed from the data frame.}
 
-\item{cutoff}{The threshold number where rows containing more unusable observations
+\item{cutoff}{The threshold number where rows containing more unuseable observations
 than the cutoff will be removed from the data frame.}
 
 \item{print_max}{If print_max = TRUE, the data frame returned will be the
-rows containing more unusable observations than the cutoff. If print_max = FALSE
-the data frame returned will be the rows containing equal to or less unusable
+rows containing more unuseable observations than the cutoff. If print_max = FALSE
+the data frame returned will be the rows containing equal to or less unuseable
 observations than the cutoff.}
 
-\item{rm_unusable}{If rm_unusable = TRUE, the columns named in the unusable
+\item{rm_unuseable}{If rm_unuseable = TRUE, the columns named in the unuseable
 vector will be removed from the data frame. These columns will not be
-removed if rm_unusable = FALSE, though duplicate data will remain.}
+removed if rm_unuseable = FALSE, though duplicate data will remain.}
 }
 \value{
-A data frame of containing summed unusable points. Data frame can be
-specified if it returns data above or below a threshold of unusable points.
+A data frame of containing summed unuseable points. Data frame can be
+specified if it returns data above or below a threshold of unuseable points.
 }
 \description{
-Sum columns containing unusable identified points and remove
-rows that contain more than the specified cutoff of unusable points.
+Sum columns containing unuseable identified points and remove
+rows that contain more than the specified cutoff of unuseable points.
 }
 \examples{
 #create data set for example
@@ -61,7 +61,7 @@ useable_obs(coral_cover, c("Blurry", "Unk"))
 
 useable_obs(coral_cover, c("Blurry", "Unk"), print_max = TRUE)
 
-useable_obs(coral_cover, c("Blurry", "Unk"), rm_unusable = FALSE)
+useable_obs(coral_cover, c("Blurry", "Unk"), rm_unuseable = FALSE)
 
 useable_obs(coral_cover, c("Blurry", "Unk"), max = TRUE, cutoff = 8)
 

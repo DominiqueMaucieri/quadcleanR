@@ -1,0 +1,143 @@
+---
+title: "Simple Cleaning Quadrat Data"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Simple Cleaning Quadrat Data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Introduction
+
+This vignette will walk you through cleaning up quadrat data to produce an easy to analyze data frame.
+
+A little about the data:
+
+The data being cleaned will be the `softcoral_LQuads` and this vignette will build off of the cropping vignette as well. Data was collected by the Baum Lab and Kiritimati Field Teams. The `softcoral_LQuads` data are from photo quadrats (1m by 1m) which were randomly annotated with 100 random points each. At each of these annotated points, the substrate was identified. Photo quadrats were collected on Kiritimati Island in the Republic of Kiribati and document coral cover over time and space. The annotations and output of the data frame were produced using [CoralNet](https://coralnet.ucsd.edu/) and all annotations were done manually, by trained researchers.
+
+First lets load the package, the dplyr package, tidyr package and the data
+
+```{r load package, message = FALSE, warning = FALSE}
+
+library(quadcleanR)
+library(dplyr)
+library(tidyr)
+library(gtools)
+
+data("softcoral_LQuads")
+
+```
+
+
+Now let me point out some unique aspects of this data:
+
+```{r head and tail, message = FALSE}
+
+tail(softcoral_LQuads)
+
+```
+This data as an `Image.ID` column which was arbitrarily added to this data set, so we are going to remove that as it holds no scientific value. There is also a final row which sums all quadrats but since we will be removing quadrats and points to clean these data up, we will remove that final row as well. The `Image.name` column is the unique ID for each photo quadrat, but it is very messy and not easy to use, so we will make this into new columns and add more information. `Annotation.status` is a column from [CoralNet](https://coralnet.ucsd.edu/) which tells if the annotations in each photo quadrat have been confirmed by human researchers or are only based on AI. The `Points` column tells us how many randomly annotated points there are in each quadrat, and since they are all 54, we know these data are from the smaller quadrats. The rest of the columns are the different coral and substrate IDs and how many points where annotated for each tag in each photo.
+
+So first, lets remove unneeded columns and make sure we are only working with "Confirmed" annotations.
+
+```{r confirmed annotation status}
+
+LQuad_confirmed <- softcoral_LQuads %>% filter(Annotation.status == "Confirmed") %>% select(-c(Image.ID, Points, Annotation.status))
+
+```
+
+Now we will separate the `Image.name` column into more descriptive columns.
+
+```{r separating ID}
+
+LQuad_separated <- separate(LQuad_confirmed, Image.name, sep="_", into=c("Field.Season", "Site","Quadrat"))
+
+```
+
+But if you notice, there are still .jpg and .jpeg in the quadrat names, so lets remove those, and change the naming of siteT19 to site40. At the same time I will remove site8.5, any DEEP sites and any MPQs (mega photo quadrat) from the data set.
+
+```{r remove jpg and T19}
+
+LQuad_nojpg <- rm_chr(LQuad_separated, c(".jpg", ".jpeg"))
+
+LQuad_site40 <- change_values(LQuad_nojpg, "Site", "siteT19", "site40")
+
+LQuad_noDEEP_site8.5 <- keep_rm(LQuad_site40, c("DEEP", "site8.5"), select = "row", exact = FALSE, colname = "Site", keep = FALSE)
+
+LQuad_noMPQ <- keep_rm(LQuad_noDEEP_site8.5, c("MPQ"), select = "row", exact = FALSE, colname = "Quadrat", keep = FALSE)
+
+
+```
+
+Now lets look at the levels of some of these columns. 
+
+```{r view levels}
+
+unique(LQuad_noMPQ$Field.Season)
+unique(LQuad_noMPQ$Site)
+
+```
+
+
+Next lets update the column names for this data frame. The column names are currently set as the tag shorthand used during the annotation process, but now I want them to better reflect the actual substrate names.
+
+```{r add labelset, message=FALSE}
+
+data("coral_labelset")
+head(coral_labelset)
+
+```
+
+This is what the label set document looks like, but you could also make this in R by joining a series of vectors. Now lets fix the column names.
+
+```{r change colnames}
+
+LQuad_colnames <- change_names(LQuad_noMPQ, coral_labelset, "short_name", "full_name")
+names(LQuad_colnames)
+
+```
+
+Much better.
+
+Now for these photo quadrats, the Shadow, Transect_hardware and Unclear tags need to be removed and not used when we calculate percent cover. If I was going to use this data to do a diversity analysis with hard corals, I would also include unknown_hard_coral, and Bleached_unknown_hard_coral to this list, but we are going to clean this data for soft coral analyses, so we will leave them in. 
+
+```{r usable points}
+
+LQuad_colnames <-  mutate_at(LQuad_colnames, c(4:134), as.numeric)
+
+LQuad_useable <- useable_obs(LQuad_colnames, c("Shadow", "Transect_hardware", "Unclear"), 
+                            max = TRUE, cutoff = 10)
+
+LQuad_removed <- useable_obs(LQuad_colnames, c("Shadow", "Transect_hardware", "Unclear"),
+                             max = TRUE, cutoff = 10, print_max = TRUE)
+
+```
+
+By identifying how many useable points there are in each quadrat, and removing any quadrats that had over 10% of the identified points unuseable, we have removed 0 quadrats from analysis, which you could view with the `LQuad_removed` data frame but as we have no quadrats to removed, it will be an empty data frame.
+
+Now we know how many useable annotations for each tag there are in each photo quadrat. Lets convert this into a proportion cover now. This may take a minute as there are many rows.
+
+```{r prop cover calc}
+
+LQuad_cover <- cover_calc(LQuad_useable, names(LQuad_useable[,4:131]), prop = TRUE) 
+
+```
+
+This data frame is now nicely formatted and could be used for many community based analyses. This might be a great stopping point for some analyses, but to further clean this up I am going to convert this into long format data.
+
+```{r long format}
+
+LQuad_long <- LQuad_cover %>% select(-c(unuseable)) %>% pivot_longer(cols = names(LQuad_useable[,4:131]), names_to = "Species", values_to = "prop_cover")
+
+```
+ 
+One thing you may notice by looking at the `Species` column, is that these species names are not unique species, but there are duplicates of the same species, categorized into bleaching and non bleaching forms. For any kind of diversity analysis, this would inflate the number of different species, so it is important to combine different forms of the same species if diversity analyses are being done.
+
+For this clean up, we will walk through 3 ways of dealing with this based on what you want to accomplish.
+
+1. Combining rows.
+
+If you want to use your data in this long format and want to just combine everything with 
+
+
+
