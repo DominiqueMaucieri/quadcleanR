@@ -54,7 +54,7 @@ of yes or no, or customize with a set of category names.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">categorize</span><span class="op">(</span><span class="va">data</span>, <span class="va">column</span>, <span class="va">values</span>, <span class="va">name</span>, binary <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">categories</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">categorize</span><span class="op">(</span><span class="va">data</span>, <span class="va">column</span>, <span class="va">values</span>, <span class="va">name</span>, binary <span class="op">=</span> <span class="cn">TRUE</span>, exact <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">categories</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -100,7 +100,7 @@ same order as the corresponding value element.</p></dd>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Classify shallow transects in a binary column</span></span>
 <span class="r-in"><span class="fu">categorize</span><span class="op">(</span>data <span class="op">=</span> <span class="va">coral_cover</span>, column <span class="op">=</span> <span class="st">"Transect"</span>, values <span class="op">=</span> <span class="st">"Shallow"</span>,</span>
-<span class="r-in">    name <span class="op">=</span> <span class="st">"Shallow"</span>, binary <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in">    name <span class="op">=</span> <span class="st">"Shallow"</span>, binary <span class="op">=</span> <span class="cn">TRUE</span>, exact <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Sites  Transect Shallow Acropora.sp Gardineroseris.sp Psammocora.sp</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1   One    1-Deep      No         0.1              0.40           0.9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2   One 1-Shallow     Yes         0.6              0.90           0.6</span>
@@ -118,7 +118,7 @@ same order as the corresponding value element.</p></dd>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Classify depth of transect in a new column based on transect name</span></span>
 <span class="r-in"><span class="fu">categorize</span><span class="op">(</span>data <span class="op">=</span> <span class="va">coral_cover</span>, column <span class="op">=</span> <span class="st">"Transect"</span>, values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Shallow"</span>, <span class="st">"Deep"</span><span class="op">)</span>,</span>
-<span class="r-in">    name <span class="op">=</span> <span class="st">"Depth"</span>, binary <span class="op">=</span> <span class="cn">FALSE</span>, categories <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"S"</span>, <span class="st">"D"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in">    name <span class="op">=</span> <span class="st">"Depth"</span>, binary <span class="op">=</span> <span class="cn">FALSE</span>, categories <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"S"</span>, <span class="st">"D"</span><span class="op">)</span>, exact <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Sites  Transect Depth Acropora.sp Gardineroseris.sp Psammocora.sp</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1   One    1-Deep     D         0.1              0.40           0.9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2   One 1-Shallow     S         0.6              0.90           0.6</span>
