@@ -4,7 +4,7 @@
 \alias{categorize}
 \title{Categorize data based on contents of a column}
 \usage{
-categorize(data, column, values, name, binary = TRUE, categories)
+categorize(data, column, values, name, binary = TRUE, exact = TRUE, categories)
 }
 \arguments{
 \item{data}{The data frame.}
@@ -48,11 +48,11 @@ coral_cover <- data.frame(Sites, Transect, Acropora.sp, Gardineroseris.sp,
 
 # Classify shallow transects in a binary column
 categorize(data = coral_cover, column = "Transect", values = "Shallow",
-    name = "Shallow", binary = TRUE)
+    name = "Shallow", binary = TRUE, exact = FALSE)
 
 # Classify depth of transect in a new column based on transect name
 categorize(data = coral_cover, column = "Transect", values = c("Shallow", "Deep"),
-    name = "Depth", binary = FALSE, categories = c("S", "D"))
+    name = "Depth", binary = FALSE, categories = c("S", "D"), exact = FALSE)
 
 
 }

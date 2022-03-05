@@ -34,37 +34,71 @@
 #'
 #' # Classify shallow transects in a binary column
 #' categorize(data = coral_cover, column = "Transect", values = "Shallow",
-#'     name = "Shallow", binary = TRUE)
+#'     name = "Shallow", binary = TRUE, exact = FALSE)
 #'
 #' # Classify depth of transect in a new column based on transect name
 #' categorize(data = coral_cover, column = "Transect", values = c("Shallow", "Deep"),
-#'     name = "Depth", binary = FALSE, categories = c("S", "D"))
+#'     name = "Depth", binary = FALSE, categories = c("S", "D"), exact = FALSE)
 #'
 #'
 
-categorize <- function(data, column, values, name, binary = TRUE, categories){
+categorize <- function(data, column, values, name, binary = TRUE, exact = TRUE, categories){
 
-  key_column <- match(as.factor(column), names(data))
-  num_column <- ncol(data)
-  data[[name]] <- "error"
-  values_vector <- c(values)
+  if(exact == FALSE){
+    key_column <- match(as.factor(column), names(data))
+    num_column <- ncol(data)
+    data[[name]] <- "error"
+    values_vector <- c(values)
 
-  if(binary == TRUE){
-    for(i in 1:nrow(data)){
-      if(grepl(paste(values_vector,collapse="|"), data[[column]][i]) == TRUE) {
-        data[[name]][i] <- "Yes"} else {
-        data[[name]][i] <- "No"
+    if(binary == TRUE){
+      for(i in 1:nrow(data)){
+        if(grepl(paste(values_vector,collapse="|"), data[[column]][i]) == TRUE) {
+          data[[name]][i] <- "Yes"} else {
+          data[[name]][i] <- "No"
+        }
+      }
+    }
+
+    if(binary == FALSE){
+      cat_vector <- c(categories)
+      for (i in 1:nrow(data)) {
+        if(grepl(paste(values_vector,collapse="|"), data[[column]][i]) == TRUE) {
+          for(j in 1:length(values_vector)){
+          if(grepl(values_vector[j], data[[column]][i]) == TRUE) {
+            data[[name]][i] <- cat_vector[j]
+            }
+          }
+        } else {data[[name]][i] <- NA}
       }
     }
   }
 
-  if(binary == FALSE){
-    cat_vector <- c(categories)
-    for (i in 1:nrow(data)) {
-      for(j in 1:length(values_vector)){
-        if(grepl(values_vector[j], data[[column]][i]) == TRUE) {
-          data[[name]][i] <- cat_vector[j]
-        }
+
+  if(exact == TRUE){
+    key_column <- match(as.factor(column), names(data))
+    num_column <- ncol(data)
+    data[[name]] <- "error"
+    values_vector <- c(values)
+
+    if(binary == TRUE){
+      for(i in 1:nrow(data)){
+        if(data[[column]][i] %in% values_vector) {
+          data[[name]][i] <- "Yes"} else {
+            data[[name]][i] <- "No"
+          }
+      }
+    }
+
+    if(binary == FALSE){
+      cat_vector <- c(categories)
+      for (i in 1:nrow(data)) {
+        if(data[[column]][i] %in% values_vector){
+          for(j in 1:length(values_vector)){
+            if(data[[column]][i] == values_vector[j]) {
+              data[[name]][i] <- cat_vector[j]
+            }
+          }
+        } else {data[[name]][i] <- NA}
       }
     }
   }
