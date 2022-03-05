@@ -24,6 +24,10 @@ If \code{binary ==  FALSE} there must be \verb{categories provided} which will b
 to classify the presence of characters or parts of characters specified in
 \code{values}.}
 
+\item{exact}{If exact = TRUE only exact matches will be selected. If exact
+= FALSE matches will be selected if they contain the characters in the
+\code{values} vector.}
+
 \item{categories}{The factor names denoting the presence of the characters or
 parts of characters specified by \code{values}. These must be specified in the
 same order as the corresponding value element.}

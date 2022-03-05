@@ -14,6 +14,9 @@
 #'     If `binary ==  FALSE` there must be `categories provided` which will be used
 #'     to classify the presence of characters or parts of characters specified in
 #'     `values`.
+#' @param exact If exact = TRUE only exact matches will be selected. If exact
+#'    = FALSE matches will be selected if they contain the characters in the
+#'    `values` vector.
 #' @param categories The factor names denoting the presence of the characters or
 #'     parts of characters specified by `values`. These must be specified in the
 #'     same order as the corresponding value element.

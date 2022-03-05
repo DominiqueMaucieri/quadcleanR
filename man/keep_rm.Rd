@@ -25,18 +25,18 @@ being kept, or being removed, as specified by \code{keep}. If \code{col}, column
 names containing the \code{values} will either be kept or removed, as specified
 by \code{keep}.}
 
-\item{keep}{If keep == TRUE the presence of the \code{values} will cause the
-selected rows or columns to be kept. If keep == FAUSE the presence of
+\item{keep}{If keep = TRUE the presence of the \code{values} will cause the
+selected rows or columns to be kept. If keep = FALSE the presence of
 the \code{values} will cause the selected rows or columns to be removed.}
 
-\item{drop_levels}{If drop_levels == TRUE, factor levels that have been
-removed will be dropped. Only applicable when select == "row"}
+\item{drop_levels}{If drop_levels = TRUE, factor levels that have been
+removed will be dropped. Only applicable when select = "row"}
 
-\item{exact}{If exact == TRUE only exact matches will be selected. If exact
-== FALSE matches will be selected if they contain the characters in the
+\item{exact}{If exact = TRUE only exact matches will be selected. If exact
+= FALSE matches will be selected if they contain the characters in the
 \code{values} vector.}
 
-\item{colname}{If \code{select} == "row", colname will specify the column to
+\item{colname}{If \code{select} = "row", \code{colname} will specify the column to
 select rows from.}
 }
 \value{

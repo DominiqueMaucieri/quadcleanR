@@ -10,15 +10,15 @@
 #'    being kept, or being removed, as specified by `keep`. If `col`, columns with
 #'    names containing the `values` will either be kept or removed, as specified
 #'    by `keep`.
-#' @param keep If keep == TRUE the presence of the `values` will cause the
-#'    selected rows or columns to be kept. If keep == FAUSE the presence of
+#' @param keep If keep = TRUE the presence of the `values` will cause the
+#'    selected rows or columns to be kept. If keep = FALSE the presence of
 #'    the `values` will cause the selected rows or columns to be removed.
-#' @param drop_levels If drop_levels == TRUE, factor levels that have been
-#'    removed will be dropped. Only applicable when select == "row"
-#' @param exact If exact == TRUE only exact matches will be selected. If exact
-#'    == FALSE matches will be selected if they contain the characters in the
+#' @param drop_levels If drop_levels = TRUE, factor levels that have been
+#'    removed will be dropped. Only applicable when select = "row"
+#' @param exact If exact = TRUE only exact matches will be selected. If exact
+#'    = FALSE matches will be selected if they contain the characters in the
 #'    `values` vector.
-#' @param colname If `select` == "row", colname will specify the column to
+#' @param colname If `select` = "row", `colname` will specify the column to
 #'    select rows from.
 #'
 #' @return a data frame containing new selection of data.
