@@ -1,5 +1,6 @@
 ---
 title: "Simple Cleaning Quadrat Data"
+description: >
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Simple Cleaning Quadrat Data}
@@ -138,6 +139,24 @@ For this clean up, we will walk through 3 ways of dealing with this based on wha
 1. Combining rows.
 
 If you want to use your data in this long format and want to just combine everything with 
+
+
+
+This will take a few minutes (about 6 minutes for ma) as there are over 500000 rows.
+
+```{r categorizing bleaching}
+
+# LQuad_Bleach <- categorize(LQuad_long, "Species", values = c("Bleach"), name = "Bleached", binary = TRUE, exact = FALSE)
+
+```
+
+```{r categorizing taxonomy}
+
+# LQuad_Taxa <- categorize(LQuad_long, "Species", values = coral_labelset$full_name, name = "Taxonomic_Name", binary = FALSE, categories = coral_labelset$taxonomic_name)
+
+#25minutes
+
+```
 
 
 

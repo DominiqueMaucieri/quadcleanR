@@ -1,5 +1,6 @@
 ---
 title: "Cleaning and Cropping Quadrat Data"
+description: >
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Cleaning and Cropping Quadrat Data}
