@@ -2,10 +2,10 @@ pandoc: 2.7.3
 pkgdown: 2.0.2
 pkgdown_sha: ~
 articles:
-  cleaning-cropping: cleaning-cropping.html
+  cleaning_cropping: cleaning_cropping.html
   cleaning_simple: cleaning_simple.html
   cropping: cropping.html
-last_built: 2022-03-05T01:07Z
+last_built: 2022-03-07T23:55Z
 urls:
   reference: https://dominiquemaucieri.github.io/quadcleanR/reference
   article: https://dominiquemaucieri.github.io/quadcleanR/articles

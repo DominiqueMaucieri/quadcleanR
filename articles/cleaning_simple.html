@@ -38,8 +38,13 @@
 <li class="nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
-<li class="active nav-item">
-  <a class="nav-link" href="../articles/index.html">Articles</a>
+<li class="active nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/cleaning_cropping.html">Cleaning and Cropping Quadrat Data</a>
+    <a class="dropdown-item" href="../articles/cleaning_simple.html">Simple Cleaning Quadrat Data</a>
+    <a class="dropdown-item" href="../articles/cropping.html">Why to Crop Quadrats by Area</a>
+  </div>
 </li>
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
@@ -327,6 +332,13 @@
 <li>Combining rows.</li>
 </ol>
 <p>If you want to use your data in this long format and want to just combine everything with</p>
+<p>This will take a few minutes (about 6 minutes for ma) as there are over 500000 rows.</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># LQuad_Bleach &lt;- categorize(LQuad_long, "Species", values = c("Bleach"), name = "Bleached", binary = TRUE, exact = FALSE)</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># LQuad_Taxa &lt;- categorize(LQuad_long, "Species", values = coral_labelset$full_name, name = "Taxonomic_Name", binary = FALSE, categories = coral_labelset$taxonomic_name)</span>
+
+<span class="co">#25minutes</span></code></pre></div>
 </div>
   </main>
 </div>
