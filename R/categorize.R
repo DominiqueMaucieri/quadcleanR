@@ -47,61 +47,49 @@
 
 categorize <- function(data, column, values, name, binary = TRUE, exact = TRUE, categories){
 
+  key_column <- match(as.factor(column), names(data))
+  num_column <- ncol(data)
+  values_vector <- c(values)
+
+
   if(exact == FALSE){
-    key_column <- match(as.factor(column), names(data))
-    num_column <- ncol(data)
-    data[[name]] <- "error"
-    values_vector <- c(values)
 
     if(binary == TRUE){
-      for(i in 1:nrow(data)){
-        if(grepl(paste(values_vector,collapse="|"), data[[column]][i]) == TRUE) {
-          data[[name]][i] <- "Yes"} else {
-          data[[name]][i] <- "No"
-        }
-      }
+      data[[name]] <- "No"
+      data[[name]][grep(paste(values_vector,collapse="|"), data[[column]])] <- "Yes"
+
     }
 
     if(binary == FALSE){
-      cat_vector <- c(categories)
-      for (i in 1:nrow(data)) {
-        if(grepl(paste(values_vector,collapse="|"), data[[column]][i]) == TRUE) {
-          for(j in 1:length(values_vector)){
-          if(grepl(values_vector[j], data[[column]][i]) == TRUE) {
-            data[[name]][i] <- cat_vector[j]
-            }
-          }
-        } else {data[[name]][i] <- NA}
+      data[[name]] <- NA
+      names <- data.frame(values_vector, categories)
+
+      for(i in 1:length(unique(categories))){
+        names_i <- names[names$categories == unique(categories)[i],]$values_vector
+        data[[name]][grep(paste(names_i,collapse="|"), data[[column]])] <- unique(categories)[i]
+
       }
     }
   }
 
 
   if(exact == TRUE){
-    key_column <- match(as.factor(column), names(data))
-    num_column <- ncol(data)
-    data[[name]] <- "error"
-    values_vector <- c(values)
 
     if(binary == TRUE){
-      for(i in 1:nrow(data)){
-        if(data[[column]][i] %in% values_vector) {
-          data[[name]][i] <- "Yes"} else {
-            data[[name]][i] <- "No"
-          }
-      }
+      data[[name]] <- "No"
+      data[[name]][data[[column]] %in% values_vector] <- "Yes"
+
     }
 
     if(binary == FALSE){
-      cat_vector <- c(categories)
-      for (i in 1:nrow(data)) {
-        if(data[[column]][i] %in% values_vector){
-          for(j in 1:length(values_vector)){
-            if(data[[column]][i] == values_vector[j]) {
-              data[[name]][i] <- cat_vector[j]
-            }
-          }
-        } else {data[[name]][i] <- NA}
+
+      data[[name]] <- NA
+      names <- data.frame(values_vector, categories)
+
+      for(i in 1:length(unique(categories))){
+        names_i <- names[names$categories == unique(categories)[i],]$values_vector
+        data[[name]][data[[column]] %in% names_i] <- unique(categories)[i]
+
       }
     }
   }

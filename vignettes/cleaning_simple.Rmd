@@ -1,6 +1,9 @@
 ---
 title: "Simple Cleaning Quadrat Data"
 description: >
+  A simple walk through of how to clean up quadrat data using the `quadcleanR`
+  package. This will go through all the functions except the `croparea()`
+  function, as well as visualizing the resulting data.
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Simple Cleaning Quadrat Data}
@@ -142,19 +145,17 @@ If you want to use your data in this long format and want to just combine everyt
 
 
 
-This will take a few minutes (about 6 minutes for ma) as there are over 500000 rows.
+
 
 ```{r categorizing bleaching}
 
-# LQuad_Bleach <- categorize(LQuad_long, "Species", values = c("Bleach"), name = "Bleached", binary = TRUE, exact = FALSE)
+LQuad_Bleach <- categorize(LQuad_long, "Species", values = c("Bleach"), name = "Bleached", binary = TRUE, exact = FALSE)
 
 ```
 
 ```{r categorizing taxonomy}
 
-# LQuad_Taxa <- categorize(LQuad_long, "Species", values = coral_labelset$full_name, name = "Taxonomic_Name", binary = FALSE, categories = coral_labelset$taxonomic_name)
-
-#25minutes
+LQuad_Taxa <- categorize(LQuad_long, "Species", values = coral_labelset$full_name, name = "Taxonomic_Name", binary = FALSE, categories = coral_labelset$taxonomic_name)
 
 ```
 

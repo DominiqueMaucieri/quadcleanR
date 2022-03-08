@@ -39,10 +39,3 @@ test_cat_2 <- categorize(data = coral_cover_2, column = "Sites", values = c("One
 expect_equal(test_cat_2[4,2], structure(NA_integer_, .Label = c("long", "short"), class = "factor"))
 
 
-
-
-
-
-
-
-

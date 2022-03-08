@@ -5,7 +5,7 @@ template:
 deploy:
   install_metadata: true
 
-vignettes:
+articles:
 - title: Vignettes
   contents:
   - cleaning_simple
