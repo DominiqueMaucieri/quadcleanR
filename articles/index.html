@@ -21,13 +21,8 @@
       <ul class="navbar-nav me-auto"><li class="nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
-<li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/cleaning_cropping.html">Cleaning and Cropping Quadrat Data</a>
-    <a class="dropdown-item" href="../articles/cleaning_simple.html">Simple Cleaning Quadrat Data</a>
-    <a class="dropdown-item" href="../articles/cropping.html">Why to Crop Quadrats by Area</a>
-  </div>
+<li class="active nav-item">
+  <a class="nav-link" href="../articles/index.html">Articles</a>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
@@ -49,15 +44,15 @@
     </div>
 
     <div class="section ">
-      <h3>All vignettes</h3>
+      <h3>Vignettes</h3>
       <p class="section-desc"></p>
 
-      <dl><dt><a href="cleaning_cropping.html">Cleaning and Cropping Quadrat Data</a></dt>
-        <dd>
-        </dd><dt><a href="cleaning_simple.html">Simple Cleaning Quadrat Data</a></dt>
-        <dd>
+      <dl><dt><a href="cleaning_simple.html">Simple Cleaning Quadrat Data</a></dt>
+        <dd><p>A simple walk through of how to clean up quadrat data using the <code>quadcleanR</code> package. This will go through all the functions except the <code>croparea()</code> function, as well as visualizing the resulting data.</p>
         </dd><dt><a href="cropping.html">Why to Crop Quadrats by Area</a></dt>
         <dd><p>The function <code>crop_area</code> is powerful when working with quadrats of different sizes but the same density of points. This vignette will walk through why you might want to crop quadrats based on area and how to go about using the <code>crop_area</code> function.</p>
+        </dd><dt><a href="cleaning_cropping.html">Cleaning and Cropping Quadrat Data</a></dt>
+        <dd><p>A complex walk through of how to clean up quadrat data using the <code>quadcleanR</code> package. This will go through all the functions inclusing the <code>croparea()</code> function, as well as visualizing the resulting data. This vignette is good for those who have to crop quadrats and clean up the data.</p>
       </dd></dl></div>
   </main></div>
 
