@@ -131,33 +131,62 @@ This data frame is now nicely formatted and could be used for many community bas
 
 ```{r long format}
 
-LQuad_long <- LQuad_cover %>% select(-c(unuseable)) %>% pivot_longer(cols = names(LQuad_useable[,4:131]), names_to = "Species", values_to = "prop_cover")
+LQuad_long <- LQuad_cover %>% select(-c(unuseable)) %>% pivot_longer(cols = names(LQuad_useable[,4:131]), names_to = "Tag_Name", values_to = "prop_cover")
 
 ```
  
-One thing you may notice by looking at the `Species` column, is that these species names are not unique species, but there are duplicates of the same species, categorized into bleaching and non bleaching forms. For any kind of diversity analysis, this would inflate the number of different species, so it is important to combine different forms of the same species if diversity analyses are being done.
+One thing you may notice by looking at the `Tag_Name` column, is that these species names are not unique species, but there are duplicates of the same species, categorized into bleaching and non bleaching forms. For any kind of diversity analysis, this would inflate the number of different species, so it is important to combine different forms of the same species if diversity analyses are being done.
 
 For this clean up, we will walk through 3 ways of dealing with this based on what you want to accomplish.
 
-1. Combining rows.
+Option A. Categorizing rows.
 
-If you want to use your data in this long format and want to just combine everything with 
-
-
+If you want to use your data in this long format, want to just categorize everything and you will use these various categories based on your different research questions, you could just add a bunch of category columns like so: 
 
 
+```{r A categorizing bleaching}
 
-```{r categorizing bleaching}
-
-LQuad_Bleach <- categorize(LQuad_long, "Species", values = c("Bleach"), name = "Bleached", binary = TRUE, exact = FALSE)
+A_LQuad_Bleach <- categorize(LQuad_long, "Tag_Name", values = c("Bleach"), name = "Bleached", binary = TRUE, exact = FALSE)
 
 ```
 
-```{r categorizing taxonomy}
+This categorizes each `Tag_Name` to whether it is a bleaching or nonbleaching tag.
 
-LQuad_Taxa <- categorize(LQuad_long, "Species", values = coral_labelset$full_name, name = "Taxonomic_Name", binary = FALSE, categories = coral_labelset$taxonomic_name)
+And you could also add other information in if you have it, like taxonomy.
+
+```{r A categorizing taxonomy}
+
+A_LQuad_Taxa <- categorize(A_LQuad_Bleach, "Tag_Name", values = coral_labelset$full_name, name = "Taxonomic_Name", binary = FALSE, categories = coral_labelset$taxonomic_name)
 
 ```
+
+
+Option B. Categorizing rows and then combining.
+
+Now after you categorize your rows, perhaps you want to have all the cover values summed at a different level, like at the taxonomy level. To do this, the `summarise()` function from `dplyr` will work great. 
+
+
+```{r B summarising taxonomy, warning=FALSE, message=FALSE}
+
+B_LQuad_taxonomy <- A_LQuad_Taxa %>% group_by(Field.Season, Site, Quadrat, Taxonomic_Name) %>% summarise(prop_cover = sum(prop_cover))
+
+```
+
+Option C. Wide format summing columns
+
+If you wanted to keep the data in a wide format, and sum columns based on taxonomy, to allow for community level analyses, you could also use the `sum_cols()` function. To do this, we first need a vector of what to change the names too, which can be done with a simple match, unless you have a vector with the new names already in the right order.
+
+```{r C summing columns}
+
+current_names <- colnames(LQuad_cover[,4:131])
+new_names <- coral_labelset[match(current_names, coral_labelset$full_name),]$taxonomic_name
+
+LQuad_wide_summed <- sum_cols(LQuad_cover, from = current_names, to = new_names)
+
+```
+
+
+Whichever of the options you choose, you will be able to customize the data to your analysis needs. After that your data is nearly cleaned. Some other things you may want to add would be environmental data, or more taxononic data. The `add_data()` function can help with adding multiple columns from a data set at a time. 
 
 
 
