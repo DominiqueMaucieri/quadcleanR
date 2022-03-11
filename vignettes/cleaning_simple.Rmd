@@ -186,7 +186,19 @@ LQuad_wide_summed <- sum_cols(LQuad_cover, from = current_names, to = new_names)
 ```
 
 
-Whichever of the options you choose, you will be able to customize the data to your analysis needs. After that your data is nearly cleaned. Some other things you may want to add would be environmental data, or more taxononic data. The `add_data()` function can help with adding multiple columns from a data set at a time. 
+Whichever of the options you choose, you will be able to customize the data to your analysis needs. After that your data is nearly cleaned. Some other things you may want to add would be environmental data, or more taxonomic data. The `add_data()` function can help with adding multiple columns from a data set at a time. 
+
+```{r add more data}
+
+B_LQuad_LH_FG <- add_data(B_LQuad_taxonomy, coral_labelset, cols = c("functional_group", "life_history"), 
+                          data_id = "Taxonomic_Name", add_id = "taxonomic_name", number = 5)
+
+
+
+
+```
+
+
 
 
 
