@@ -20,6 +20,7 @@ Suggests:
     gtools,
     knitr,
     rmarkdown,
+    shiny,
     testthat (>= 3.0.0),
     tidyr
 VignetteBuilder: knitr

@@ -2,7 +2,7 @@
 title: "Simple Cleaning Quadrat Data"
 description: >
   A simple walk through of how to clean up quadrat data using the `quadcleanR`
-  package. This will go through all the functions except the `croparea()`
+  package. This will go through all the functions except the `crop_area()`
   function, as well as visualizing the resulting data.
 output: rmarkdown::html_vignette
 vignette: >
@@ -19,6 +19,8 @@ A little about the data:
 
 The data being cleaned will be the `softcoral_LQuads` and this vignette will build off of the cropping vignette as well. Data was collected by the Baum Lab and Kiritimati Field Teams. The `softcoral_LQuads` data are from photo quadrats (1m by 1m) which were randomly annotated with 100 random points each. At each of these annotated points, the substrate was identified. Photo quadrats were collected on Kiritimati Island in the Republic of Kiribati and document coral cover over time and space. The annotations and output of the data frame were produced using [CoralNet](https://coralnet.ucsd.edu/) and all annotations were done manually, by trained researchers.
 
+# Cleaning the Data
+
 First lets load the package, the dplyr package, tidyr package and the data
 
 ```{r load package, message = FALSE, warning = FALSE}
@@ -27,6 +29,7 @@ library(quadcleanR)
 library(dplyr)
 library(tidyr)
 library(gtools)
+library(shiny)
 
 data("softcoral_LQuads")
 
@@ -199,7 +202,7 @@ B_LQuad_enviro <- add_data(B_LQuad_LH_FG, environmental_data, cols = c("HD_Cat",
 ```
 
 
-The final things I will add to this data to get it in shape for analysis is a final categorization of the study years based on the timing of the 2015/2016 El Nino and subset the species to only soft coral.
+The final things I will add to this data to get it in shape for analysis is a final categorization of the study years based on the timing of the 2015/2016 El Niño and subset the species to only soft coral.
 
 
 ```{r final characterization and subset}
@@ -207,6 +210,17 @@ The final things I will add to this data to get it in shape for analysis is a fi
 B_LQuad_timeblock <- categorize(B_LQuad_enviro, column = "Field.Season", values = unique(B_LQuad_enviro$Field.Season), name = "TimeBlock", binary = FALSE, exact = TRUE, categories = c(rep("Before", times = 4), rep("During", times = 3), rep("After", times = 4)))
 
 B_LQuad_softcoral <- keep_rm(B_LQuad_timeblock, values = "Soft_coral", select = "row", colname = "functional_group")
+
+```
+
+
+# Visualizing
+
+This data has now been sufficiently cleaned and can be used for many different analyses. Often once data has been cleaned, the first step is to start exploring the data. One thing we can look at is the sample sizes, to see how many quadrats I have over the different sites and years.
+
+```{r sample sizes}
+
+sample_size(B_LQuad_softcoral, dim_1 = "Site", dim_2 = "Field.Season", count = "Quadrat")
 
 ```
 

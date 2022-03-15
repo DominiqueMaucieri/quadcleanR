@@ -43,7 +43,7 @@ sample_size <- function(data, dim_1, dim_2, count){
     for (j in 1:length(dim_2_unique)) {
 
       i_j <- data[(data[[dim_1]] == dim_1_unique[i]) & (data[[dim_2]] == dim_2_unique[j]), ]
-      new_data[[i,j]] <- length(i_j[[count_vec]])
+      new_data[[i,j]] <- length(unique(i_j[[count_vec]]))
 
     }
 
