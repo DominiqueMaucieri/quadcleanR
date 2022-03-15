@@ -190,13 +190,28 @@ Whichever of the options you choose, you will be able to customize the data to y
 
 ```{r add more data}
 
-B_LQuad_LH_FG <- add_data(B_LQuad_taxonomy, coral_labelset, cols = c("functional_group", "life_history"), 
-                          data_id = "Taxonomic_Name", add_id = "taxonomic_name", number = 5)
+B_LQuad_LH_FG <- add_data(B_LQuad_taxonomy, coral_labelset, cols = c("functional_group", "life_history"), data_id = "Taxonomic_Name", add_id = "taxonomic_name", number = 5)
 
+data("environmental_data")
 
-
+B_LQuad_enviro <- add_data(B_LQuad_LH_FG, environmental_data, cols = c("HD_Cat", "HD_Cont", "NPP",  "WE", "Region", "WaveEnergy"), data_id = "Site", add_id = "Site", number = 4)
 
 ```
+
+
+The final things I will add to this data to get it in shape for analysis is a final categorization of the study years based on the timing of the 2015/2016 El Nino and subset the species to only soft coral.
+
+
+```{r final characterization and subset}
+
+B_LQuad_timeblock <- categorize(B_LQuad_enviro, column = "Field.Season", values = unique(B_LQuad_enviro$Field.Season), name = "TimeBlock", binary = FALSE, exact = TRUE, categories = c(rep("Before", times = 4), rep("During", times = 3), rep("After", times = 4)))
+
+B_LQuad_softcoral <- keep_rm(B_LQuad_timeblock, values = "Soft_coral", select = "row", colname = "functional_group")
+
+```
+
+
+
 
 
 
