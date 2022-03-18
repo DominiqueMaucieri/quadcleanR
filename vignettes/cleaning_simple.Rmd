@@ -23,13 +23,15 @@ The data being cleaned will be the `softcoral_LQuads` and this vignette will bui
 
 First lets load the package, the dplyr package, tidyr package and the data
 
-```{r load package, message = FALSE, warning = FALSE}
+```{r load package, warning=FALSE, message=FALSE}
 
 library(quadcleanR)
 library(dplyr)
 library(tidyr)
 library(gtools)
 library(shiny)
+library(knitr)
+library(kableExtra)
 
 data("softcoral_LQuads")
 
@@ -38,11 +40,20 @@ data("softcoral_LQuads")
 
 Now let me point out some unique aspects of this data:
 
-```{r head and tail, message = FALSE}
+```{r head and tail, results='hide'}
 
 tail(softcoral_LQuads)
 
 ```
+
+```{r head and tail cleaner md output, message = FALSE, echo = FALSE, results='asis'}
+
+knitr::kable(tail(softcoral_LQuads), align = 'c') %>%
+  kable_styling("striped", full_width = F) %>% 
+  scroll_box(width = "100%")
+
+```
+
 This data as an `Image.ID` column which was arbitrarily added to this data set, so we are going to remove that as it holds no scientific value. There is also a final row which sums all quadrats but since we will be removing quadrats and points to clean these data up, we will remove that final row as well. The `Image.name` column is the unique ID for each photo quadrat, but it is very messy and not easy to use, so we will make this into new columns and add more information. `Annotation.status` is a column from [CoralNet](https://coralnet.ucsd.edu/) which tells if the annotations in each photo quadrat have been confirmed by human researchers or are only based on AI. The `Points` column tells us how many randomly annotated points there are in each quadrat, and since they are all 54, we know these data are from the smaller quadrats. The rest of the columns are the different coral and substrate IDs and how many points where annotated for each tag in each photo.
 
 So first, lets remove unneeded columns and make sure we are only working with "Confirmed" annotations.
@@ -88,10 +99,18 @@ unique(LQuad_noMPQ$Site)
 
 Next lets update the column names for this data frame. The column names are currently set as the tag shorthand used during the annotation process, but now I want them to better reflect the actual substrate names.
 
-```{r add labelset, message=FALSE}
+```{r add labelset, message=FALSE, results='hide'}
 
 data("coral_labelset")
 head(coral_labelset)
+
+```
+
+```{r add labelset cleaner md output, message = FALSE, echo = FALSE, results='asis'}
+
+knitr::kable(head(coral_labelset), align = 'c')%>%
+  kable_styling("striped", full_width = F) %>% 
+  scroll_box(width = "100%")
 
 ```
 
@@ -100,7 +119,7 @@ This is what the label set document looks like, but you could also make this in 
 ```{r change colnames}
 
 LQuad_colnames <- change_names(LQuad_noMPQ, coral_labelset, "short_name", "full_name")
-names(LQuad_colnames)
+names(LQuad_colnames)[1:16]
 
 ```
 
@@ -169,7 +188,7 @@ Option B. Categorizing rows and then combining.
 Now after you categorize your rows, perhaps you want to have all the cover values summed at a different level, like at the taxonomy level. To do this, the `summarise()` function from `dplyr` will work great. 
 
 
-```{r B summarising taxonomy, warning=FALSE, message=FALSE}
+```{r B summarising taxonomy, results='hide'}
 
 B_LQuad_taxonomy <- A_LQuad_Taxa %>% group_by(Field.Season, Site, Quadrat, Taxonomic_Name) %>% summarise(prop_cover = sum(prop_cover))
 
@@ -218,13 +237,29 @@ B_LQuad_softcoral <- keep_rm(B_LQuad_timeblock, values = "Soft_coral", select = 
 
 This data has now been sufficiently cleaned and can be used for many different analyses. Often once data has been cleaned, the first step is to start exploring the data. One thing we can look at is the sample sizes, to see how many quadrats I have over the different sites and years.
 
-```{r sample sizes}
+```{r sample sizes, results = 'hide'}
 
 sample_size(B_LQuad_softcoral, dim_1 = "Site", dim_2 = "Field.Season", count = "Quadrat")
 
 ```
 
 
+```{r sample sizes cleaner md output, message = FALSE, echo = FALSE, results='asis'}
+
+knitr::kable(sample_size(B_LQuad_softcoral, dim_1 = "Site", dim_2 = "Field.Season", count = "Quadrat"), align = 'c')%>%
+  kable_styling("striped", full_width = F) %>% 
+  scroll_box(width = "100%")
+
+```
+
+
+
+```{r shiny app}
+
+
+
+
+```
 
 
 

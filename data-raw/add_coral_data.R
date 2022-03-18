@@ -30,3 +30,8 @@ environmental_data <- read.csv(here::here("data-raw", "environmental_data.csv"))
 usethis::use_data(environmental_data, overwrite = TRUE,
                   compress = "xz")
 
+simple_cleaned <- read.csv(here::here("data-raw", "simple_cleaned.csv"))
+
+usethis::use_data(simple_cleaned, overwrite = TRUE,
+                  compress = "xz")
+
