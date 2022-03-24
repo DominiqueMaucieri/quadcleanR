@@ -253,7 +253,15 @@ knitr::kable(sample_size(simple_cleaned, dim_1 = "Site", dim_2 = "Field.Season",
 ```
 
 
-Visualizing the data can be easy with a built in shiny app function. To see an example shiny app you can go [here](https://dominiquemaucieri.shinyapps.io/example/). The data used in this example is this data set. However this does not help you as this is not your own data. You can use the following code to produce a shiny app of your data, which you can then explore your data. 
+Visualizing the data can be easy with a built in shiny app function. To see an example shiny app you can go [here](https://dominiquemaucieri.shinyapps.io/example/) or the following code.
+
+```{r shiny app from git}
+
+# runGitHub("quadcleanR", username = "DominiqueMaucieri", subdir = "inst/shiny/example", ref = "main")
+
+```
+
+The data used in this example is this data set we have just cleaned. However this does not help you as this is not your own data. You can use the following code to produce a shiny app of your data, which you can then explore your data. 
 
 ```{r shiny app}
 
