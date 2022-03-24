@@ -38,23 +38,20 @@ cover_calc <- function(data, spp, prop = TRUE, total = FALSE){
 
   if(total == FALSE){
     if(prop == TRUE){
-      for(i in 1:nrow(data)){
-        total_i <- rowSums(data[,colnames(data) %in% spp_vector])[i]
+
+        total_i <- rowSums(data[,colnames(data) %in% spp_vector])
 
         for(j in 1:length(spp_vector)){
-          data[[spp_vector[j]]][i] <- data[[spp_vector[j]]][i]/total_i
+          data[[spp_vector[j]]] <- data[[spp_vector[j]]]/total_i
 
-        }
       }
     }
     if(prop == FALSE){
-      for(i in 1:nrow(data)){
-        total_i <- rowSums(data[,colnames(data) %in% spp_vector])[i]
+        total_i <- rowSums(data[,colnames(data) %in% spp_vector])
 
         for(j in 1:length(spp_vector)){
-          data[[spp_vector[j]]][i] <- (data[[spp_vector[j]]][i]/total_i) * 100
+          data[[spp_vector[j]]] <- (data[[spp_vector[j]]]/total_i) * 100
 
-        }
       }
     }
    return(data)
@@ -67,25 +64,20 @@ cover_calc <- function(data, spp, prop = TRUE, total = FALSE){
    if(prop == TRUE){
      data[["total_pts"]] <- rowSums(data[,colnames(data) %in% spp_vector])
 
-     for(i in 1:nrow(data)){
-
        for(j in 1:length(spp_vector)){
-         data[[spp_vector[j]]][i] <- data[[spp_vector[j]]][i]/data[["total_pts"]][i]
+         data[[spp_vector[j]]] <- data[[spp_vector[j]]]/data[["total_pts"]]
 
-       }
      }
    }
    if(prop == FALSE){
      data[["total_pts"]] <- 100
 
-     for(i in 1:nrow(data)){
-       total_i <- rowSums(data[,colnames(data) %in% spp_vector])[i]
+       total_i <- rowSums(data[,colnames(data) %in% spp_vector])
 
        for(j in 1:length(spp_vector)){
-         data[[spp_vector[j]]][i] <- (data[[spp_vector[j]]][i]/total_i) * 100
+         data[[spp_vector[j]]] <- (data[[spp_vector[j]]]/total_i) * 100
 
-       }
-     }
+      }
    }
    return(data)
 
