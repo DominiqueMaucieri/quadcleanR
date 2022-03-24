@@ -228,40 +228,40 @@ The final things I will add to this data to get it in shape for analysis is a fi
 
 B_LQuad_timeblock <- categorize(B_LQuad_enviro, column = "Field.Season", values = unique(B_LQuad_enviro$Field.Season), name = "TimeBlock", binary = FALSE, exact = TRUE, categories = c(rep("Before", times = 4), rep("During", times = 3), rep("After", times = 4)))
 
-B_LQuad_softcoral <- keep_rm(B_LQuad_timeblock, values = "Soft_coral", select = "row", colname = "functional_group")
+simple_cleaned <- keep_rm(B_LQuad_timeblock, values = "Soft_coral", select = "row", colname = "functional_group")
 
 ```
 
 
-# Visualizing
+# Exploration
 
 This data has now been sufficiently cleaned and can be used for many different analyses. Often once data has been cleaned, the first step is to start exploring the data. One thing we can look at is the sample sizes, to see how many quadrats I have over the different sites and years.
 
 ```{r sample sizes, results = 'hide'}
 
-sample_size(B_LQuad_softcoral, dim_1 = "Site", dim_2 = "Field.Season", count = "Quadrat")
+sample_size(simple_cleaned, dim_1 = "Site", dim_2 = "Field.Season", count = "Quadrat")
 
 ```
 
 
 ```{r sample sizes cleaner md output, message = FALSE, echo = FALSE, results='asis'}
 
-knitr::kable(sample_size(B_LQuad_softcoral, dim_1 = "Site", dim_2 = "Field.Season", count = "Quadrat"), align = 'c')%>%
+knitr::kable(sample_size(simple_cleaned, dim_1 = "Site", dim_2 = "Field.Season", count = "Quadrat"), align = 'c')%>%
   kable_styling("striped", full_width = F) %>% 
   scroll_box(width = "100%")
 
 ```
 
 
+Visualizing the data can be easy with a built in shiny app function. To see an example shiny app you can go [here](https://dominiquemaucieri.shinyapps.io/example/). The data used in this example is this data set. However this does not help you as this is not your own data. You can use the following code to produce a shiny app of your data, which you can then explore your data. 
 
 ```{r shiny app}
 
-
-
+# visualize_app(data = simple_cleaned, independent = colnames(simple_cleaned[,1:13]), dependent = "prop_cover")
 
 ```
 
-
+Note: if you do not provide data, the example data that was shown [here](https://dominiquemaucieri.shinyapps.io/example/) will be the data used. 
 
 
 
