@@ -37,6 +37,9 @@ to do: Needs to answer what the package does, why to use it, how to use it, how 
 ## Example Usage
 
 
+Check out [this example shiny app](https://dominiquemaucieri.shinyapps.io/example/)
+
+
 ## Getting Help
 
 

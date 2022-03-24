@@ -23,4 +23,7 @@ it, how to get it
 
 ## Example Usage
 
+Check out [this example shiny
+app](https://dominiquemaucieri.shinyapps.io/example/)
+
 ## Getting Help
