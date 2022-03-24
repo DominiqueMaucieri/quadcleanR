@@ -4426,8 +4426,11 @@ site7
 </tbody>
 </table>
 </div>
-<p>Visualizing the data can be easy with a built in shiny app function. To see an example shiny app you can go <a href="https://dominiquemaucieri.shinyapps.io/example/" class="external-link">here</a>. The data used in this example is this data set. However this does not help you as this is not your own data. You can use the following code to produce a shiny app of your data, which you can then explore your data.</p>
+<p>Visualizing the data can be easy with a built in shiny app function. To see an example shiny app you can go <a href="https://dominiquemaucieri.shinyapps.io/example/" class="external-link">here</a> or the following code.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># runGitHub("quadcleanR", username = "DominiqueMaucieri", subdir = "inst/shiny/example", ref = "main")</span></code></pre></div>
+<p>The data used in this example is this data set we have just cleaned. However this does not help you as this is not your own data. You can use the following code to produce a shiny app of your data, which you can then explore your data.</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># visualize_app(data = simple_cleaned, independent = colnames(simple_cleaned[,1:13]), dependent = "prop_cover")</span></code></pre></div>
 <p>Note: if you do not provide data, the example data that was shown <a href="https://dominiquemaucieri.shinyapps.io/example/" class="external-link">here</a> will be the data used.</p>
 </div>
