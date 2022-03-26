@@ -1,55 +1,228 @@
 library(shiny)
 library(shinydashboard)
+library(shinyWidgets)
 library(ggplot2)
+library(viridis)
+library(dplyr)
 
 data <- read.csv("simple_cleaned.csv")
 
+data$TimeBlock <- factor(data$TimeBlock, levels = c("Before", "During", "After"))
+data$Site <- factor(data$Site, levels = paste("site", seq(1:40), sep = ""))
+data$HD_Cat <- factor(data$HD_Cat, levels = c("Very Low", "Low", "Medium", "High", "Very High"))
+independent <- colnames(data[,1:13])
+dependent <- "prop_cover"
+
 ui <- dashboardPage( skin = "purple",
-  dashboardHeader(title = "Data Visualization"),
-  dashboardSidebar(disable = TRUE),
-  dashboardBody(
-    box(shiny::selectInput("yaxis", h4("Choose a y-axis variable:"), "prop_cover"),
-        shiny::selectInput("xaxis", h4("Choose an x-axis variable:"), colnames(data[,1:13])),
-        shiny::selectInput("colour", h4("Choose a color variable:"), colnames(data[,1:13])),
-        shiny::selectInput("facet", h4("Choose a facet variable:"), colnames(data[,1:13])),
-        shiny::selectInput("function", h4("Choose a function to apply to the y-axis:"),
-                           c("mean", "max", "min", "median")),
-        width = 4,
-        title = "Customization",
-        solidHeader = FALSE),
-    box(shiny::textOutput("data_warning"),
-        shiny::plotOutput("prettyplot"),
-        width = 8,
-        title = "Plot",
-        solidHeader = FALSE)
-  )
+                     dashboardHeader(title = "Data Visualization"),
+                     dashboardSidebar(disable = TRUE),
+                     dashboardBody(
+                       fluidRow(
+                         box(shiny::selectInput("yaxis", "Choose a y-axis variable:", dependent),
+                             shiny::selectInput("xaxis", "Choose an x-axis variable:", independent),
+                             shiny::selectInput("colour", "Choose a color variable:", independent, selected = independent[2]),
+                             shiny::checkboxInput("continuous", "Treat as discrete", value = TRUE),
+                             shiny::selectInput("facet", "Choose a facet variable:", c("no facet", independent), selected = "null"),
+                             shiny::checkboxGroupInput("group_by", "Choose variable(s) to group by and average:", independent, selected = independent),
+                             width = 4,
+                             title = "Customization",
+                             solidHeader = FALSE,
+                             height = "100vh"),
+                         box(radioGroupButtons(
+                           inputId = "change_plot",
+                           choices = c(c("box", "violin", "scatter", "stacked bar")),
+                           justified = TRUE,
+                           selected = "box"
+                         ),
+                         shiny::plotOutput("prettyplot",
+                                           height = "80vh"),
+                         width = 8,
+                         title = "Plot",
+                         solidHeader = FALSE,
+                         height = "100vh")),
+                       box(htmlOutput("subsetting"),
+                           textOutput("code"),
+                           width=12,
+                           justified = TRUE,
+                           title = "R Code")
+                     )
 )
 
 
 server <- function(input, output) {
 
-  plot_theme <- function () {
-    theme_classic(base_size = 12, base_family = 'Times') +
-      theme(
-        panel.border = element_blank(),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        axis.line = element_line(colour = "black"),
-        axis.title = element_text(size = 14, face = "bold"),
-        axis.text = element_text(size = 12, face = "plain"),
-        legend.text = element_text(size = 12, face = "plain"),
-        legend.title = element_text(size = 14, face = "bold"))
-  }
+  output$prettyplot <- renderPlot({
 
-  output_message <- c("")
+    data_plot <- data %>%
+      dplyr::group_by_at(input$group_by) %>%
+      dplyr::summarise_at(vars(one_of(input$yaxis)), list(yaxis_grouped = mean))
 
-  output$data_warning <-  shiny::renderText({ output_message })
 
-  output$prettyplot <- shiny::renderPlot({
-    ggplot2::ggplot(data, ggplot2::aes_string(x=input$xaxis, y=input$yaxis, color = input$colour)) +
-      ggplot2::geom_point() +
-      plot_theme()
+    if(length(input$group_by) != length(independent)){
+      y_axis_name <- paste("mean_", input$yaxis)
+    } else {
+      y_axis_name <- input$yaxis
+    }
+
+    if (input$facet %in% "no facet") {
+      if (input$change_plot %in% "box") {
+        ggplot2::ggplot(data_plot, ggplot2::aes_string(x=input$xaxis, y=data_plot$yaxis_grouped, color = input$colour)) +
+          ggplot2::geom_boxplot() +
+          theme_classic() +
+          ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5, hjust=1)) +
+          viridis::scale_colour_viridis(discrete = input$continuous) +
+          labs(y = y_axis_name)
+      } else{
+
+        if (input$change_plot %in% "violin") {
+          ggplot2::ggplot(data_plot, ggplot2::aes_string(x=input$xaxis, y=data_plot$yaxis_grouped, fill = input$colour)) +
+            ggplot2::geom_violin() +
+            theme_classic() +
+            ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5, hjust=1)) +
+            viridis::scale_fill_viridis(discrete = input$continuous)
+        } else {
+
+          if (input$change_plot %in% "scatter") {
+            ggplot2::ggplot(data_plot, ggplot2::aes_string(x=input$xaxis, y=data_plot$yaxis_grouped, color = input$colour)) +
+              ggplot2::geom_point() +
+              theme_classic() +
+              ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5, hjust=1)) +
+              viridis::scale_colour_viridis(discrete = input$continuous)
+          } else {
+
+            if (input$change_plot %in% "stacked bar") {
+              ggplot2::ggplot(data_plot, ggplot2::aes_string(x=input$xaxis, y=data_plot$yaxis_grouped, fill = input$colour)) +
+                ggplot2::geom_bar(position="stack", stat="identity") +
+                theme_classic() +
+                ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5, hjust=1)) +
+                viridis::scale_fill_viridis(discrete = input$continuous)
+            }}}}} else {
+
+              if (input$change_plot %in% "box") {
+                ggplot2::ggplot(data_plot, ggplot2::aes_string(x=input$xaxis, y=data_plot$yaxis_grouped, color = input$colour)) +
+                  ggplot2::geom_boxplot() +
+                  theme_classic() +
+                  ggplot2::facet_wrap(~get(input$facet)) +
+                  ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5, hjust=1)) +
+                  viridis::scale_colour_viridis(discrete = input$continuous)
+              } else{
+
+                if (input$change_plot %in% "violin") {
+                  ggplot2::ggplot(data_plot, ggplot2::aes_string(x=input$xaxis, y=data_plot$yaxis_grouped, fill = input$colour)) +
+                    ggplot2::geom_violin() +
+                    theme_classic() +
+                    ggplot2::facet_wrap(~get(input$facet)) +
+                    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5, hjust=1)) +
+                    viridis::scale_fill_viridis(discrete = input$continuous)
+                } else {
+
+                  if (input$change_plot %in% "scatter") {
+                    ggplot2::ggplot(data_plot, ggplot2::aes_string(x=input$xaxis, y=data_plot$yaxis_grouped, color = input$colour)) +
+                      ggplot2::geom_point() +
+                      theme_classic() +
+                      ggplot2::facet_wrap(~get(input$facet)) +
+                      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5, hjust=1)) +
+                      viridis::scale_colour_viridis(discrete = input$continuous)
+                  } else {
+
+                    if (input$change_plot %in% "stacked bar") {
+                      ggplot2::ggplot(data_plot, ggplot2::aes_string(x=input$xaxis, y=data_plot$yaxis_grouped, fill = input$colour)) +
+                        ggplot2::geom_bar(position="stack", stat="identity") +
+                        theme_classic() +
+                        ggplot2::facet_wrap(~get(input$facet)) +
+                        ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5, hjust=1)) +
+                        viridis::scale_fill_viridis(discrete = input$continuous)
+                    }}}}}
   })
+
+  output$subsetting <- renderUI({
+
+    if(length(input$group_by) != length(independent)){
+      y_axis_name <- paste("mean_", input$yaxis)
+
+      grouped_raw <- sprintf(paste(
+        "data_grouped <- group_by(data_raw, %s)"),
+        list(input$group_by))
+
+      summarized_raw <- sprintf(paste(
+        "data <- summarize(data_grouped, %s = mean(%s))"),
+        y_axis_name, input$yaxis)
+
+      HTML(paste(grouped_raw, summarized_raw, sep = '<br/>'))
+
+
+    } else {
+
+
+    }
+
+
+
+  })
+
+  output$code <- renderText({
+
+
+    if(length(input$group_by) != length(independent)){
+      y_axis_name <- paste("mean_", input$yaxis)
+    } else {
+      y_axis_name <- input$yaxis
+    }
+
+    code_code <- sprintf(paste(
+      "plot <- ggplot(data, aes(x = %s, y = %s"),
+      input$xaxis, y_axis_name
+    )
+
+
+    if(input$change_plot %in% "box"){
+      code_code <- sprintf(paste(
+        code_code, ", color = %s) +\n
+        geom_boxplot() + \n
+        theme_classic() + \n
+        theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +\n
+        scale_colour_viridis(discrete = %s)"),
+        input$colour, input$continuous)} else {
+
+          if(input$change_plot %in% "violin"){
+            code_code <- sprintf(paste(
+              code_code, ", fill = %s) +\n
+        geom_violin() + \n
+        theme_classic() + \n
+        theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +\n
+        scale_fill_viridis(discrete = %s)"),
+        input$colour, input$continuous)} else {
+
+          if(input$change_plot %in% "scatter"){
+            code_code <- sprintf(paste(
+              code_code, ", color = %s) +\n
+        geom_boxplot() + \n
+        theme_classic() + \n
+        theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +\n
+        scale_colour_viridis(discrete = %s)"),
+        input$colour, input$continuous)} else {
+
+          if(input$change_plot %in% "stacked bar"){
+            code_code <- sprintf(paste(
+              code_code, ", fill = %s) +\n
+        geom_bar(position = 'stacked', stat = 'identity') + \n
+        theme_classic() + \n
+        theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +\n
+        scale_fill_viridis(discrete = %s)"),
+        input$colour, input$continuous)}}}}
+
+    if(!input$facet %in% "no facet"){
+      code_code <- sprintf(paste(
+        code_code, " +\n",
+        "facet_wrap(~ vars(%s))"),
+        input$facet)} else {
+
+          code_code <- code_code
+        }
+
+  })
+
+
 }
 
 shinyApp(ui, server)

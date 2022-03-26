@@ -22,8 +22,10 @@ Suggests:
     knitr,
     rmarkdown,
     shiny,
+    shinyWidgets,
     testthat (>= 3.0.0),
-    tidyr
+    tidyr,
+    viridis
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 Depends: 

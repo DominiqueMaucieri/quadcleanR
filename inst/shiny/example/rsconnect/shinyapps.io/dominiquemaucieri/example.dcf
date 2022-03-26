@@ -5,9 +5,9 @@ account: dominiquemaucieri
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 5930491
-bundleId: 5724460
+bundleId: 5728852
 url: https://dominiquemaucieri.shinyapps.io/example/
-when: 1648163522.95596
-lastSyncTime: 1648163522.95598
+when: 1648255673.09173
+lastSyncTime: 1648255673.09175
 asMultiple: FALSE
 asStatic: FALSE

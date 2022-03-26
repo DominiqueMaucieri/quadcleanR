@@ -7,7 +7,6 @@ deploy:
 
 articles:
 - title: Vignettes
-  navbar: ~
   contents:
   - cleaning_simple
   - cropping
