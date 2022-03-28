@@ -66,11 +66,11 @@ server <- function(input, output) {
 
     if (input$facet %in% "no facet") {
       if (input$change_plot %in% "box") {
-        ggplot2::ggplot(data_plot, ggplot2::aes_string(x=input$xaxis, y=data_plot$yaxis_grouped, color = input$colour)) +
+        ggplot2::ggplot(data_plot, ggplot2::aes_string(x=input$xaxis, y=data_plot$yaxis_grouped, fill = input$colour)) +
           ggplot2::geom_boxplot() +
           theme_classic() +
           ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5, hjust=1)) +
-          viridis::scale_colour_viridis(discrete = input$continuous) +
+          viridis::scale_fill_viridis(discrete = input$continuous) +
           labs(y = y_axis_name)
       } else{
 
@@ -79,7 +79,8 @@ server <- function(input, output) {
             ggplot2::geom_violin() +
             theme_classic() +
             ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5, hjust=1)) +
-            viridis::scale_fill_viridis(discrete = input$continuous)
+            viridis::scale_fill_viridis(discrete = input$continuous)+
+            labs(y = y_axis_name)
         } else {
 
           if (input$change_plot %in% "scatter") {
@@ -87,7 +88,8 @@ server <- function(input, output) {
               ggplot2::geom_point() +
               theme_classic() +
               ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5, hjust=1)) +
-              viridis::scale_colour_viridis(discrete = input$continuous)
+              viridis::scale_colour_viridis(discrete = input$continuous)+
+              labs(y = y_axis_name)
           } else {
 
             if (input$change_plot %in% "stacked bar") {
@@ -95,16 +97,18 @@ server <- function(input, output) {
                 ggplot2::geom_bar(position="stack", stat="identity") +
                 theme_classic() +
                 ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5, hjust=1)) +
-                viridis::scale_fill_viridis(discrete = input$continuous)
+                viridis::scale_fill_viridis(discrete = input$continuous)+
+                labs(y = y_axis_name)
             }}}}} else {
 
               if (input$change_plot %in% "box") {
-                ggplot2::ggplot(data_plot, ggplot2::aes_string(x=input$xaxis, y=data_plot$yaxis_grouped, color = input$colour)) +
+                ggplot2::ggplot(data_plot, ggplot2::aes_string(x=input$xaxis, y=data_plot$yaxis_grouped, fill = input$colour)) +
                   ggplot2::geom_boxplot() +
                   theme_classic() +
                   ggplot2::facet_wrap(~get(input$facet)) +
                   ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5, hjust=1)) +
-                  viridis::scale_colour_viridis(discrete = input$continuous)
+                  viridis::scale_fill_viridis(discrete = input$continuous)+
+                  labs(y = y_axis_name)
               } else{
 
                 if (input$change_plot %in% "violin") {
@@ -113,7 +117,8 @@ server <- function(input, output) {
                     theme_classic() +
                     ggplot2::facet_wrap(~get(input$facet)) +
                     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5, hjust=1)) +
-                    viridis::scale_fill_viridis(discrete = input$continuous)
+                    viridis::scale_fill_viridis(discrete = input$continuous)+
+                    labs(y = y_axis_name)
                 } else {
 
                   if (input$change_plot %in% "scatter") {
@@ -122,7 +127,8 @@ server <- function(input, output) {
                       theme_classic() +
                       ggplot2::facet_wrap(~get(input$facet)) +
                       ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5, hjust=1)) +
-                      viridis::scale_colour_viridis(discrete = input$continuous)
+                      viridis::scale_colour_viridis(discrete = input$continuous)+
+                      labs(y = y_axis_name)
                   } else {
 
                     if (input$change_plot %in% "stacked bar") {
@@ -131,32 +137,35 @@ server <- function(input, output) {
                         theme_classic() +
                         ggplot2::facet_wrap(~get(input$facet)) +
                         ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5, hjust=1)) +
-                        viridis::scale_fill_viridis(discrete = input$continuous)
+                        viridis::scale_fill_viridis(discrete = input$continuous)+
+                        labs(y = y_axis_name)
                     }}}}}
   })
 
   output$subsetting <- renderUI({
 
     if(length(input$group_by) != length(independent)){
-      y_axis_name <- paste("mean_", input$yaxis)
+      y_axis_name <- paste("mean_", input$yaxis, sep="")
+
+      group_by_vector <- paste(input$group_by,collapse=", ")
+
+      data_name <- sprintf(paste(
+        "data <- data_raw"))
 
       grouped_raw <- sprintf(paste(
-        "data_grouped <- group_by(data_raw, %s)"),
-        list(input$group_by))
+        "group_by(", group_by_vector, ")"))
+
+      paste(
+        "group_by(", independent, ")")
 
       summarized_raw <- sprintf(paste(
-        "data <- summarize(data_grouped, %s = mean(%s))"),
+        "summarize(%s = mean(%s))"),
         y_axis_name, input$yaxis)
 
-      HTML(paste(grouped_raw, summarized_raw, sep = '<br/>'))
+      HTML(paste(data_name, grouped_raw, summarized_raw, sep = ' %>% '))
 
 
-    } else {
-
-
-    }
-
-
+    } else {}
 
   })
 
@@ -164,7 +173,7 @@ server <- function(input, output) {
 
 
     if(length(input$group_by) != length(independent)){
-      y_axis_name <- paste("mean_", input$yaxis)
+      y_axis_name <- paste("mean_", input$yaxis, sep = "")
     } else {
       y_axis_name <- input$yaxis
     }
@@ -177,16 +186,16 @@ server <- function(input, output) {
 
     if(input$change_plot %in% "box"){
       code_code <- sprintf(paste(
-        code_code, ", color = %s) +\n
+        code_code, ", fill = %s)) +\n
         geom_boxplot() + \n
         theme_classic() + \n
         theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +\n
-        scale_colour_viridis(discrete = %s)"),
+        scale_fill_viridis(discrete = %s)"),
         input$colour, input$continuous)} else {
 
           if(input$change_plot %in% "violin"){
             code_code <- sprintf(paste(
-              code_code, ", fill = %s) +\n
+              code_code, ", fill = %s)) +\n
         geom_violin() + \n
         theme_classic() + \n
         theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +\n
@@ -195,7 +204,7 @@ server <- function(input, output) {
 
           if(input$change_plot %in% "scatter"){
             code_code <- sprintf(paste(
-              code_code, ", color = %s) +\n
+              code_code, ", color = %s)) +\n
         geom_boxplot() + \n
         theme_classic() + \n
         theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +\n
@@ -204,7 +213,7 @@ server <- function(input, output) {
 
           if(input$change_plot %in% "stacked bar"){
             code_code <- sprintf(paste(
-              code_code, ", fill = %s) +\n
+              code_code, ", fill = %s)) +\n
         geom_bar(position = 'stacked', stat = 'identity') + \n
         theme_classic() + \n
         theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +\n
