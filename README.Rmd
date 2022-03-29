@@ -44,7 +44,7 @@ A cheat sheet is still in development, but check back soon.
 
 There are three vignettes included with this package which will walk through different examples of cleaning quadrat data. The \code{\link{cleaning_simple.Rmd}} vignette will produce data which is visualizable with [this example shiny app](https://dominiquemaucieri.shinyapps.io/example/).
 
-```{r, message = FALSE, out.width = '45%', fig.show='hold'}
+```{r, message = FALSE, eval = FALSE}
 
 library(quadcleanR)
 library(ggplot2)
@@ -154,8 +154,12 @@ ggplot(coral_annotations[301:400, ], aes(x = column, y = row)) +
              color = "red")
 
 ```
-
-
+<p float="left">
+  <img src='man/figures/README1.png'  width="400"/>
+  <img src='man/figures/README2.png'  width="400"/>
+  <img src='man/figures/README3.png'  width="400"/>
+  <img src='man/figures/README4.png'  width="400"/>
+</p>
 
 ## Getting Help
 

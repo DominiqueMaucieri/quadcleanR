@@ -149,7 +149,12 @@ ggplot(coral_annotations[301:400, ], aes(x = column, y = row)) +
              color = "red")
 ```
 
-<img src="man/figures/README-unnamed-chunk-3-1.png" width="45%" /><img src="man/figures/README-unnamed-chunk-3-2.png" width="45%" /><img src="man/figures/README-unnamed-chunk-3-3.png" width="45%" /><img src="man/figures/README-unnamed-chunk-3-4.png" width="45%" />
+<p float="left">
+<img src='man/figures/README1.png'  width="400"/>
+<img src='man/figures/README2.png'  width="400"/>
+<img src='man/figures/README3.png'  width="400"/>
+<img src='man/figures/README4.png'  width="400"/>
+</p>
 
 ## Getting Help
 
