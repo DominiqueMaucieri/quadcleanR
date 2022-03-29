@@ -6,6 +6,8 @@
 \alias{quadcleanR-package}
 \title{quadcleanR: Cleanup And Visualization of Quadrat Data}
 \description{
+\if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
+
 A customizable tool to clean up ecological data collected from quadrats.
 }
 \seealso{

@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# quadcleanR <a href='https://dominiquemaucieri.github.io/quadcleanR/'><img src='man/figures/quadcleanR_logo.png' align="right" height="139" /></a>
+# quadcleanR <a href='https://dominiquemaucieri.github.io/quadcleanR/'><img src='man/figures/logo.png' align="right" height="139" /></a>
 
 <!-- badges: start -->
 
@@ -149,7 +149,7 @@ ggplot(coral_annotations[301:400, ], aes(x = column, y = row)) +
              color = "red")
 ```
 
-<img src="README_files/figure-gfm/unnamed-chunk-2-1.png" width="45%" /><img src="README_files/figure-gfm/unnamed-chunk-2-2.png" width="45%" /><img src="README_files/figure-gfm/unnamed-chunk-2-3.png" width="45%" /><img src="README_files/figure-gfm/unnamed-chunk-2-4.png" width="45%" />
+<img src="man/figures/README-unnamed-chunk-3-1.png" width="45%" /><img src="man/figures/README-unnamed-chunk-3-2.png" width="45%" /><img src="man/figures/README-unnamed-chunk-3-3.png" width="45%" /><img src="man/figures/README-unnamed-chunk-3-4.png" width="45%" />
 
 ## Getting Help
 

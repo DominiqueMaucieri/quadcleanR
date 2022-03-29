@@ -4,7 +4,16 @@ output: github_document
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# quadcleanR <a href='https://dominiquemaucieri.github.io/quadcleanR/'><img src='man/figures/quadcleanR_logo.png' align="right" height="139" /></a>
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# quadcleanR <a href='https://dominiquemaucieri.github.io/quadcleanR/'><img src='man/figures/logo.png' align="right" height="139" /></a>
 
 <!-- badges: start -->
   [![R-CMD-check](https://github.com/DominiqueMaucieri/quadcleanR/workflows/R-CMD-check/badge.svg)](https://github.com/DominiqueMaucieri/quadcleanR/actions)
