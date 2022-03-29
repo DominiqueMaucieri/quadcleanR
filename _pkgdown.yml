@@ -38,7 +38,7 @@ reference:
   - softcoral_annotations
 
 
-  navbar:
+navbar:
   structure:
     left: [reference, articles, news, shiny]
   components:
