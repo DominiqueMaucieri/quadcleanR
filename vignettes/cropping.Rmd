@@ -1,10 +1,10 @@
 ---
 title: "Why to Crop Quadrats by Area"
 description: >
-  The function `crop_area` is powerful when working with quadrats of different 
+  The function `crop_area()` is powerful when working with quadrats of different 
   sizes but the same density of points. This vignette will walk through why you 
   might want to crop quadrats based on area and how to go about using the 
-  `crop_area` function. 
+  `crop_area()` function. 
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Why to Crop Quadrats by Area}

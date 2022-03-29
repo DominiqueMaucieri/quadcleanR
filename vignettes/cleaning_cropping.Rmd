@@ -2,7 +2,7 @@
 title: "Cleaning and Cropping Quadrat Data"
 description: >
   A complex walk through of how to clean up quadrat data using the `quadcleanR`
-  package. This will go through all the functions inclusing the `croparea()`
+  package. This will go through all the functions inclusing the `crop_area()`
   function, as well as visualizing the resulting data. This vignette is good
   for those who have to crop quadrats and clean up the data. 
 output: rmarkdown::html_vignette
