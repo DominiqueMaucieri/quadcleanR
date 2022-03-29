@@ -25,6 +25,7 @@ your data so you can spend your time on further analyses.
 
 ``` r
 #currently quadcleanR is in the development phase and can only be downloaded from GitHub directly:
+install.packages("devtools")
 devtools::install_github("DominiqueMaucieri/quadcleanR")
 ```
 
@@ -148,7 +149,7 @@ ggplot(coral_annotations[301:400, ], aes(x = column, y = row)) +
              color = "red")
 ```
 
-<img src="man/figures/README-unnamed-chunk-3-1.png" width="45%" /><img src="man/figures/README-unnamed-chunk-3-2.png" width="45%" /><img src="man/figures/README-unnamed-chunk-3-3.png" width="45%" /><img src="man/figures/README-unnamed-chunk-3-4.png" width="45%" />
+<img src="README_files/figure-gfm/unnamed-chunk-2-1.png" width="45%" /><img src="README_files/figure-gfm/unnamed-chunk-2-2.png" width="45%" /><img src="README_files/figure-gfm/unnamed-chunk-2-3.png" width="45%" /><img src="README_files/figure-gfm/unnamed-chunk-2-4.png" width="45%" />
 
 ## Getting Help
 

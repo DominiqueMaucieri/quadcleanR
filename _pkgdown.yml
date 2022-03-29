@@ -28,7 +28,7 @@ reference:
   - useable_obs
   - visualize_app
 
-- title: Data sets
+- title: Data
   contents:
   - coral_labelset
   - environmental_data
@@ -36,6 +36,15 @@ reference:
   - softcoral_LQuads
   - softcoral_SQuads
   - softcoral_annotations
+
+
+  navbar:
+  structure:
+    left: [reference, articles, news, shiny]
+  components:
+    shiny:
+      text: Shiny
+      href: https://dominiquemaucieri.shinyapps.io/example/
 
 
 
