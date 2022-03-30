@@ -24,7 +24,6 @@
 #' visualize_app(data = coral, independent = colnames(coral[,1:4]), dependent = "cover")
 #' }
 #'
-
 visualize_app <- function(data, dependent, independent) {
 
   ui <- shinydashboard::dashboardPage( skin = "purple",
@@ -251,6 +250,3 @@ visualize_app <- function(data, dependent, independent) {
 shiny::shinyApp(ui, server)
 
 }
-
-
-
