@@ -21,7 +21,7 @@ The data being cleaned will be the `softcoral_LQuads` and this vignette will bui
 
 # Cleaning the Data
 
-First lets load the package, the dplyr package, tidyr package and the data
+First lets load the package, the dplyr package, tidyr package and the data, plus a few extras used to create this vignette.
 
 ```{r load package, warning=FALSE, message=FALSE}
 
@@ -153,7 +153,7 @@ This data frame is now nicely formatted and could be used for many community bas
 
 ```{r long format}
 
-LQuad_long <- LQuad_cover %>% select(-c(unuseable)) %>% pivot_longer(cols = names(LQuad_useable[,4:131]), names_to = "Tag_Name", values_to = "prop_cover")
+LQuad_long <- LQuad_cover %>% select(-c(unuseable)) %>% pivot_longer(cols = names(LQuad_cover[,4:131]), names_to = "Tag_Name", values_to = "prop_cover")
 
 ```
  
@@ -255,21 +255,19 @@ knitr::kable(sample_size(simple_cleaned, dim_1 = "Site", dim_2 = "Field.Season",
 
 Visualizing the data can be easy with a built in shiny app function. To see an example shiny app you can go [here](https://dominiquemaucieri.shinyapps.io/example/) or the following code.
 
-```{r shiny app from git}
+```{r shiny app from git, eval = FALSE}
 
-# runGitHub("quadcleanR", username = "DominiqueMaucieri", subdir = "inst/shiny/example", ref = "main")
+runGitHub("quadcleanR", username = "DominiqueMaucieri", subdir = "inst/shiny/example", ref = "main")
 
 ```
 
 The data used in this example is this data set we have just cleaned. However this does not help you as this is not your own data. You can use the following code to produce a shiny app of your data, which you can then explore your data. 
 
-```{r shiny app}
+```{r shiny app, eval= FALSE}
 
-# visualize_app(data = simple_cleaned, independent = colnames(simple_cleaned[,1:13]), dependent = "prop_cover")
+visualize_app(data = simple_cleaned, independent = colnames(simple_cleaned[,1:13]), dependent = "prop_cover")
 
 ```
-
-Note: if you do not provide data, the example data that was shown [here](https://dominiquemaucieri.shinyapps.io/example/) will be the data used. 
 
 
 
