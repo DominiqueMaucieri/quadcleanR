@@ -83,7 +83,8 @@
 
 
 
-<script src="cleaning_cropping_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+<script src="cleaning_cropping_files/accessible-code-block-0.0.1/empty-anchor.js"></script><script src="cleaning_cropping_files/kePrint-0.0.1/kePrint.js"></script><link href="cleaning_cropping_files/lightable-0.0.1/lightable.css" rel="stylesheet">
+<div class="row">
   <main id="main"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Cleaning and Cropping Quadrat Data</h1>
             
@@ -106,224 +107,2912 @@
 <li><p>Then crop the large quadrat data (<code>softcoral_annotations</code>) and clean it too</p></li>
 <li><p>Join the two together to produce a large, easy to use data frame for future analyses, with some further cleaning of this joint data set.</p></li>
 </ol>
-<p>First lets load the package, the dplyr package, tidyr package and the data</p>
+<p>First lets load the package, the dplyr package, tidyr package and the data, plus a few extras used to create thsi vignette.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/DominiqueMaucieri/quadcleanR" class="external-link">quadcleanR</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-gregmisc/gtools" class="external-link">gtools</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.rstudio.com/" class="external-link">shiny</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://yihui.org/knitr/" class="external-link">knitr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://haozhu233.github.io/kableExtra/" class="external-link">kableExtra</a></span><span class="op">)</span>
+
 
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"softcoral_SQuads"</span><span class="op">)</span></code></pre></div>
 <p>Now let me point out some unique aspects of this data:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">softcoral_SQuads</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">##   Image.ID              Image.name Annotation.status Points AcCor AcDig Acr_arb</span>
-<span class="co">## 1  1009261 KI2007_site10_Q1-10.jpg         Confirmed     54     0     0       0</span>
-<span class="co">## 2  1009252  KI2007_site10_Q1-1.jpg         Confirmed     54     0     0       0</span>
-<span class="co">## 3  1009253  KI2007_site10_Q1-2.jpg         Confirmed     54     0     0       0</span>
-<span class="co">## 4  1009254  KI2007_site10_Q1-3.jpg         Confirmed     54     0     0       0</span>
-<span class="co">## 5  1009255  KI2007_site10_Q1-4.jpg         Confirmed     54     0     0       0</span>
-<span class="co">## 6  1009256  KI2007_site10_Q1-5.jpg         Confirmed     54     0     0       0</span>
-<span class="co">##   Acrop AcroTab Astreo B_Acr_arb B_Acro B_Astre BAT B_Cosc B_Echin B_FavHal</span>
-<span class="co">## 1     0       0      0         0      0       0   0      0       0        0</span>
-<span class="co">## 2     0       0      0         0      0       0   0      0       0        0</span>
-<span class="co">## 3     0       0      0         0      0       0   0      0       0        0</span>
-<span class="co">## 4     0       0      0         0      0       0   0      0       0        0</span>
-<span class="co">## 5     0       0      0         0      0       0   0      0       0        0</span>
-<span class="co">## 6     0       0      0         0      0       0   0      0       0        0</span>
-<span class="co">##   B_Favia B_FaviaM B_FaviaS B_FaviaSt B_Favites B_FavPent B_Fung BGard B_GonEd</span>
-<span class="co">## 1       0        0        0         0         0         0      0     0       0</span>
-<span class="co">## 2       0        0        0         0         0         0      0     0       0</span>
-<span class="co">## 3       0        0        0         0         0         0      0     0       0</span>
-<span class="co">## 4       0        0        0         0         0         0      0     0       0</span>
-<span class="co">## 5       0        0        0         0         0         0      0     0       0</span>
-<span class="co">## 6       0        0        0         0         0         0      0     0       0</span>
-<span class="co">##   B_Herpo B_HYDNO B_HyExe BlAcro.Cor B_Lepta B_Lepto Blisop B_Lobo BlTurbFol</span>
-<span class="co">## 1       0       0       0          0       0       0      0      0         0</span>
-<span class="co">## 2       0       0       0          0       0       0      0      0         0</span>
-<span class="co">## 3       0       0       0          0       0       0      0      0         0</span>
-<span class="co">## 4       0       0       0          0       0       0      0      0         0</span>
-<span class="co">## 5       0       0       0          0       0       0      0      0         0</span>
-<span class="co">## 6       0       0       0          0       0       0      0      0         0</span>
-<span class="co">##   B_MOEN B_MOFO B_Monta B_Monti B_Oxyp B_Paly B_PaveDUER B_Pavona B_PEYDO</span>
-<span class="co">## 1      0      0       0       0      0      0          0        0       0</span>
-<span class="co">## 2      0      0       0       0      0      0          0        0       0</span>
-<span class="co">## 3      0      0       0       0      0      0          0        0       0</span>
-<span class="co">## 4      0      0       0       0      0      0          0        0       0</span>
-<span class="co">## 5      0      0       0       0      0      0          0        0       0</span>
-<span class="co">## 6      0      0       0       0      0      0          0        0       0</span>
-<span class="co">##   B_Plat B_PMEAN B_Pocillo B_Porit B_Psam B_PVAR B_Sando B_UnkCoral Cirr COSC</span>
-<span class="co">## 1      0       0         0       0      0      0       0          0    0    0</span>
-<span class="co">## 2      0       0         0       0      0      0       0          0    0    0</span>
-<span class="co">## 3      0       0         0       0      0      0       0          0    0    0</span>
-<span class="co">## 4      0       0         0       0      0      0       0          0    0    0</span>
-<span class="co">## 5      0       0         0       0      0      0       0          0    0    0</span>
-<span class="co">## 6      0       0         0       0      0      0       0          0    0    0</span>
-<span class="co">##   ECHIN Fav FavHal Favia FaviaM FaviaS FaviaSt FavPent Fung Gardin GonEd Herpo</span>
-<span class="co">## 1     0   0      0     0      0      0       0       0    0      0     0     0</span>
-<span class="co">## 2     0   0      0     0      0      0       0       0    0      0     0     0</span>
-<span class="co">## 3     0   0      0     0      0      0       0       0    0      0     0     0</span>
-<span class="co">## 4     0   0      0     0      0      0       0       0    0      0     0     0</span>
-<span class="co">## 5     0   0      0     0      0      0       0       0    0      0     0     0</span>
-<span class="co">## 6     0   0      0     0      0      0       0       0    0      0     0     0</span>
-<span class="co">##   HYDNO HyExe Isopora Lepta Lepto Lobo X.MOEN X.MOFO Monta Monti Oxyp Paly</span>
-<span class="co">## 1     0     0       0     0     0    0      0      0     0     0    0    0</span>
-<span class="co">## 2     0     0       0     0     0    0      0      0     0     0    0    0</span>
-<span class="co">## 3     0     0       0     0     0    0      0      0     0     0    0    0</span>
-<span class="co">## 4     0     0       0     0     0    0      0      0     0     0    0    0</span>
-<span class="co">## 5     0     0       0     0     0    0      0      0     0     0    0    0</span>
-<span class="co">## 6     0     0       0     0     0    0      0      0     0     0    0    0</span>
-<span class="co">##   PaveDUER Pavon PEYDO Plat Plero PMEAN Pocill Porit Psam PVAR Sando Tuba TURB</span>
-<span class="co">## 1        0     0     0    0     0     0      0     0    0    0     0    0    0</span>
-<span class="co">## 2        0     0     0    0     0     0      0     0    0    0     0    0    0</span>
-<span class="co">## 3        0     0     0    0     0     0      0     0    0    0     0    0    0</span>
-<span class="co">## 4        0     0     0    0     0     0      0     0    0    0     0    0    0</span>
-<span class="co">## 5        0     0     0    0     0     0      0     0    0    0     0    0    0</span>
-<span class="co">## 6        0     0     0    0     0     0      0     0    0    0     0    0    0</span>
-<span class="co">##   UnkCoral ANEM B_Clad B_Sinu Clad EncBry EUR HYDCO Hydra Mille MOBI Sarco SECO</span>
-<span class="co">## 1        0    0      0      0    0      0   0     0     0     0    0     0    0</span>
-<span class="co">## 2        0    0      0      0    0      0   0     0     0     0    0     0    0</span>
-<span class="co">## 3        0    0      0      0    0      0   0     0     0     0    0     0    0</span>
-<span class="co">## 4        0    0      0      0    0      0   0     0     0     0    0     0    0</span>
-<span class="co">## 5        0    0      0      0    0      0   0     0     0     0    0     0    0</span>
-<span class="co">## 6        0    0      0      0    0      0   0     0     0     0    0     0    0</span>
-<span class="co">##   Sinu Sponge Stylas UnkTUN XmasW ZOAN B_Sarco Sand Sediment SCRO B_Loph CYAN</span>
-<span class="co">## 1    0      0      0      0     0    0       0    0        0    0      0    0</span>
-<span class="co">## 2    0      0      0      0     0    0       0    0        0    0      0    0</span>
-<span class="co">## 3    0      0      0      0     0    0       0    0        0    0      0    0</span>
-<span class="co">## 4    0      0      0      0     0    0       0    0        0    0      0    0</span>
-<span class="co">## 5    0      0      0      0     0    0       0    0        0    0      0    0</span>
-<span class="co">## 6    0      0      0      0     0    0       0    0        0    0      0    0</span>
-<span class="co">##   Loph Rubble  SHAD Trans   Unc AVRA Caul CCA Dict DICTY Hali Lobph Macro Mdict</span>
-<span class="co">## 1    0      0 3.704     0 1.852    0    0   0    0     0    0     0     0     0</span>
-<span class="co">## 2    0      0 0.000     0 0.000    0    0   0    0     0    0     0     0     0</span>
-<span class="co">## 3    0      0 0.000     0 0.000    0    0   0    0     0    0     0     0     0</span>
-<span class="co">## 4    0      0 1.852     0 1.852    0    0   0    0     0    0     0     0     0</span>
-<span class="co">## 5    0      0 0.000     0 0.000    0    0   0    0     0    0     0     0     0</span>
-<span class="co">## 6    0      0 0.000     0 0.000    0    0   0    0     0    0     0     0     0</span>
-<span class="co">##   Pad Peysson Turf TURFH Unidentified</span>
-<span class="co">## 1   0       0    0     0       94.444</span>
-<span class="co">## 2   0       0    0     0      100.000</span>
-<span class="co">## 3   0       0    0     0      100.000</span>
-<span class="co">## 4   0       0    0     0       96.296</span>
-<span class="co">## 5   0       0    0     0      100.000</span>
-<span class="co">## 6   0       0    0     0      100.000</span></code></pre>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">softcoral_SQuads</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">##        Image.ID          Image.name Annotation.status Points AcCor AcDig</span>
-<span class="co">## 2517    1403339 KI2011_site9_Q5.jpg         Confirmed     54     0     0</span>
-<span class="co">## 2518    1403340 KI2011_site9_Q6.jpg         Confirmed     54     0     0</span>
-<span class="co">## 2519    1403341 KI2011_site9_Q7.jpg         Confirmed     54     0     0</span>
-<span class="co">## 2520    1403342 KI2011_site9_Q8.jpg         Confirmed     54     0     0</span>
-<span class="co">## 2521    1403343 KI2011_site9_Q9.jpg         Confirmed     54     0     0</span>
-<span class="co">## 2522 ALL IMAGES                                           NA     0     0</span>
-<span class="co">##      Acr_arb Acrop AcroTab Astreo B_Acr_arb B_Acro B_Astre BAT B_Cosc B_Echin</span>
-<span class="co">## 2517       0     0       0      0         0      0       0   0      0       0</span>
-<span class="co">## 2518       0     0       0      0         0      0       0   0      0       0</span>
-<span class="co">## 2519       0     0       0      0         0      0       0   0      0       0</span>
-<span class="co">## 2520       0     0       0      0         0      0       0   0      0       0</span>
-<span class="co">## 2521       0     0       0      0         0      0       0   0      0       0</span>
-<span class="co">## 2522       0     0       0      0         0      0       0   0      0       0</span>
-<span class="co">##      B_FavHal B_Favia B_FaviaM B_FaviaS B_FaviaSt B_Favites B_FavPent B_Fung</span>
-<span class="co">## 2517        0       0        0        0         0         0         0      0</span>
-<span class="co">## 2518        0       0        0        0         0         0         0      0</span>
-<span class="co">## 2519        0       0        0        0         0         0         0      0</span>
-<span class="co">## 2520        0       0        0        0         0         0         0      0</span>
-<span class="co">## 2521        0       0        0        0         0         0         0      0</span>
-<span class="co">## 2522        0       0        0        0         0         0         0      0</span>
-<span class="co">##      BGard B_GonEd B_Herpo B_HYDNO B_HyExe BlAcro.Cor B_Lepta B_Lepto Blisop</span>
-<span class="co">## 2517     0       0       0       0       0          0       0       0      0</span>
-<span class="co">## 2518     0       0       0       0       0          0       0       0      0</span>
-<span class="co">## 2519     0       0       0       0       0          0       0       0      0</span>
-<span class="co">## 2520     0       0       0       0       0          0       0       0      0</span>
-<span class="co">## 2521     0       0       0       0       0          0       0       0      0</span>
-<span class="co">## 2522     0       0       0       0       0          0       0       0      0</span>
-<span class="co">##      B_Lobo BlTurbFol B_MOEN B_MOFO B_Monta B_Monti B_Oxyp B_Paly B_PaveDUER</span>
-<span class="co">## 2517      0         0      0      0       0       0      0      0          0</span>
-<span class="co">## 2518      0         0      0      0       0       0      0      0          0</span>
-<span class="co">## 2519      0         0      0      0       0       0      0      0          0</span>
-<span class="co">## 2520      0         0      0      0       0       0      0      0          0</span>
-<span class="co">## 2521      0         0      0      0       0       0      0      0          0</span>
-<span class="co">## 2522      0         0      0      0       0       0      0      0          0</span>
-<span class="co">##      B_Pavona B_PEYDO B_Plat B_PMEAN B_Pocillo B_Porit B_Psam B_PVAR B_Sando</span>
-<span class="co">## 2517        0       0      0       0         0       0      0      0       0</span>
-<span class="co">## 2518        0       0      0       0         0       0      0      0       0</span>
-<span class="co">## 2519        0       0      0       0         0       0      0      0       0</span>
-<span class="co">## 2520        0       0      0       0         0       0      0      0       0</span>
-<span class="co">## 2521        0       0      0       0         0       0      0      0       0</span>
-<span class="co">## 2522        0       0      0       0         0       0      0      0       0</span>
-<span class="co">##      B_UnkCoral Cirr COSC ECHIN Fav FavHal Favia FaviaM FaviaS FaviaSt FavPent</span>
-<span class="co">## 2517          0    0    0     0   0      0     0      0      0       0       0</span>
-<span class="co">## 2518          0    0    0     0   0      0     0      0      0       0       0</span>
-<span class="co">## 2519          0    0    0     0   0      0     0      0      0       0       0</span>
-<span class="co">## 2520          0    0    0     0   0      0     0      0      0       0       0</span>
-<span class="co">## 2521          0    0    0     0   0      0     0      0      0       0       0</span>
-<span class="co">## 2522          0    0    0     0   0      0     0      0      0       0       0</span>
-<span class="co">##      Fung Gardin GonEd Herpo HYDNO HyExe Isopora Lepta Lepto Lobo X.MOEN X.MOFO</span>
-<span class="co">## 2517    0      0     0     0     0     0       0     0     0    0      0      0</span>
-<span class="co">## 2518    0      0     0     0     0     0       0     0     0    0      0      0</span>
-<span class="co">## 2519    0      0     0     0     0     0       0     0     0    0      0      0</span>
-<span class="co">## 2520    0      0     0     0     0     0       0     0     0    0      0      0</span>
-<span class="co">## 2521    0      0     0     0     0     0       0     0     0    0      0      0</span>
-<span class="co">## 2522    0      0     0     0     0     0       0     0     0    0      0      0</span>
-<span class="co">##      Monta Monti Oxyp Paly PaveDUER Pavon PEYDO Plat Plero PMEAN Pocill Porit</span>
-<span class="co">## 2517     0     0    0    0        0     0     0    0     0     0      0     0</span>
-<span class="co">## 2518     0     0    0    0        0     0     0    0     0     0      0     0</span>
-<span class="co">## 2519     0     0    0    0        0     0     0    0     0     0      0     0</span>
-<span class="co">## 2520     0     0    0    0        0     0     0    0     0     0      0     0</span>
-<span class="co">## 2521     0     0    0    0        0     0     0    0     0     0      0     0</span>
-<span class="co">## 2522     0     0    0    0        0     0     0    0     0     0      0     0</span>
-<span class="co">##      Psam PVAR Sando Tuba TURB UnkCoral ANEM B_Clad B_Sinu Clad EncBry EUR</span>
-<span class="co">## 2517    0    0     0    0    0        0    0      0      0    0      0   0</span>
-<span class="co">## 2518    0    0     0    0    0        0    0      0      0    0      0   0</span>
-<span class="co">## 2519    0    0     0    0    0        0    0      0      0    0      0   0</span>
-<span class="co">## 2520    0    0     0    0    0        0    0      0      0    0      0   0</span>
-<span class="co">## 2521    0    0     0    0    0        0    0      0      0    0      0   0</span>
-<span class="co">## 2522    0    0     0    0    0        0    0      0      0    0      0   0</span>
-<span class="co">##      HYDCO Hydra Mille MOBI Sarco SECO Sinu Sponge Stylas UnkTUN XmasW ZOAN</span>
-<span class="co">## 2517     0     0     0    0     0    0    0      0      0      0     0    0</span>
-<span class="co">## 2518     0     0     0    0     0    0    0      0      0      0     0    0</span>
-<span class="co">## 2519     0     0     0    0     0    0    0      0      0      0     0    0</span>
-<span class="co">## 2520     0     0     0    0     0    0    0      0      0      0     0    0</span>
-<span class="co">## 2521     0     0     0    0     0    0    0      0      0      0     0    0</span>
-<span class="co">## 2522     0     0     0    0     0    0    0      0      0      0     0    0</span>
-<span class="co">##      B_Sarco Sand Sediment SCRO B_Loph CYAN Loph Rubble SHAD Trans Unc AVRA</span>
-<span class="co">## 2517       0    0        0    0      0    0    0      0    0 5.556   0    0</span>
-<span class="co">## 2518       0    0        0    0      0    0    0      0    0 5.556   0    0</span>
-<span class="co">## 2519       0    0        0    0      0    0    0      0    0 1.852   0    0</span>
-<span class="co">## 2520       0    0        0    0      0    0    0      0    0 0.000   0    0</span>
-<span class="co">## 2521       0    0        0    0      0    0    0      0    0 0.000   0    0</span>
-<span class="co">## 2522       0    0        0    0      0    0    0      0    0 0.000   0    0</span>
-<span class="co">##      Caul CCA Dict DICTY Hali Lobph Macro Mdict Pad Peysson Turf TURFH</span>
-<span class="co">## 2517    0   0    0     0    0     0     0     0   0       0    0     0</span>
-<span class="co">## 2518    0   0    0     0    0     0     0     0   0       0    0     0</span>
-<span class="co">## 2519    0   0    0     0    0     0     0     0   0       0    0     0</span>
-<span class="co">## 2520    0   0    0     0    0     0     0     0   0       0    0     0</span>
-<span class="co">## 2521    0   0    0     0    0     0     0     0   0       0    0     0</span>
-<span class="co">## 2522    0   0    0     0    0     0     0     0   0       0    0     0</span>
-<span class="co">##      Unidentified</span>
-<span class="co">## 2517       94.444</span>
-<span class="co">## 2518       94.444</span>
-<span class="co">## 2519       98.148</span>
-<span class="co">## 2520      100.000</span>
-<span class="co">## 2521      100.000</span>
-<span class="co">## 2522      100.000</span></code></pre>
+<div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:100%; ">
+<table class="table table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead><tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:center;">
+Image.ID
+</th>
+<th style="text-align:center;">
+Image.name
+</th>
+<th style="text-align:center;">
+Annotation.status
+</th>
+<th style="text-align:center;">
+Points
+</th>
+<th style="text-align:center;">
+AcCor
+</th>
+<th style="text-align:center;">
+AcDig
+</th>
+<th style="text-align:center;">
+Acr_arb
+</th>
+<th style="text-align:center;">
+Acrop
+</th>
+<th style="text-align:center;">
+AcroTab
+</th>
+<th style="text-align:center;">
+Astreo
+</th>
+<th style="text-align:center;">
+B_Acr_arb
+</th>
+<th style="text-align:center;">
+B_Acro
+</th>
+<th style="text-align:center;">
+B_Astre
+</th>
+<th style="text-align:center;">
+BAT
+</th>
+<th style="text-align:center;">
+B_Cosc
+</th>
+<th style="text-align:center;">
+B_Echin
+</th>
+<th style="text-align:center;">
+B_FavHal
+</th>
+<th style="text-align:center;">
+B_Favia
+</th>
+<th style="text-align:center;">
+B_FaviaM
+</th>
+<th style="text-align:center;">
+B_FaviaS
+</th>
+<th style="text-align:center;">
+B_FaviaSt
+</th>
+<th style="text-align:center;">
+B_Favites
+</th>
+<th style="text-align:center;">
+B_FavPent
+</th>
+<th style="text-align:center;">
+B_Fung
+</th>
+<th style="text-align:center;">
+BGard
+</th>
+<th style="text-align:center;">
+B_GonEd
+</th>
+<th style="text-align:center;">
+B_Herpo
+</th>
+<th style="text-align:center;">
+B_HYDNO
+</th>
+<th style="text-align:center;">
+B_HyExe
+</th>
+<th style="text-align:center;">
+BlAcro.Cor
+</th>
+<th style="text-align:center;">
+B_Lepta
+</th>
+<th style="text-align:center;">
+B_Lepto
+</th>
+<th style="text-align:center;">
+Blisop
+</th>
+<th style="text-align:center;">
+B_Lobo
+</th>
+<th style="text-align:center;">
+BlTurbFol
+</th>
+<th style="text-align:center;">
+B_MOEN
+</th>
+<th style="text-align:center;">
+B_MOFO
+</th>
+<th style="text-align:center;">
+B_Monta
+</th>
+<th style="text-align:center;">
+B_Monti
+</th>
+<th style="text-align:center;">
+B_Oxyp
+</th>
+<th style="text-align:center;">
+B_Paly
+</th>
+<th style="text-align:center;">
+B_PaveDUER
+</th>
+<th style="text-align:center;">
+B_Pavona
+</th>
+<th style="text-align:center;">
+B_PEYDO
+</th>
+<th style="text-align:center;">
+B_Plat
+</th>
+<th style="text-align:center;">
+B_PMEAN
+</th>
+<th style="text-align:center;">
+B_Pocillo
+</th>
+<th style="text-align:center;">
+B_Porit
+</th>
+<th style="text-align:center;">
+B_Psam
+</th>
+<th style="text-align:center;">
+B_PVAR
+</th>
+<th style="text-align:center;">
+B_Sando
+</th>
+<th style="text-align:center;">
+B_UnkCoral
+</th>
+<th style="text-align:center;">
+Cirr
+</th>
+<th style="text-align:center;">
+COSC
+</th>
+<th style="text-align:center;">
+ECHIN
+</th>
+<th style="text-align:center;">
+Fav
+</th>
+<th style="text-align:center;">
+FavHal
+</th>
+<th style="text-align:center;">
+Favia
+</th>
+<th style="text-align:center;">
+FaviaM
+</th>
+<th style="text-align:center;">
+FaviaS
+</th>
+<th style="text-align:center;">
+FaviaSt
+</th>
+<th style="text-align:center;">
+FavPent
+</th>
+<th style="text-align:center;">
+Fung
+</th>
+<th style="text-align:center;">
+Gardin
+</th>
+<th style="text-align:center;">
+GonEd
+</th>
+<th style="text-align:center;">
+Herpo
+</th>
+<th style="text-align:center;">
+HYDNO
+</th>
+<th style="text-align:center;">
+HyExe
+</th>
+<th style="text-align:center;">
+Isopora
+</th>
+<th style="text-align:center;">
+Lepta
+</th>
+<th style="text-align:center;">
+Lepto
+</th>
+<th style="text-align:center;">
+Lobo
+</th>
+<th style="text-align:center;">
+X.MOEN
+</th>
+<th style="text-align:center;">
+X.MOFO
+</th>
+<th style="text-align:center;">
+Monta
+</th>
+<th style="text-align:center;">
+Monti
+</th>
+<th style="text-align:center;">
+Oxyp
+</th>
+<th style="text-align:center;">
+Paly
+</th>
+<th style="text-align:center;">
+PaveDUER
+</th>
+<th style="text-align:center;">
+Pavon
+</th>
+<th style="text-align:center;">
+PEYDO
+</th>
+<th style="text-align:center;">
+Plat
+</th>
+<th style="text-align:center;">
+Plero
+</th>
+<th style="text-align:center;">
+PMEAN
+</th>
+<th style="text-align:center;">
+Pocill
+</th>
+<th style="text-align:center;">
+Porit
+</th>
+<th style="text-align:center;">
+Psam
+</th>
+<th style="text-align:center;">
+PVAR
+</th>
+<th style="text-align:center;">
+Sando
+</th>
+<th style="text-align:center;">
+Tuba
+</th>
+<th style="text-align:center;">
+TURB
+</th>
+<th style="text-align:center;">
+UnkCoral
+</th>
+<th style="text-align:center;">
+ANEM
+</th>
+<th style="text-align:center;">
+B_Clad
+</th>
+<th style="text-align:center;">
+B_Sinu
+</th>
+<th style="text-align:center;">
+Clad
+</th>
+<th style="text-align:center;">
+EncBry
+</th>
+<th style="text-align:center;">
+EUR
+</th>
+<th style="text-align:center;">
+HYDCO
+</th>
+<th style="text-align:center;">
+Hydra
+</th>
+<th style="text-align:center;">
+Mille
+</th>
+<th style="text-align:center;">
+MOBI
+</th>
+<th style="text-align:center;">
+Sarco
+</th>
+<th style="text-align:center;">
+SECO
+</th>
+<th style="text-align:center;">
+Sinu
+</th>
+<th style="text-align:center;">
+Sponge
+</th>
+<th style="text-align:center;">
+Stylas
+</th>
+<th style="text-align:center;">
+UnkTUN
+</th>
+<th style="text-align:center;">
+XmasW
+</th>
+<th style="text-align:center;">
+ZOAN
+</th>
+<th style="text-align:center;">
+B_Sarco
+</th>
+<th style="text-align:center;">
+Sand
+</th>
+<th style="text-align:center;">
+Sediment
+</th>
+<th style="text-align:center;">
+SCRO
+</th>
+<th style="text-align:center;">
+B_Loph
+</th>
+<th style="text-align:center;">
+CYAN
+</th>
+<th style="text-align:center;">
+Loph
+</th>
+<th style="text-align:center;">
+Rubble
+</th>
+<th style="text-align:center;">
+SHAD
+</th>
+<th style="text-align:center;">
+Trans
+</th>
+<th style="text-align:center;">
+Unc
+</th>
+<th style="text-align:center;">
+AVRA
+</th>
+<th style="text-align:center;">
+Caul
+</th>
+<th style="text-align:center;">
+CCA
+</th>
+<th style="text-align:center;">
+Dict
+</th>
+<th style="text-align:center;">
+DICTY
+</th>
+<th style="text-align:center;">
+Hali
+</th>
+<th style="text-align:center;">
+Lobph
+</th>
+<th style="text-align:center;">
+Macro
+</th>
+<th style="text-align:center;">
+Mdict
+</th>
+<th style="text-align:center;">
+Pad
+</th>
+<th style="text-align:center;">
+Peysson
+</th>
+<th style="text-align:center;">
+Turf
+</th>
+<th style="text-align:center;">
+TURFH
+</th>
+<th style="text-align:center;">
+Unidentified
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+2517
+</td>
+<td style="text-align:center;">
+1403339
+</td>
+<td style="text-align:center;">
+KI2011_site9_Q5.jpg
+</td>
+<td style="text-align:center;">
+Confirmed
+</td>
+<td style="text-align:center;">
+54
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+5.556
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+94.444
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2518
+</td>
+<td style="text-align:center;">
+1403340
+</td>
+<td style="text-align:center;">
+KI2011_site9_Q6.jpg
+</td>
+<td style="text-align:center;">
+Confirmed
+</td>
+<td style="text-align:center;">
+54
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+5.556
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+94.444
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2519
+</td>
+<td style="text-align:center;">
+1403341
+</td>
+<td style="text-align:center;">
+KI2011_site9_Q7.jpg
+</td>
+<td style="text-align:center;">
+Confirmed
+</td>
+<td style="text-align:center;">
+54
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+1.852
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+98.148
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2520
+</td>
+<td style="text-align:center;">
+1403342
+</td>
+<td style="text-align:center;">
+KI2011_site9_Q8.jpg
+</td>
+<td style="text-align:center;">
+Confirmed
+</td>
+<td style="text-align:center;">
+54
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0.000
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+100.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2521
+</td>
+<td style="text-align:center;">
+1403343
+</td>
+<td style="text-align:center;">
+KI2011_site9_Q9.jpg
+</td>
+<td style="text-align:center;">
+Confirmed
+</td>
+<td style="text-align:center;">
+54
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0.000
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+100.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2522
+</td>
+<td style="text-align:center;">
+ALL IMAGES
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+NA
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0.000
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+100.000
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 <p>This data as an <code>Image.ID</code> column which was arbitrarily added to this data set, so we are going to remove that as it holds no scientific value. There is also a final row which sums all quadrats but since we will be removing quadrats and points to clean these data up, we will remove that final row as well. The <code>Image.name</code> column is the unique ID for each photo quadrat, but it is very messy and not easy to use, so we will make this into new columns and add more information. <code>Annotation.status</code> is a column from <a href="https://coralnet.ucsd.edu/" class="external-link">CoralNet</a> which tells if the annotations in each photo quadrat have been confirmed by human researchers or are only based on AI. The <code>Points</code> column tells us how many randomly annotated points there are in each quadrat, and since they are all 54, we know these data are from the smaller quadrats. The rest of the columns are the different coral and substrate IDs and how many points where annotated for each tag in each photo.</p>
 <p>So first, lets remove unneeded columns and make sure we are only working with “Confirmed” annotations.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">SQuad_confirmed</span> <span class="op">&lt;-</span> <span class="va">softcoral_SQuads</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Annotation.status</span> <span class="op">==</span> <span class="st">"Confirmed"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">Image.ID</span>, <span class="va">Points</span>, <span class="va">Annotation.status</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">SQuad_confirmed</span> <span class="op">&lt;-</span> <span class="va">softcoral_SQuads</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Annotation.status</span> <span class="op">==</span> <span class="st">"Confirmed"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">Image.ID</span>, <span class="va">Points</span>, <span class="va">Annotation.status</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>Now we will separate the <code>Image.name</code> column into more descriptive columns.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">SQuad_separated</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/separate.html" class="external-link">separate</a></span><span class="op">(</span><span class="va">SQuad_confirmed</span>, <span class="va">Image.name</span>, sep<span class="op">=</span><span class="st">"_"</span>, into<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Field.Season"</span>, <span class="st">"Site"</span>,<span class="st">"Quadrat"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p>There will be 3 rows with discarded pieces because the quadrats have an _ in them, but that is okay, they will still be unique quadrat names so we don’t need to worry about that. But if you notice, there are still .jpg and .jpeg in the quadrat names, so lets remove those, and change the naming of siteT19 to site40</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<pre><code><span class="co">## Warning: Expected 3 pieces. Additional pieces discarded in 3 rows [275, 446,</span>
+<span class="co">## 477].</span></code></pre>
+<p>But if you notice, there are still .jpg and .jpeg in the quadrat names, so lets remove those, and change the naming of siteT19 to site40.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">SQuad_nojpg</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rm_chr.html">rm_chr</a></span><span class="op">(</span><span class="va">SQuad_separated</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">".jpg"</span>, <span class="st">".jpeg"</span><span class="op">)</span><span class="op">)</span>
 <span class="va">SQuad_site40</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/change_values.html">change_values</a></span><span class="op">(</span><span class="va">SQuad_nojpg</span>, <span class="st">"Site"</span>, <span class="st">"siteT19"</span>, <span class="st">"site40"</span><span class="op">)</span></code></pre></div>
 <p>Now lets look at the levels of some of my columns.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">SQuad_site40</span><span class="op">$</span><span class="va">Field.Season</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] "KI2007" "KI2009" "KI2010" "KI2011"</span></code></pre>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">SQuad_site40</span><span class="op">$</span><span class="va">Site</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">##  [1] "site10" "site11" "site12" "site13" "site14" "site15" "site16" "site17"</span>
 <span class="co">##  [9] "site18" "site19" "site1"  "site20" "site21" "site22" "site23" "site24"</span>
@@ -332,97 +3021,149 @@
 <span class="co">## [33] "site5"  "site6"  "site7"  "site8"  "site9"  "site38" "site39" "site40"</span></code></pre>
 <p>Sometimes you may not want every year and every site of the data, so you may want to subset some of them out. For this example I don’t want to subset any of these out, but I will demonstrate how to subset out based on values later, when we get to the large quadrats.</p>
 <p>Now to prep for the addition of the large quadrats, I want to update the column names for this data frame. The column names are currently set as the tag shorthand used during the annotation process, but now I want them to better reflect the actual substrate names.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"coral_labelset"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">coral_labelset</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">##   short_name                full_name           taxonomic_name</span>
-<span class="co">## 1     Rubble      Broken_coral_rubble      Broken_coral_rubble</span>
-<span class="co">## 2       SCRO   Consolidated_hard_rock   Consolidated_hard_rock</span>
-<span class="co">## 3       Sand                     Sand                     Sand</span>
-<span class="co">## 4   Sediment                 Sediment                 Sediment</span>
-<span class="co">## 5        CCA Crustose_coralline_algae Crustose_coralline_algae</span>
-<span class="co">## 6    Peysson             Peyssonnelia             Peyssonnelia</span>
-<span class="co">##    functional_group life_history</span>
-<span class="co">## 1 Abiotic_Substrate    Not_Coral</span>
-<span class="co">## 2 Abiotic_Substrate    Not_Coral</span>
-<span class="co">## 3 Abiotic_Substrate    Not_Coral</span>
-<span class="co">## 4 Abiotic_Substrate    Not_Coral</span>
-<span class="co">## 5    Crustose_Algae    Not_Coral</span>
-<span class="co">## 6    Crustose_Algae    Not_Coral</span></code></pre>
+<div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:100%; ">
+<table class="table table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead><tr>
+<th style="text-align:center;">
+short_name
+</th>
+<th style="text-align:center;">
+full_name
+</th>
+<th style="text-align:center;">
+taxonomic_name
+</th>
+<th style="text-align:center;">
+functional_group
+</th>
+<th style="text-align:center;">
+life_history
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+Rubble
+</td>
+<td style="text-align:center;">
+Broken_coral_rubble
+</td>
+<td style="text-align:center;">
+Broken_coral_rubble
+</td>
+<td style="text-align:center;">
+Abiotic_Substrate
+</td>
+<td style="text-align:center;">
+Not_Coral
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+SCRO
+</td>
+<td style="text-align:center;">
+Consolidated_hard_rock
+</td>
+<td style="text-align:center;">
+Consolidated_hard_rock
+</td>
+<td style="text-align:center;">
+Abiotic_Substrate
+</td>
+<td style="text-align:center;">
+Not_Coral
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Sand
+</td>
+<td style="text-align:center;">
+Sand
+</td>
+<td style="text-align:center;">
+Sand
+</td>
+<td style="text-align:center;">
+Abiotic_Substrate
+</td>
+<td style="text-align:center;">
+Not_Coral
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Sediment
+</td>
+<td style="text-align:center;">
+Sediment
+</td>
+<td style="text-align:center;">
+Sediment
+</td>
+<td style="text-align:center;">
+Abiotic_Substrate
+</td>
+<td style="text-align:center;">
+Not_Coral
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+CCA
+</td>
+<td style="text-align:center;">
+Crustose_coralline_algae
+</td>
+<td style="text-align:center;">
+Crustose_coralline_algae
+</td>
+<td style="text-align:center;">
+Crustose_Algae
+</td>
+<td style="text-align:center;">
+Not_Coral
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Peysson
+</td>
+<td style="text-align:center;">
+Peyssonnelia
+</td>
+<td style="text-align:center;">
+Peyssonnelia
+</td>
+<td style="text-align:center;">
+Crustose_Algae
+</td>
+<td style="text-align:center;">
+Not_Coral
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 <p>This is what my label set document looks like, but you could also make this in R by joining a series of vectors. Now lets fix the column names.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">SQuad_colnames</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/change_names.html">change_names</a></span><span class="op">(</span><span class="va">SQuad_site40</span>, <span class="va">coral_labelset</span>, <span class="st">"short_name"</span>, <span class="st">"full_name"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">SQuad_colnames</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">##   [1] "Field.Season"                   "Site"                          </span>
-<span class="co">##   [3] "Quadrat"                        "Acropora_corymbose"            </span>
-<span class="co">##   [5] "Acropora_digitate"              "Acropora_arborescent"          </span>
-<span class="co">##   [7] "Acropora"                       "Acropora_tabulate"             </span>
-<span class="co">##   [9] "Astreopora"                     "Bleached_Acropora_arborescent" </span>
-<span class="co">##  [11] "Bleached_Acropora"              "Bleached_Astreopora"           </span>
-<span class="co">##  [13] "Bleached_Acropora_tabulate"     "Bleached_Coscinarea"           </span>
-<span class="co">##  [15] "Bleached_Echinophyllia"         "Bleached_Favites_halicora"     </span>
-<span class="co">##  [17] "Bleached_Favia"                 "Bleached_Favia_matthai"        </span>
-<span class="co">##  [19] "Bleached_Favia_speciosa"        "Bleached_Goniastrea_stelligera"</span>
-<span class="co">##  [21] "Bleached_Favites"               "Bleached_Favites_pentagona"    </span>
-<span class="co">##  [23] "Bleached_Fungia"                "Bleached_Gardineroseris"       </span>
-<span class="co">##  [25] "Bleached_Goniastrea_edwardsi"   "Bleached_Herpolitha"           </span>
-<span class="co">##  [27] "Bleached_Hydnophora"            "Bleached_Hydnophora_exesa"     </span>
-<span class="co">##  [29] "Bleached_Acropora_corymbose"    "Bleached_Leptastrea"           </span>
-<span class="co">##  [31] "Bleached_Leptoseris"            "Bleached_Isopora"              </span>
-<span class="co">##  [33] "Bleached_Lobophyllia"           "Bleached_Turbinaria_foliose"   </span>
-<span class="co">##  [35] "Bleached_Montipora_encrusting"  "Bleached_Montipora_foliose"    </span>
-<span class="co">##  [37] "Bleached_Montastraea"           "Bleached_Montipora"            </span>
-<span class="co">##  [39] "Bleached_Oxypora"               "Bleached_Palythoa"             </span>
-<span class="co">##  [41] "Bleached_Pavona_duerdeni"       "Bleached_Pavona"               </span>
-<span class="co">##  [43] "Bleached_Pocillopora_eydouxi"   "Bleached_Platygyra"            </span>
-<span class="co">##  [45] "Bleached_Pocillopora_meandrina" "Bleached_Pocillopora"          </span>
-<span class="co">##  [47] "Bleached_Porites"               "Bleached_Psammocora"           </span>
-<span class="co">##  [49] "Bleached_Pavona_varians"        "Bleached_Sandolitha"           </span>
-<span class="co">##  [51] "Bleached_unknown_hard_coral"    "Cirrhipathes"                  </span>
-<span class="co">##  [53] "Coscinaraea"                    "Echinophyllia"                 </span>
-<span class="co">##  [55] "Favites"                        "Favites_halicora"              </span>
-<span class="co">##  [57] "Favia"                          "Dipsastraea_matthai"           </span>
-<span class="co">##  [59] "Favia_speciosa"                 "Favia_stelligera"              </span>
-<span class="co">##  [61] "Favites_pentagona"              "Fungia"                        </span>
-<span class="co">##  [63] "Gardineroseris"                 "Goniastrea_edwardsi"           </span>
-<span class="co">##  [65] "Herpolitha"                     "Hydnophora"                    </span>
-<span class="co">##  [67] "Hydnophora_exesa"               "Isopora"                       </span>
-<span class="co">##  [69] "Leptastrea"                     "Leptoseris"                    </span>
-<span class="co">##  [71] "Lobophyllia"                    "Montipora_encrusting"          </span>
-<span class="co">##  [73] "Montipora_foliose"              "Montastraea"                   </span>
-<span class="co">##  [75] "Montipora"                      "Oxypora"                       </span>
-<span class="co">##  [77] "Palythoa"                       "Pavona_duerdeni"               </span>
-<span class="co">##  [79] "Pavona"                         "Pocillopora_eydouxi"           </span>
-<span class="co">##  [81] "Platygyra"                      "Plerogyra"                     </span>
-<span class="co">##  [83] "Pocillopora_meandrina"          "Pocillopora"                   </span>
-<span class="co">##  [85] "Porites"                        "Psammocora"                    </span>
-<span class="co">##  [87] "Pavona_varians"                 "Sandolitha"                    </span>
-<span class="co">##  [89] "Tubastrea"                      "Turbinaria"                    </span>
-<span class="co">##  [91] "Unknown_Hard_Coral"             "Sea_anemone"                   </span>
-<span class="co">##  [93] "Bleached_Cladiella"             "Bleached_Sinularia"            </span>
-<span class="co">##  [95] "Cladiella"                      "Encrusting_Bryozoan"           </span>
-<span class="co">##  [97] "Sea_urchin"                     "Hydrocoral"                    </span>
-<span class="co">##  [99] "Hydroid"                        "Millepora"                     </span>
-<span class="co">## [101] "Bivalves"                       "Sarcophyton"                   </span>
-<span class="co">## [103] "Sea_cucumber"                   "Sinularia"                     </span>
-<span class="co">## [105] "Sponge"                         "Stylaster"                     </span>
-<span class="co">## [107] "Unknown_Tunicate"               "Christmas_Tree_Worm"           </span>
-<span class="co">## [109] "Zoanthid"                       "Bleached_Sarcophyton"          </span>
-<span class="co">## [111] "Sand"                           "Sediment"                      </span>
-<span class="co">## [113] "Consolidated_hard_rock"         "Bleached_Lobophytum"           </span>
-<span class="co">## [115] "Cyanobacteria_films"            "Lobophytum"                    </span>
-<span class="co">## [117] "Broken_coral_rubble"            "Shadow"                        </span>
-<span class="co">## [119] "Transect_hardware"              "Unclear"                       </span>
-<span class="co">## [121] "Avrainvillea"                   "Caulerpa"                      </span>
-<span class="co">## [123] "Crustose_coralline_algae"       "Dictyota"                      </span>
-<span class="co">## [125] "Dictyosphaeria"                 "Halimeda"                      </span>
-<span class="co">## [127] "Lobophora"                      "Macroalgae"                    </span>
-<span class="co">## [129] "Microdictyon"                   "Padina"                        </span>
-<span class="co">## [131] "Peyssonnelia"                   "Turf_algae"                    </span>
-<span class="co">## [133] "Turf_algae_on_hard_substrate"   "Unidentified"</span></code></pre>
+<span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">SQuad_colnames</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">16</span><span class="op">]</span></code></pre></div>
+<pre><code><span class="co">##  [1] "Field.Season"                  "Site"                         </span>
+<span class="co">##  [3] "Quadrat"                       "Acropora_corymbose"           </span>
+<span class="co">##  [5] "Acropora_digitate"             "Acropora_arborescent"         </span>
+<span class="co">##  [7] "Acropora"                      "Acropora_tabulate"            </span>
+<span class="co">##  [9] "Astreopora"                    "Bleached_Acropora_arborescent"</span>
+<span class="co">## [11] "Bleached_Acropora"             "Bleached_Astreopora"          </span>
+<span class="co">## [13] "Bleached_Acropora_tabulate"    "Bleached_Coscinarea"          </span>
+<span class="co">## [15] "Bleached_Echinophyllia"        "Bleached_Favites_halicora"</span></code></pre>
 <p>Much better.</p>
 <p>Now because these are smaller quadrats with fewer annotated points, before we add in the large quadrat data, lets deal with the substrate that was not able to be accurately identified. For these photo quadrats, the Shadow, Transect_hardware and Unclear tags need to be removed and not used when we calculate percent cover. If I was going to use this data to do a diversity analysis with hard corals, I would also include unknown_hard_coral, and Bleached_unknown_hard_coral to this list, but as this data will be used for soft coral analyses, we will leave it.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">SQuad_colnames</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate_all.html" class="external-link">mutate_at</a></span><span class="op">(</span><span class="va">SQuad_colnames</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span><span class="op">:</span><span class="fl">134</span><span class="op">)</span>, <span class="va">as.numeric</span><span class="op">)</span>
 
 <span class="va">SQuad_usable</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/useable_obs.html">useable_obs</a></span><span class="op">(</span><span class="va">SQuad_colnames</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Shadow"</span>, <span class="st">"Transect_hardware"</span>, <span class="st">"Unclear"</span><span class="op">)</span>, 
@@ -432,22 +3173,22 @@
                              max <span class="op">=</span> <span class="cn">TRUE</span>, cutoff <span class="op">=</span> <span class="fl">10</span>, print_max <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p>By identifying how many useable points there are in each quadrat, and removing any quadrats that had over 10% of the identified points unuseable, we have removed 0 quadrats from analysis, which you could view with the <code>SQuad_removed</code> data frame but as we have no quadrats to removed, it will be an empty data frame.</p>
 <p>Now we can start working on the large quadrat data.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"softcoral_annotations"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"softcoral_LQuads"</span><span class="op">)</span></code></pre></div>
 <p>I will be cropping this data as outlined in the cropping vignette, so check that out for the details, but before I crop it, I want to remove any unconfirmed quadrats just as we did for the small quads.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">LQuad_confirmed</span> <span class="op">&lt;-</span> <span class="va">softcoral_LQuads</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Annotation.status</span> <span class="op">==</span> <span class="st">"Confirmed"</span><span class="op">)</span> 
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">LQuad_confirmed</span> <span class="op">&lt;-</span> <span class="va">softcoral_LQuads</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Annotation.status</span> <span class="op">==</span> <span class="st">"Confirmed"</span><span class="op">)</span> 
 
-<span class="va">LQuad_sub</span> <span class="op">&lt;-</span> <span class="va">softcoral_annotations</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Name</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">LQuad_confirmed</span><span class="op">$</span><span class="va">Image.name</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="va">LQuad_sub</span> <span class="op">&lt;-</span> <span class="va">softcoral_annotations</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Name</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">LQuad_confirmed</span><span class="op">$</span><span class="va">Image.name</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>Then we will crop the annotations data.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">LQuad_cropped</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/crop_area.html">crop_area</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">LQuad_sub</span>, row <span class="op">=</span> <span class="st">"Row"</span>,
                              column <span class="op">=</span> <span class="st">"Column"</span>, id <span class="op">=</span> <span class="st">"Name"</span>, dim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">0.6</span><span class="op">)</span>, 
                              obs_range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">36</span>,<span class="fl">64</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>Now I will just format this to look like the small quad data so we can join the two.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">LQuad_wide</span> <span class="op">&lt;-</span> <span class="va">LQuad_cropped</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">obs</span>, <span class="va">Row</span>, <span class="va">Column</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Name</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">Label</span>, values_from <span class="op">=</span> <span class="va">Label</span>, values_fn <span class="op">=</span> <span class="va">length</span>, values_fill <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">LQuad_wide</span> <span class="op">&lt;-</span> <span class="va">LQuad_cropped</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">obs</span>, <span class="va">Row</span>, <span class="va">Column</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Name</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">Label</span>, values_from <span class="op">=</span> <span class="va">Label</span>, values_fn <span class="op">=</span> <span class="va">length</span>, values_fill <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
 <span class="va">LQuad_wide</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">LQuad_wide</span><span class="op">)</span>
 
 <span class="va">LQuad_separated</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/separate.html" class="external-link">separate</a></span><span class="op">(</span><span class="va">LQuad_wide</span>, <span class="va">Name</span>, sep<span class="op">=</span><span class="st">"_"</span>, into<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Field.Season"</span>, <span class="st">"Site"</span>,<span class="st">"Quadrat"</span><span class="op">)</span><span class="op">)</span>
@@ -465,23 +3206,2128 @@
 <span class="va">LQuad_removed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/useable_obs.html">useable_obs</a></span><span class="op">(</span><span class="va">LQuad_colnames</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Shadow"</span>, <span class="st">"Transect_hardware"</span>, <span class="st">"Unclear"</span><span class="op">)</span>,
                              max <span class="op">=</span> <span class="cn">TRUE</span>, cutoff <span class="op">=</span> <span class="fl">0.1</span><span class="op">*</span><span class="fl">54</span>, print_max <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p>With the large quadrats, only 4 photos needed to be removed because they had too many unuseable points.</p>
-<p>There are a few more things that need to be removed from the large quadrat data, including MPQs (Mega photo quadrats), site8.5 and DEEP photo quadrats.</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">LQuad_noDEEP_site8.5</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/keep_rm.html">keep_rm</a></span><span class="op">(</span><span class="va">LQuad_usable</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"DEEP"</span>, <span class="st">"site8.5"</span><span class="op">)</span>, select <span class="op">=</span> <span class="st">"row"</span>, exact <span class="op">=</span> <span class="cn">FALSE</span>, colname <span class="op">=</span> <span class="st">"Site"</span>, keep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+<p>Alright, now we can join these data frames together, and continue with one large data set. As both data sets used the same label set of names, This is easy with the <code><a href="https://rdrr.io/pkg/gtools/man/smartbind.html" class="external-link">smartbind()</a></code> function out of the <code>gtools</code> package</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">AllQuads</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/gtools/man/smartbind.html" class="external-link">smartbind</a></span><span class="op">(</span><span class="va">SQuad_usable</span>, <span class="va">LQuad_usable</span>, fill <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">unuseable</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p>Now lets continue with the cleaning of these data.</p>
+<p>There are a few more things that need to be removed including MPQs (Mega photo quadrats), site8.5 and DEEP photo quadrats.</p>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">AllQuad_noDEEP_site8.5</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/keep_rm.html">keep_rm</a></span><span class="op">(</span><span class="va">AllQuads</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"DEEP"</span>, <span class="st">"site8.5"</span><span class="op">)</span>, select <span class="op">=</span> <span class="st">"row"</span>, exact <span class="op">=</span> <span class="cn">FALSE</span>, colname <span class="op">=</span> <span class="st">"Site"</span>, keep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 
-<span class="va">LQuad_noMPQ</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/keep_rm.html">keep_rm</a></span><span class="op">(</span><span class="va">LQuad_noDEEP_site8.5</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"MPQ"</span><span class="op">)</span>, select <span class="op">=</span> <span class="st">"row"</span>, exact <span class="op">=</span> <span class="cn">FALSE</span>, colname <span class="op">=</span> <span class="st">"Quadrat"</span>, keep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
-<p>Alright, not we can join these data frames together, and continue with one large data set. As both data sets used the samle label set of names, This is easy with the <code><a href="https://rdrr.io/pkg/gtools/man/smartbind.html" class="external-link">smartbind()</a></code> function out of the <code>gtools</code> package</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># AllQuads &lt;- smartbind(SQuad_usable, LQuad_noMPQ, fill = 0) %&gt;% select(-c(unusable))</span></code></pre></div>
-<p>Now we have removed unusable annotations, so lets rescale and recalculate cover with proportion cover. This data frame has ~6500 rows so this will take a minute or two.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># AllQuads_cover &lt;- cover_calc(AllQuads, names(AllQuads[,4:131]), prop = TRUE)</span></code></pre></div>
-<p>One thing you may notice by looking at the column names, is that these columns are not specific species, but there are duplicates of the same species, categorized into bleaching and non bleaching forms. For any kind of diversity analysis, this would inflate the number of different species, so it is important to combine different forms of the same species if diversity analyses are being done.</p>
+<span class="va">AllQuad_noMPQ</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/keep_rm.html">keep_rm</a></span><span class="op">(</span><span class="va">AllQuad_noDEEP_site8.5</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"MPQ"</span><span class="op">)</span>, select <span class="op">=</span> <span class="st">"row"</span>, exact <span class="op">=</span> <span class="cn">FALSE</span>, colname <span class="op">=</span> <span class="st">"Quadrat"</span>, keep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<p>Now we have removed unusable annotations, so lets rescale and recalculate cover with proportion cover.</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">AllQuad_cover</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cover_calc.html">cover_calc</a></span><span class="op">(</span><span class="va">AllQuad_noMPQ</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">AllQuad_noMPQ</span><span class="op">[</span>,<span class="fl">4</span><span class="op">:</span><span class="fl">131</span><span class="op">]</span><span class="op">)</span>, prop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p>This data frame is now nicely formatted and could be used for many community based analyses. This might be a great stopping point for some analyses, but to further clean this up I am going to convert this into long format data.</p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">AllQuad_long</span> <span class="op">&lt;-</span> <span class="va">AllQuad_cover</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span>cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">AllQuad_cover</span><span class="op">[</span>,<span class="fl">4</span><span class="op">:</span><span class="fl">131</span><span class="op">]</span><span class="op">)</span>, names_to <span class="op">=</span> <span class="st">"Tag_Name"</span>, values_to <span class="op">=</span> <span class="st">"prop_cover"</span><span class="op">)</span></code></pre></div>
+<p>One thing you may notice by looking at the <code>Tag_Name</code> column, is that these species names are not unique species, but there are duplicates of the same species, categorized into bleaching and non bleaching forms. For any kind of diversity analysis, this would inflate the number of different species, so it is important to combine different forms of the same species if diversity analyses are being done.</p>
+<p>For this clean up, we will walk through 3 ways of dealing with this based on what you want to accomplish.</p>
+<p>Option A. Categorizing rows.</p>
+<p>If you want to use your data in this long format, want to just categorize everything and you will use these various categories based on your different research questions, you could just add a bunch of category columns like so:</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">A_AllQuad_Bleach</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/categorize.html">categorize</a></span><span class="op">(</span><span class="va">AllQuad_long</span>, <span class="st">"Tag_Name"</span>, values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Bleach"</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"Bleached"</span>, binary <span class="op">=</span> <span class="cn">TRUE</span>, exact <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<p>This categorizes each <code>Tag_Name</code> to whether it is a bleaching or nonbleaching tag.</p>
+<p>And you could also add other information in if you have it, like taxonomy.</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">A_AllQuad_Taxa</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/categorize.html">categorize</a></span><span class="op">(</span><span class="va">A_AllQuad_Bleach</span>, <span class="st">"Tag_Name"</span>, values <span class="op">=</span> <span class="va">coral_labelset</span><span class="op">$</span><span class="va">full_name</span>, name <span class="op">=</span> <span class="st">"Taxonomic_Name"</span>, binary <span class="op">=</span> <span class="cn">FALSE</span>, categories <span class="op">=</span> <span class="va">coral_labelset</span><span class="op">$</span><span class="va">taxonomic_name</span><span class="op">)</span></code></pre></div>
+<p>Option B. Categorizing rows and then combining.</p>
+<p>Now after you categorize your rows, perhaps you want to have all the cover values summed at a different level, like at the taxonomy level. To do this, the <code><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise()</a></code> function from <code>dplyr</code> will work great.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># AllQuads_long</span></code></pre></div>
+<code class="sourceCode R"><span class="va">B_AllQuad_taxonomy</span> <span class="op">&lt;-</span> <span class="va">A_AllQuad_Taxa</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Field.Season</span>, <span class="va">Site</span>, <span class="va">Quadrat</span>, <span class="va">Taxonomic_Name</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>prop_cover <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">prop_cover</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## `summarise()` has grouped output by 'Field.Season', 'Site', 'Quadrat'. You can</span>
+<span class="co">## override using the `.groups` argument.</span></code></pre>
+<p>Option C. Wide format summing columns</p>
+<p>If you wanted to keep the data in a wide format, and sum columns based on taxonomy, to allow for community level analyses, you could also use the <code><a href="../reference/sum_cols.html">sum_cols()</a></code> function. To do this, we first need a vector of what to change the names too, which can be done with a simple match, unless you have a vector with the new names already in the right order.</p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">current_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">AllQuad_cover</span><span class="op">[</span>,<span class="fl">4</span><span class="op">:</span><span class="fl">131</span><span class="op">]</span><span class="op">)</span>
+<span class="va">new_names</span> <span class="op">&lt;-</span> <span class="va">coral_labelset</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/match.html" class="external-link">match</a></span><span class="op">(</span><span class="va">current_names</span>, <span class="va">coral_labelset</span><span class="op">$</span><span class="va">full_name</span><span class="op">)</span>,<span class="op">]</span><span class="op">$</span><span class="va">taxonomic_name</span>
+
+<span class="va">AllQuad_wide_summed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sum_cols.html">sum_cols</a></span><span class="op">(</span><span class="va">AllQuad_cover</span>, from <span class="op">=</span> <span class="va">current_names</span>, to <span class="op">=</span> <span class="va">new_names</span><span class="op">)</span></code></pre></div>
+<p>Whichever of the options you choose, you will be able to customize the data to your analysis needs. After that your data is nearly cleaned. Some other things you may want to add would be environmental data, or more taxonomic data. The <code><a href="../reference/add_data.html">add_data()</a></code> function can help with adding multiple columns from a data set at a time.</p>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">B_AllQuad_LH_FG</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/add_data.html">add_data</a></span><span class="op">(</span><span class="va">B_AllQuad_taxonomy</span>, <span class="va">coral_labelset</span>, cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"functional_group"</span>, <span class="st">"life_history"</span><span class="op">)</span>, data_id <span class="op">=</span> <span class="st">"Taxonomic_Name"</span>, add_id <span class="op">=</span> <span class="st">"taxonomic_name"</span>, number <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"environmental_data"</span><span class="op">)</span>
+
+<span class="va">B_AllQuad_enviro</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/add_data.html">add_data</a></span><span class="op">(</span><span class="va">B_AllQuad_LH_FG</span>, <span class="va">environmental_data</span>, cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"HD_Cat"</span>, <span class="st">"HD_Cont"</span>, <span class="st">"NPP"</span>,  <span class="st">"WE"</span>, <span class="st">"Region"</span>, <span class="st">"WaveEnergy"</span><span class="op">)</span>, data_id <span class="op">=</span> <span class="st">"Site"</span>, add_id <span class="op">=</span> <span class="st">"Site"</span>, number <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></code></pre></div>
+<p>The final things I will add to this data to get it in shape for analysis is a final categorization of the study years based on the timing of the 2015/2016 El Niño, subset the species to only soft coral, and refactor the levels of some of the variables.</p>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">B_AllQuad_timeblock</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/categorize.html">categorize</a></span><span class="op">(</span><span class="va">B_AllQuad_enviro</span>, column <span class="op">=</span> <span class="st">"Field.Season"</span>, values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">B_AllQuad_enviro</span><span class="op">$</span><span class="va">Field.Season</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"TimeBlock"</span>, binary <span class="op">=</span> <span class="cn">FALSE</span>, exact <span class="op">=</span> <span class="cn">TRUE</span>, categories <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Before"</span>, times <span class="op">=</span> <span class="fl">8</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"During"</span>, times <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"After"</span>, times <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+
+<span class="va">AllQuads_cropclean</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/keep_rm.html">keep_rm</a></span><span class="op">(</span><span class="va">B_AllQuad_timeblock</span>, values <span class="op">=</span> <span class="st">"Soft_coral"</span>, select <span class="op">=</span> <span class="st">"row"</span>, colname <span class="op">=</span> <span class="st">"functional_group"</span><span class="op">)</span>
+
+<span class="va">AllQuads_cropclean</span><span class="op">$</span><span class="va">TimeBlock</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">AllQuads_cropclean</span><span class="op">$</span><span class="va">TimeBlock</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Before"</span>, <span class="st">"During"</span>, <span class="st">"After"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">AllQuads_cropclean</span><span class="op">$</span><span class="va">Site</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">AllQuads_cropclean</span><span class="op">$</span><span class="va">Site</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"site"</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">40</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span><span class="op">)</span>
+<span class="va">AllQuads_cropclean</span><span class="op">$</span><span class="va">HD_Cat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">AllQuads_cropclean</span><span class="op">$</span><span class="va">HD_Cat</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Very Low"</span>, <span class="st">"Low"</span>, <span class="st">"Medium"</span>, <span class="st">"High"</span>, <span class="st">"Very High"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 </div>
-  </main>
+<div class="section level2">
+<h2 id="exploration">Exploration<a class="anchor" aria-label="anchor" href="#exploration"></a>
+</h2>
+<p>This data has now been sufficiently cleaned and can be used for many different analyses. Often once data has been cleaned, the first step is to start exploring the data. One thing we can look at is the sample sizes, to see how many quadrats I have over the different sites and years.</p>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/sample_size.html">sample_size</a></span><span class="op">(</span><span class="va">AllQuads_cropclean</span>, dim_1 <span class="op">=</span> <span class="st">"Site"</span>, dim_2 <span class="op">=</span> <span class="st">"Field.Season"</span>, count <span class="op">=</span> <span class="st">"Quadrat"</span><span class="op">)</span></code></pre></div>
+<div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:100%; ">
+<table class="table table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead><tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:center;">
+KI2007
+</th>
+<th style="text-align:center;">
+KI2009
+</th>
+<th style="text-align:center;">
+KI2010
+</th>
+<th style="text-align:center;">
+KI2011
+</th>
+<th style="text-align:center;">
+KI2013
+</th>
+<th style="text-align:center;">
+KI2014
+</th>
+<th style="text-align:center;">
+KI2015a
+</th>
+<th style="text-align:center;">
+KI2015b
+</th>
+<th style="text-align:center;">
+KI2015c
+</th>
+<th style="text-align:center;">
+KI2015d
+</th>
+<th style="text-align:center;">
+KI2016a
+</th>
+<th style="text-align:center;">
+KI2016b
+</th>
+<th style="text-align:center;">
+KI2017
+</th>
+<th style="text-align:center;">
+KI2018
+</th>
+<th style="text-align:center;">
+KI2019
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+site1
+</td>
+<td style="text-align:center;">
+22
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+28
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+29
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+site10
+</td>
+<td style="text-align:center;">
+20
+</td>
+<td style="text-align:center;">
+21
+</td>
+<td style="text-align:center;">
+32
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+25
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+site11
+</td>
+<td style="text-align:center;">
+29
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+site12
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+25
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+22
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+31
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+30
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+site13
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+23
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+site14
+</td>
+<td style="text-align:center;">
+29
+</td>
+<td style="text-align:center;">
+22
+</td>
+<td style="text-align:center;">
+22
+</td>
+<td style="text-align:center;">
+25
+</td>
+<td style="text-align:center;">
+13
+</td>
+<td style="text-align:center;">
+21
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+16
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+site15
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+23
+</td>
+<td style="text-align:center;">
+26
+</td>
+<td style="text-align:center;">
+26
+</td>
+<td style="text-align:center;">
+24
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+29
+</td>
+<td style="text-align:center;">
+15
+</td>
+<td style="text-align:center;">
+29
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+29
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+site16
+</td>
+<td style="text-align:center;">
+28
+</td>
+<td style="text-align:center;">
+26
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+site17
+</td>
+<td style="text-align:center;">
+29
+</td>
+<td style="text-align:center;">
+20
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+19
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+site18
+</td>
+<td style="text-align:center;">
+29
+</td>
+<td style="text-align:center;">
+28
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+24
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+20
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+site19
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+28
+</td>
+<td style="text-align:center;">
+26
+</td>
+<td style="text-align:center;">
+21
+</td>
+<td style="text-align:center;">
+21
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+28
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+26
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+site2
+</td>
+<td style="text-align:center;">
+25
+</td>
+<td style="text-align:center;">
+29
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+site20
+</td>
+<td style="text-align:center;">
+28
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+31
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+19
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+site21
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+site22
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+20
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+19
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+site23
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+28
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+25
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+29
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+site24
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+35
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+22
+</td>
+<td style="text-align:center;">
+31
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+site25
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+22
+</td>
+<td style="text-align:center;">
+21
+</td>
+<td style="text-align:center;">
+24
+</td>
+<td style="text-align:center;">
+26
+</td>
+<td style="text-align:center;">
+25
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+31
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+17
+</td>
+<td style="text-align:center;">
+27
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+site26
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+27
+</td>
+<td style="text-align:center;">
+22
+</td>
+<td style="text-align:center;">
+25
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+site27
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+26
+</td>
+<td style="text-align:center;">
+18
+</td>
+<td style="text-align:center;">
+24
+</td>
+<td style="text-align:center;">
+28
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+29
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+29
+</td>
+<td style="text-align:center;">
+29
+</td>
+<td style="text-align:center;">
+30
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+site28
+</td>
+<td style="text-align:center;">
+21
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+site29
+</td>
+<td style="text-align:center;">
+21
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+site3
+</td>
+<td style="text-align:center;">
+28
+</td>
+<td style="text-align:center;">
+20
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+25
+</td>
+<td style="text-align:center;">
+28
+</td>
+<td style="text-align:center;">
+32
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+29
+</td>
+<td style="text-align:center;">
+28
+</td>
+<td style="text-align:center;">
+30
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+site30
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+28
+</td>
+<td style="text-align:center;">
+23
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+29
+</td>
+<td style="text-align:center;">
+25
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+21
+</td>
+<td style="text-align:center;">
+30
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+site31
+</td>
+<td style="text-align:center;">
+20
+</td>
+<td style="text-align:center;">
+27
+</td>
+<td style="text-align:center;">
+21
+</td>
+<td style="text-align:center;">
+26
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+20
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+30
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+site32
+</td>
+<td style="text-align:center;">
+10
+</td>
+<td style="text-align:center;">
+18
+</td>
+<td style="text-align:center;">
+18
+</td>
+<td style="text-align:center;">
+24
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+34
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+30
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+site33
+</td>
+<td style="text-align:center;">
+21
+</td>
+<td style="text-align:center;">
+27
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+27
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+31
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+site34
+</td>
+<td style="text-align:center;">
+22
+</td>
+<td style="text-align:center;">
+27
+</td>
+<td style="text-align:center;">
+23
+</td>
+<td style="text-align:center;">
+19
+</td>
+<td style="text-align:center;">
+28
+</td>
+<td style="text-align:center;">
+31
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+29
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+29
+</td>
+<td style="text-align:center;">
+27
+</td>
+<td style="text-align:center;">
+30
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+site35
+</td>
+<td style="text-align:center;">
+21
+</td>
+<td style="text-align:center;">
+20
+</td>
+<td style="text-align:center;">
+44
+</td>
+<td style="text-align:center;">
+25
+</td>
+<td style="text-align:center;">
+26
+</td>
+<td style="text-align:center;">
+31
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+29
+</td>
+<td style="text-align:center;">
+9
+</td>
+<td style="text-align:center;">
+26
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+29
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+30
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+site36
+</td>
+<td style="text-align:center;">
+21
+</td>
+<td style="text-align:center;">
+22
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+27
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+site37
+</td>
+<td style="text-align:center;">
+22
+</td>
+<td style="text-align:center;">
+27
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+30
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+site4
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+site5
+</td>
+<td style="text-align:center;">
+29
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+29
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+26
+</td>
+<td style="text-align:center;">
+29
+</td>
+<td style="text-align:center;">
+30
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+site6
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+19
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+27
+</td>
+<td style="text-align:center;">
+29
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+30
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+site7
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+20
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+25
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+site8
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+29
+</td>
+<td style="text-align:center;">
+27
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+27
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+29
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+site9
+</td>
+<td style="text-align:center;">
+35
+</td>
+<td style="text-align:center;">
+28
+</td>
+<td style="text-align:center;">
+13
+</td>
+<td style="text-align:center;">
+27
+</td>
+<td style="text-align:center;">
+25
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+site38
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+25
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+21
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+31
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+29
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+28
+</td>
+<td style="text-align:center;">
+30
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+site39
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+22
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+site40
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+21
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+23
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+31
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+30
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Visualizing the data can be easy with a built in shiny app function. To see an example shiny app you can go <a href="https://dominiquemaucieri.shinyapps.io/example/" class="external-link">here</a> but to visualize the data we have cleaned up here, we can run the following code:</p>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/visualize_app.html">visualize_app</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">AllQuads_cropclean</span>, independent <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">AllQuads_cropclean</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">13</span><span class="op">]</span><span class="op">)</span>, dependent <span class="op">=</span> <span class="st">"prop_cover"</span><span class="op">)</span></code></pre></div>
+</div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
