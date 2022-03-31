@@ -3,31 +3,33 @@
 #'     the size of the quadrat, crop quadrat data to a smaller area, while
 #'     maintaining the spatial relationships between points.
 #'
-#' @param data A data frame containing annotations, in long format.
-#' @param row The column name in data which contains the row location of
-#'     the annotated points
-#' @param column The column name in data which contains the column location of
-#'     the annotated points
-#' @param id The column name in data which contains the quadrat ID for
-#'     the annotated points
+#' @param data A data frame containing annotations, in long format, such that all
+#'     observations are contained in one column.
+#' @param row The column name in `data` which contains the row locations of
+#'     the annotated points.
+#' @param column The column name in `data` which contains the column location of
+#'     the annotated points.
+#' @param id The column name in `data` which contains the quadrat ID for
+#'     the annotated points.
 #' @param dim A vector with length of 2, containing the proportion of the row and
 #'     columns to crop. First element will be the proportion of the rows and the
 #'     second will be the proportion of the columns.
-#' @param obs_rm If obs_rm = FALSE, no quadrats will be removed from the returned
-#'     data set. If obs_rm = TRUE, quadrats will be removed from the returned
-#'     data set based on the number of annotated observations in the cropped area.
+#' @param obs_rm If `obs_rm = FALSE`, no quadrats will be removed from the returned
+#'     data set. If `obs_rm = TRUE`, quadrats will be removed from the returned
+#'     data set based on the number of annotated observations in the cropped area
+#'     as specified by `obs_range`.
 #' @param obs_range A vector with length of 2, specifying the min and max accepted
 #'     number of annotated observations to retain in the data set.
-#' @param res If res = TRUE if the dimensions of each quadrat are known. These must
+#' @param res If `res = TRUE` if the dimensions of each quadrat are known. These must
 #'     be the same units as the row and column locations. If dimensions are not
-#'     known, specify res = FALSE, and the function will estimate the max dimensions
+#'     known, specify `res = FALSE`, and the function will estimate the max dimensions
 #'     based off the max row and column location for the annotated points.
-#' @param res_dim_x The column name in data which contains the max column dimension
+#' @param res_dim_x The column name in `data` which contains the max column dimension
 #'     for each quadrat.
-#' @param res_dim_y The column name in data which contains the max row dimension
+#' @param res_dim_y The column name in `data` which contains the max row dimension
 #'     for each quadrat.
 #'
-#' @return A data frame in long format with a subset of annotated points.
+#' @return A data frame in of quadrat annotations with a subset of annotated points.
 #' @export
 #'
 #' @examples

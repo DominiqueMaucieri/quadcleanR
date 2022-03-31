@@ -131,21 +131,21 @@ Now for these photo quadrats, the Shadow, Transect_hardware and Unclear tags nee
 
 LQuad_colnames <-  mutate_at(LQuad_colnames, c(4:134), as.numeric)
 
-LQuad_useable <- useable_obs(LQuad_colnames, c("Shadow", "Transect_hardware", "Unclear"), 
+LQuad_usable <- usable_obs(LQuad_colnames, c("Shadow", "Transect_hardware", "Unclear"), 
                             max = TRUE, cutoff = 10)
 
-LQuad_removed <- useable_obs(LQuad_colnames, c("Shadow", "Transect_hardware", "Unclear"),
+LQuad_removed <- usable_obs(LQuad_colnames, c("Shadow", "Transect_hardware", "Unclear"),
                              max = TRUE, cutoff = 10, print_max = TRUE)
 
 ```
 
-By identifying how many useable points there are in each quadrat, and removing any quadrats that had over 10% of the identified points unuseable, we have removed 0 quadrats from analysis, which you could view with the `LQuad_removed` data frame but as we have no quadrats to removed, it will be an empty data frame.
+By identifying how many usable points there are in each quadrat, and removing any quadrats that had over 10% of the identified points unusable, we have removed 0 quadrats from analysis, which you could view with the `LQuad_removed` data frame but as we have no quadrats to removed, it will be an empty data frame.
 
-Now we know how many useable annotations for each tag there are in each photo quadrat. Lets convert this into a proportion cover now. This may take a minute as there are many rows.
+Now we know how many usable annotations for each tag there are in each photo quadrat. Lets convert this into a proportion cover now. This may take a minute as there are many rows.
 
 ```{r prop cover calc}
 
-LQuad_cover <- cover_calc(LQuad_useable, names(LQuad_useable[,4:131]), prop = TRUE) 
+LQuad_cover <- cover_calc(LQuad_usable, names(LQuad_usable[,4:131]), prop = TRUE) 
 
 ```
 
@@ -153,7 +153,7 @@ This data frame is now nicely formatted and could be used for many community bas
 
 ```{r long format}
 
-LQuad_long <- LQuad_cover %>% select(-c(unuseable)) %>% pivot_longer(cols = names(LQuad_cover[,4:131]), names_to = "Tag_Name", values_to = "prop_cover")
+LQuad_long <- LQuad_cover %>% select(-c(unusable)) %>% pivot_longer(cols = names(LQuad_cover[,4:131]), names_to = "Tag_Name", values_to = "prop_cover")
 
 ```
  

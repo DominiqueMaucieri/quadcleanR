@@ -24,7 +24,8 @@ your data so you can spend your time on further analyses.
 ## Installation
 
 ``` r
-#currently quadcleanR is in the development phase and can only be downloaded from GitHub directly:
+#currently quadcleanR is in the development phase and can only be 
+#downloaded from GitHub directly:
 install.packages("devtools")
 devtools::install_github("DominiqueMaucieri/quadcleanR")
 ```
@@ -36,9 +37,9 @@ A cheat sheet is still in development, but check back soon.
 ## Example Usage
 
 There are three vignettes included with this package which will walk
-through different examples of cleaning quadrat data. The vignette will
-produce data which is visualizable with [this example shiny
-app](https://dominiquemaucieri.shinyapps.io/example/).
+through different examples of cleaning quadrat data. The Simple Cleaning
+Quadrat Data vignette will produce data which is visualizable with [this
+example shiny app](https://dominiquemaucieri.shinyapps.io/example/).
 
 ``` r
 library(quadcleanR)

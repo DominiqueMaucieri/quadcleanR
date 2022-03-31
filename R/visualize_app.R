@@ -1,4 +1,4 @@
-#' @title Visualize cleaned data.
+#' @title Visualize cleaned data
 #' @description Using an interactive shiny app, visualize and explore cleaned
 #'     quadrat data.
 #'

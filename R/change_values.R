@@ -2,13 +2,13 @@
 #' @description Using two vectors, change the values in one column to a new
 #'     set of values.
 #'
-#' @param data The data frame.
+#' @param data A data frame.
 #' @param column The column in which to change values.
 #' @param from A vector containing the values you wish to change.
 #' @param to A vector contain the values you which to change to, ensuring these
 #'     occur in the same order as the `from` vector.
 #'
-#' @return a data frame containing new values within the specified column.
+#' @return A data frame containing new values within the specified column.
 #' @export
 #'
 #' @examples
@@ -23,7 +23,6 @@
 #'
 #' change_values(coral_cover, "Dominant_Coral",
 #'     c("Acropora.sp","Leptastrea.spp"), c("Acropora_tabulate", "Leptastrea.purpurea"))
-
 change_values <- function(data, column, from, to) {
 
     column_vec <- column

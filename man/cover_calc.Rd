@@ -7,26 +7,27 @@
 cover_calc(data, spp, prop = TRUE, total = FALSE)
 }
 \arguments{
-\item{data}{The data frame in wide format.}
+\item{data}{A data frame with each row representing a sampling unit (ex. a
+quadrat or photo).}
 
 \item{spp}{The column names containing all observations to be used in the
 proportion calculation. It is important to note that the proportions
 will be scaled to the total observations in these columns for each quadrat.}
 
-\item{prop}{If prop = TRUE, the resulting cover will be proportions. If prop =
-FALSE, the resulting cover will be in percentages.}
+\item{prop}{If \code{prop = TRUE}, the resulting cover will be proportions. If
+\code{prop = FALSE}, the resulting cover will be in percentages.}
 
-\item{total}{If total = TRUE, a column containing the total number of observations
-at each quadrat will be reported in a new column called total_pts. This will
-not be reported if total = FALSE.}
+\item{total}{If \code{total = TRUE}, a column containing the total number of observations
+at each sampling unit will be returned in a new column called total_pts. This will
+not be returned if \code{total = FALSE}.}
 }
 \value{
-A data frame containing species cover.
+A data frame containing scaled observation cover.
 }
 \description{
 Convert the number of observations for each species or non-species
-to proportion or percent cover within each quadrat based on the total number
-of points identified at each quadrat.
+to proportion or percent cover within each row based on the total number
+of observations in each row.
 }
 \examples{
 #create data set for example

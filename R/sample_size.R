@@ -1,16 +1,15 @@
-
-#' @title Calculate sample sizes.
+#' @title Calculate sample sizes
 #' @description Specify which columns to use to produce a table with sample sizes.
 #'
 #' @param data The data frame you want to calculate sample sizes for.
 #' @param dim_1 The first dimension to calculate sample sizes for. This will be the
-#'     resulting row names. This must be the column name within `data`
+#'     resulting row names. This must be the column name within `data`.
 #' @param dim_2 The second dimension to calculate sample sizes for. This will be the
-#'     resulting column names. This must be the column name within `data`
+#'     resulting column names. This must be the column name within `data`.
 #' @param count The column name within `data` that you wish to count the length of
 #'     in order to calculate the sample sizes.
 #'
-#' @return A data frame with sample sizes.
+#' @return A data frame of sample sizes.
 #' @export
 #'
 #' @examples

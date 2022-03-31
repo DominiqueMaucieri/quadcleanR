@@ -1,27 +1,29 @@
 #' @title Categorize data based on contents of a column
 #' @description Using a column within the data frame, categorize rows in a binary
-#'     of yes or no, or customize with a set of category names.
+#'     of yes or no, or customize with a set of category names. Data can be categorized
+#'     based on the inclusion or lack of inclusion of parts of characters, or based on
+#'     exact characters.
 #'
 #' @param data The data frame.
 #' @param column The column name which contains the data on which to categorize
 #'     rows.
 #' @param values The characters or parts of characters to use to classify rows.
-#' @param name The name of the now column of categories
-#' @param binary If `binary == TRUE`, the `name` column will be returned with "Yes"
-#'     denoting the presence of characters or parts of characters specified by
+#' @param name The name of the now column of categories.
+#' @param binary If `binary = TRUE`, the `name` column will be returned with "Yes"
+#'     denoting that characters ,or parts of characters specified by
 #'     `values` are present in the row, while "No" denotes that there are no
 #'     characters or parts of characters specified in `values` present in the row.
-#'     If `binary ==  FALSE` there must be `categories provided` which will be used
+#'     If `binary =  FALSE` there must be `categories` provided which will be used
 #'     to classify the presence of characters or parts of characters specified in
 #'     `values`.
-#' @param exact If exact = TRUE only exact matches will be selected. If exact
-#'    = FALSE matches will be selected if they contain the characters in the
-#'    `values` vector.
+#' @param exact If `exact = TRUE` only exact matches will be selected. If `exact = FALSE`
+#'     matches will be selected if they contain the characters in the
+#'    `values` vector and will not be limited by exact matches.
 #' @param categories The factor names denoting the presence of the characters or
 #'     parts of characters specified by `values`. These must be specified in the
-#'     same order as the corresponding value element.
+#'     same order as the corresponding element in `values`.
 #'
-#' @return A data frame with new categorization column
+#' @return A data frame with new categorization column.
 #' @export
 #'
 #' @examples
@@ -44,7 +46,6 @@
 #'     name = "Depth", binary = FALSE, categories = c("S", "D"), exact = FALSE)
 #'
 #'
-
 categorize <- function(data, column, values, name, binary = TRUE, exact = TRUE, categories){
 
   key_column <- match(as.factor(column), names(data))

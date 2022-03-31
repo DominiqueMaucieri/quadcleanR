@@ -1,27 +1,26 @@
-#' @title Keep or remove from data frame
-#' @description Using a character, or part of character select aspects of the data
-#'     frame to either keep or remove. Aspects of the data frame include rows or
-#'     columns containing or not containing the specified characters.
+#' @title Keep or remove rows and columns from data frame
+#' @description Using a character, or part of character select rows or columns
+#'     of the data frame to either keep or remove.
 #'
-#' @param data The data frame.
+#' @param data A data frame.
 #' @param values A vector containing the characters or parts of characters to base
 #'    selection off of.
-#' @param select If `row`, rows containing the `values` will be selected for either
-#'    being kept, or being removed, as specified by `keep`. If `col`, columns with
-#'    names containing the `values` will either be kept or removed, as specified
-#'    by `keep`.
-#' @param keep If keep = TRUE the presence of the `values` will cause the
-#'    selected rows or columns to be kept. If keep = FALSE the presence of
+#' @param select If `select = "row"`, rows containing the `values` will be selected
+#'    for either being kept, or being removed, as specified by `keep`. If
+#'    `select = "col"`, columns with names containing the `values` will either be
+#'    kept or removed, as specified by `keep`.
+#' @param keep If `keep = TRUE` the presence of the `values` will cause the
+#'    selected rows or columns to be kept. If `keep = FALSE` the presence of
 #'    the `values` will cause the selected rows or columns to be removed.
-#' @param drop_levels If drop_levels = TRUE, factor levels that have been
-#'    removed will be dropped. Only applicable when select = "row"
-#' @param exact If exact = TRUE only exact matches will be selected. If exact
-#'    = FALSE matches will be selected if they contain the characters in the
-#'    `values` vector.
-#' @param colname If `select` = "row", `colname` will specify the column to
+#' @param drop_levels If `drop_levels = TRUE`, factor levels that have been
+#'    removed will be dropped. Only applicable when `select = "row"`
+#' @param exact If `exact = TRUE` only exact matches will be selected. If
+#'    `exact = FALSE` matches will be selected if they contain the characters in the
+#'    `values` vector and will not be limited to exact matches only.
+#' @param colname If `select = "row"`, `colname` will specify the column to
 #'    select rows from.
 #'
-#' @return a data frame containing new selection of data.
+#' @return A data frame containing new selection of data.
 #' @export
 #'
 #' @examples

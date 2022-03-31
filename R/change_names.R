@@ -1,11 +1,14 @@
 
 #' @title Change names of columns
-#' @description Using a new data frame of labels, change column names in one function
+#' @description Using a new data frame of labels, change column names in one function.
 #'
-#' @param data The data frame that you want to change the name of.
-#' @param labelset The data frame containing labels that you want to change and what you want them to be changed to.
-#' @param from The name of the column in the label set data frame containing the original names.
-#' @param to The name of the column in the label set data frame containing new names that the original names will be changed to.
+#' @param data The data frame that you want to change the column names of.
+#' @param labelset The data frame containing column names that you want to change and
+#'     what you want them to be changed to.
+#' @param from The name of the column in the label set data frame containing the
+#'     original column names.
+#' @param to The name of the column in the label set data frame containing new
+#'     column names that the original column names will be changed to.
 #'
 #' @return A data frame containing new column names.
 #' @export

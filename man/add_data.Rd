@@ -11,14 +11,15 @@ add_data(data, add, cols, data_id, add_id, number = FALSE)
 
 \item{add}{A data frame with columns you want to add to \code{data}.}
 
-\item{cols}{The column names from \code{add} that you wish to add.}
+\item{cols}{The column names from \code{add} that you wish to add to \code{data}.}
 
 \item{data_id}{The ID column in \code{data} that will be used to match rows in \code{add}.}
 
 \item{add_id}{The ID column in \code{add} that will be used to match rows in \code{data}.}
 
 \item{number}{The column number to start at to add the new columns, so they
-are not added to the end of the data frame.}
+are not added to the end of the data frame. If not specified they will
+be added to the end of the data frame by default.}
 }
 \value{
 A data frame with added columns.
@@ -27,7 +28,7 @@ A data frame with added columns.
 Using key identifying columns, add additional columns to an
 existing data frame. This function allows you to match new columns
 based on specified IDs and you can choose what columns to add. Additionally
-you can specify the column number to start at to add the new columns, so they
+you can specify the column number at which to add the new columns, so they
 are not added to the end of the data frame.
 }
 \examples{

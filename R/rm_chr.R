@@ -1,18 +1,18 @@
-#' @title Remove characters from data frame or select columns
+#' @title Remove characters from data frame
 #' @description Parts of characters can be removed based on a vector of removal
 #'     characters. When these characters are present in the data frame they will
 #'     be removed. Selection area can include the full data frame or a subset
 #'     of columns.
 #'
-#' @param data The data frame.
+#' @param data A data frame.
 #' @param rm The parts of characters to be removed from the data frame. Can be a
 #'     single element or a vector of elements.
-#' @param full_selection If full_selection = TRUE parts of characters matching
-#'     the rm argument will be removed from entire data frame. If
-#'     full_selection = FALSE only the specified columns will have the parts of
-#'     characters matching the rm argument removed.
-#' @param cols If full_selection = FALSE this argument will specify which columns
-#'     to have characters matching the rm argument removed.
+#' @param full_selection If `full_selection = TRUE` parts of characters matching
+#'     the `rm` argument will be removed from entire data frame. If
+#'     `full_selection = FALSE` only the specified columns will have the parts of
+#'     characters matching the `rm` argument removed.
+#' @param cols If `full_selection = FALSE` this argument will specify which columns
+#'     to have characters matching the `rm` argument removed.
 #'
 #' @return A data frame containing the selected parts of characters removed.
 #' @export

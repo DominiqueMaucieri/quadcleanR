@@ -2,7 +2,7 @@
 % Please edit documentation in R/keep_rm.R
 \name{keep_rm}
 \alias{keep_rm}
-\title{Keep or remove from data frame}
+\title{Keep or remove rows and columns from data frame}
 \usage{
 keep_rm(
   data,
@@ -15,37 +15,36 @@ keep_rm(
 )
 }
 \arguments{
-\item{data}{The data frame.}
+\item{data}{A data frame.}
 
 \item{values}{A vector containing the characters or parts of characters to base
 selection off of.}
 
-\item{select}{If \code{row}, rows containing the \code{values} will be selected for either
-being kept, or being removed, as specified by \code{keep}. If \code{col}, columns with
-names containing the \code{values} will either be kept or removed, as specified
-by \code{keep}.}
+\item{select}{If \code{select = "row"}, rows containing the \code{values} will be selected
+for either being kept, or being removed, as specified by \code{keep}. If
+\code{select = "col"}, columns with names containing the \code{values} will either be
+kept or removed, as specified by \code{keep}.}
 
-\item{keep}{If keep = TRUE the presence of the \code{values} will cause the
-selected rows or columns to be kept. If keep = FALSE the presence of
+\item{keep}{If \code{keep = TRUE} the presence of the \code{values} will cause the
+selected rows or columns to be kept. If \code{keep = FALSE} the presence of
 the \code{values} will cause the selected rows or columns to be removed.}
 
-\item{drop_levels}{If drop_levels = TRUE, factor levels that have been
-removed will be dropped. Only applicable when select = "row"}
+\item{drop_levels}{If \code{drop_levels = TRUE}, factor levels that have been
+removed will be dropped. Only applicable when \code{select = "row"}}
 
-\item{exact}{If exact = TRUE only exact matches will be selected. If exact
-= FALSE matches will be selected if they contain the characters in the
-\code{values} vector.}
+\item{exact}{If \code{exact = TRUE} only exact matches will be selected. If
+\code{exact = FALSE} matches will be selected if they contain the characters in the
+\code{values} vector and will not be limited to exact matches only.}
 
-\item{colname}{If \code{select} = "row", \code{colname} will specify the column to
+\item{colname}{If \code{select = "row"}, \code{colname} will specify the column to
 select rows from.}
 }
 \value{
-a data frame containing new selection of data.
+A data frame containing new selection of data.
 }
 \description{
-Using a character, or part of character select aspects of the data
-frame to either keep or remove. Aspects of the data frame include rows or
-columns containing or not containing the specified characters.
+Using a character, or part of character select rows or columns
+of the data frame to either keep or remove.
 }
 \examples{
 # create data frame

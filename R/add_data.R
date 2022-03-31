@@ -2,16 +2,17 @@
 #' @description Using key identifying columns, add additional columns to an
 #'     existing data frame. This function allows you to match new columns
 #'     based on specified IDs and you can choose what columns to add. Additionally
-#'     you can specify the column number to start at to add the new columns, so they
+#'     you can specify the column number at which to add the new columns, so they
 #'     are not added to the end of the data frame.
 #'
 #' @param data A data frame you want to add columns to.
 #' @param add A data frame with columns you want to add to `data`.
-#' @param cols The column names from `add` that you wish to add.
+#' @param cols The column names from `add` that you wish to add to `data`.
 #' @param data_id The ID column in `data` that will be used to match rows in `add`.
 #' @param add_id The ID column in `add` that will be used to match rows in `data`.
 #' @param number The column number to start at to add the new columns, so they
-#'     are not added to the end of the data frame.
+#'     are not added to the end of the data frame. If not specified they will
+#'     be added to the end of the data frame by default.
 #'
 #' @return A data frame with added columns.
 #' @export

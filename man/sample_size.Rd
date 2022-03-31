@@ -2,7 +2,7 @@
 % Please edit documentation in R/sample_size.R
 \name{sample_size}
 \alias{sample_size}
-\title{Calculate sample sizes.}
+\title{Calculate sample sizes}
 \usage{
 sample_size(data, dim_1, dim_2, count)
 }
@@ -10,16 +10,16 @@ sample_size(data, dim_1, dim_2, count)
 \item{data}{The data frame you want to calculate sample sizes for.}
 
 \item{dim_1}{The first dimension to calculate sample sizes for. This will be the
-resulting row names. This must be the column name within \code{data}}
+resulting row names. This must be the column name within \code{data}.}
 
 \item{dim_2}{The second dimension to calculate sample sizes for. This will be the
-resulting column names. This must be the column name within \code{data}}
+resulting column names. This must be the column name within \code{data}.}
 
 \item{count}{The column name within \code{data} that you wish to count the length of
 in order to calculate the sample sizes.}
 }
 \value{
-A data frame with sample sizes.
+A data frame of sample sizes.
 }
 \description{
 Specify which columns to use to produce a table with sample sizes.

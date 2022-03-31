@@ -7,7 +7,7 @@
 change_values(data, column, from, to)
 }
 \arguments{
-\item{data}{The data frame.}
+\item{data}{A data frame.}
 
 \item{column}{The column in which to change values.}
 
@@ -17,7 +17,7 @@ change_values(data, column, from, to)
 occur in the same order as the \code{from} vector.}
 }
 \value{
-a data frame containing new values within the specified column.
+A data frame containing new values within the specified column.
 }
 \description{
 Using two vectors, change the values in one column to a new

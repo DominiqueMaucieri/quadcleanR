@@ -26,7 +26,7 @@ reference:
   - rm_chr
   - sample_size
   - sum_cols
-  - useable_obs
+  - usable_obs
   - visualize_app
 
 - title: Data

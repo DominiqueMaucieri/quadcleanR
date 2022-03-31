@@ -14,30 +14,32 @@ rows.}
 
 \item{values}{The characters or parts of characters to use to classify rows.}
 
-\item{name}{The name of the now column of categories}
+\item{name}{The name of the now column of categories.}
 
-\item{binary}{If \code{binary == TRUE}, the \code{name} column will be returned with "Yes"
-denoting the presence of characters or parts of characters specified by
+\item{binary}{If \code{binary = TRUE}, the \code{name} column will be returned with "Yes"
+denoting that characters ,or parts of characters specified by
 \code{values} are present in the row, while "No" denotes that there are no
 characters or parts of characters specified in \code{values} present in the row.
-If \code{binary ==  FALSE} there must be \verb{categories provided} which will be used
+If \code{binary =  FALSE} there must be \code{categories} provided which will be used
 to classify the presence of characters or parts of characters specified in
 \code{values}.}
 
-\item{exact}{If exact = TRUE only exact matches will be selected. If exact
-= FALSE matches will be selected if they contain the characters in the
-\code{values} vector.}
+\item{exact}{If \code{exact = TRUE} only exact matches will be selected. If \code{exact = FALSE}
+matches will be selected if they contain the characters in the
+\code{values} vector and will not be limited by exact matches.}
 
 \item{categories}{The factor names denoting the presence of the characters or
 parts of characters specified by \code{values}. These must be specified in the
-same order as the corresponding value element.}
+same order as the corresponding element in \code{values}.}
 }
 \value{
-A data frame with new categorization column
+A data frame with new categorization column.
 }
 \description{
 Using a column within the data frame, categorize rows in a binary
-of yes or no, or customize with a set of category names.
+of yes or no, or customize with a set of category names. Data can be categorized
+based on the inclusion or lack of inclusion of parts of characters, or based on
+exact characters.
 }
 \examples{
 Sites <- as.factor(c("One", "One", "One", "Two", "Two", "Three"))

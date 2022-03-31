@@ -2,23 +2,23 @@
 % Please edit documentation in R/rm_chr.R
 \name{rm_chr}
 \alias{rm_chr}
-\title{Remove characters from data frame or select columns}
+\title{Remove characters from data frame}
 \usage{
 rm_chr(data, rm, full_selection = TRUE, cols)
 }
 \arguments{
-\item{data}{The data frame.}
+\item{data}{A data frame.}
 
 \item{rm}{The parts of characters to be removed from the data frame. Can be a
 single element or a vector of elements.}
 
-\item{full_selection}{If full_selection = TRUE parts of characters matching
-the rm argument will be removed from entire data frame. If
-full_selection = FALSE only the specified columns will have the parts of
-characters matching the rm argument removed.}
+\item{full_selection}{If \code{full_selection = TRUE} parts of characters matching
+the \code{rm} argument will be removed from entire data frame. If
+\code{full_selection = FALSE} only the specified columns will have the parts of
+characters matching the \code{rm} argument removed.}
 
-\item{cols}{If full_selection = FALSE this argument will specify which columns
-to have characters matching the rm argument removed.}
+\item{cols}{If \code{full_selection = FALSE} this argument will specify which columns
+to have characters matching the \code{rm} argument removed.}
 }
 \value{
 A data frame containing the selected parts of characters removed.

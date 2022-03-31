@@ -1,8 +1,8 @@
-#' @title Sum columns based on matching names.
-#' @description Select columns and attach a vector of their new names, and columns
+#' @title Sum columns based on matching names
+#' @description Select columns and attach a vector of their new names, then columns
 #'     with matching names will have each row summed.
 #'
-#' @param data The data frame.
+#' @param data A data frame.
 #' @param from The column names in `data`.
 #' @param to A vector of new names, with matching names being the columns where
 #'    each row will be summed.

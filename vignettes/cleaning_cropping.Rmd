@@ -137,15 +137,15 @@ Now because these are smaller quadrats with fewer annotated points, before we ad
 
 SQuad_colnames <-  mutate_at(SQuad_colnames, c(4:134), as.numeric)
 
-SQuad_usable <- useable_obs(SQuad_colnames, c("Shadow", "Transect_hardware", "Unclear"), 
+SQuad_usable <- usable_obs(SQuad_colnames, c("Shadow", "Transect_hardware", "Unclear"), 
                             max = TRUE, cutoff = 10)
 
-SQuad_removed <- useable_obs(SQuad_colnames, c("Shadow", "Transect_hardware", "Unclear"),
+SQuad_removed <- usable_obs(SQuad_colnames, c("Shadow", "Transect_hardware", "Unclear"),
                              max = TRUE, cutoff = 10, print_max = TRUE)
 
 ```
 
-By identifying how many useable points there are in each quadrat, and removing any quadrats that had over 10% of the identified points unuseable, we have removed 0 quadrats from analysis, which you could view with the `SQuad_removed` data frame but as we have no quadrats to removed, it will be an empty data frame.
+By identifying how many usable points there are in each quadrat, and removing any quadrats that had over 10% of the identified points unusable, we have removed 0 quadrats from analysis, which you could view with the `SQuad_removed` data frame but as we have no quadrats to removed, it will be an empty data frame.
 
 Now we can start working on the large quadrat data. 
 
@@ -193,21 +193,21 @@ LQuad_colnames <- change_names(LQuad_nojpg, coral_labelset, "short_name", "full_
 
 LQuad_colnames <-  mutate_at(LQuad_colnames, c(4:11), as.numeric)
 
-LQuad_usable <- useable_obs(LQuad_colnames, c("Shadow", "Transect_hardware", "Unclear"),
+LQuad_usable <- usable_obs(LQuad_colnames, c("Shadow", "Transect_hardware", "Unclear"),
                              max = TRUE, cutoff = 0.1*54)
 
-LQuad_removed <- useable_obs(LQuad_colnames, c("Shadow", "Transect_hardware", "Unclear"),
+LQuad_removed <- usable_obs(LQuad_colnames, c("Shadow", "Transect_hardware", "Unclear"),
                              max = TRUE, cutoff = 0.1*54, print_max = TRUE)
 
 ```
 
-With the large quadrats, only 4 photos needed to be removed because they had too many unuseable points. 
+With the large quadrats, only 4 photos needed to be removed because they had too many unusable points. 
 
 Alright, now we can join these data frames together, and continue with one large data set. As both data sets used the same label set of names, This is easy with the `smartbind()` function out of the `gtools` package
 
 ```{r bind quad dfs}
 
-AllQuads <- smartbind(SQuad_usable, LQuad_usable, fill = 0) %>% select(-c(unuseable))
+AllQuads <- smartbind(SQuad_usable, LQuad_usable, fill = 0) %>% select(-c(unusable))
 
 ```
 

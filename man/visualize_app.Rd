@@ -2,7 +2,7 @@
 % Please edit documentation in R/visualize_app.R
 \name{visualize_app}
 \alias{visualize_app}
-\title{Visualize cleaned data.}
+\title{Visualize cleaned data}
 \usage{
 visualize_app(data, dependent, independent)
 }

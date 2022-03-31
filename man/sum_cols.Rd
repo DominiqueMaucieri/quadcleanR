@@ -2,12 +2,12 @@
 % Please edit documentation in R/sum_cols.R
 \name{sum_cols}
 \alias{sum_cols}
-\title{Sum columns based on matching names.}
+\title{Sum columns based on matching names}
 \usage{
 sum_cols(data, from, to)
 }
 \arguments{
-\item{data}{The data frame.}
+\item{data}{A data frame.}
 
 \item{from}{The column names in \code{data}.}
 
@@ -18,7 +18,7 @@ each row will be summed.}
 A data frame with summed columns.
 }
 \description{
-Select columns and attach a vector of their new names, and columns
+Select columns and attach a vector of their new names, then columns
 with matching names will have each row summed.
 }
 \examples{

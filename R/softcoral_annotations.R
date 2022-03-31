@@ -1,7 +1,7 @@
 #' @title Sample Annotation Data for Cropping Vignette
 #'
-#' @description A \code{data_frame} that can be used with the cropping vignette
-#'     to show how quadrat data can be cropped while maintaining spatial
+#' @description A \code{data_frame} that can be used with the Why to Crop Quadrats
+#'     by Area vignette to show how quadrat data can be cropped while maintaining spatial
 #'     relationships between observations. Data was collected by the
 #'     [Baum Lab](https://www.juliakbaum.org/) and Kiritimati Field Teams. Data
 #'     is the uncleaned version of data found in
@@ -16,10 +16,10 @@
 #'
 #' @format A \code{data_frame} with 4 columns, which are:
 #' \describe{
-#' \item{Name}{Unique identification code for each quadrat}
-#' \item{Row}{The pixel row where the annotation occured in the photo of the quadrat}
+#' \item{Name}{Unique identification code for each quadrat.}
+#' \item{Row}{The pixel row where the annotation occured in the photo of the quadrat.}
 #' \item{Column}{The pixel column where the annotation occurred in the photo of
-#'     the quadrat}
-#' \item{Label}{The identification for the substrate below the annotaion location}
+#'     the quadrat.}
+#' \item{Label}{The identification for the substrate below the annotaion location.}
 #' }
 "softcoral_annotations"

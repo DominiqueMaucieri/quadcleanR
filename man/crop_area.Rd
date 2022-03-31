@@ -18,41 +18,43 @@ crop_area(
 )
 }
 \arguments{
-\item{data}{A data frame containing annotations, in long format.}
+\item{data}{A data frame containing annotations, in long format, such that all
+observations are contained in one column.}
 
-\item{row}{The column name in data which contains the row location of
-the annotated points}
+\item{row}{The column name in \code{data} which contains the row locations of
+the annotated points.}
 
-\item{column}{The column name in data which contains the column location of
-the annotated points}
+\item{column}{The column name in \code{data} which contains the column location of
+the annotated points.}
 
-\item{id}{The column name in data which contains the quadrat ID for
-the annotated points}
+\item{id}{The column name in \code{data} which contains the quadrat ID for
+the annotated points.}
 
 \item{dim}{A vector with length of 2, containing the proportion of the row and
 columns to crop. First element will be the proportion of the rows and the
 second will be the proportion of the columns.}
 
-\item{obs_rm}{If obs_rm = FALSE, no quadrats will be removed from the returned
-data set. If obs_rm = TRUE, quadrats will be removed from the returned
-data set based on the number of annotated observations in the cropped area.}
+\item{obs_rm}{If \code{obs_rm = FALSE}, no quadrats will be removed from the returned
+data set. If \code{obs_rm = TRUE}, quadrats will be removed from the returned
+data set based on the number of annotated observations in the cropped area
+as specified by \code{obs_range}.}
 
 \item{obs_range}{A vector with length of 2, specifying the min and max accepted
 number of annotated observations to retain in the data set.}
 
-\item{res}{If res = TRUE if the dimensions of each quadrat are known. These must
+\item{res}{If \code{res = TRUE} if the dimensions of each quadrat are known. These must
 be the same units as the row and column locations. If dimensions are not
-known, specify res = FALSE, and the function will estimate the max dimensions
+known, specify \code{res = FALSE}, and the function will estimate the max dimensions
 based off the max row and column location for the annotated points.}
 
-\item{res_dim_x}{The column name in data which contains the max column dimension
+\item{res_dim_x}{The column name in \code{data} which contains the max column dimension
 for each quadrat.}
 
-\item{res_dim_y}{The column name in data which contains the max row dimension
+\item{res_dim_y}{The column name in \code{data} which contains the max row dimension
 for each quadrat.}
 }
 \value{
-A data frame in long format with a subset of annotated points.
+A data frame in of quadrat annotations with a subset of annotated points.
 }
 \description{
 Using the location of annotated points within quadrats and
