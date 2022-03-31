@@ -7,26 +7,34 @@ deploy:
 
 articles:
 - title: Vignettes
-  navbar: Vignettes
   contents:
   - cleaning_simple
   - cropping
   - cleaning_cropping
 
 reference:
-- title: Functions
+- title: Clean
+  contents:
+  - change_names
+  - change_values
+  - keep_rm
+  - rm_chr
+  - sum_cols
+
+- title: Add
   contents:
   - add_data
   - categorize
-  - change_names
-  - change_values
+
+- title: Process
+  contents:
   - cover_calc
   - crop_area
-  - keep_rm
-  - rm_chr
-  - sample_size
-  - sum_cols
   - usable_obs
+
+- title: Assess
+  contents:
+  - sample_size
   - visualize_app
 
 - title: Data
