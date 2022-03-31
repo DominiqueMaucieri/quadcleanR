@@ -66,7 +66,7 @@ visualize_app <- function(data, dependent, independent) {
 
     output$prettyplot <- shiny::renderPlot({
 
-      data_plot <- data
+      data_plot <- data %>%
         dplyr::group_by_at(input$group_by) %>%
         dplyr::summarise_at(dplyr::vars(dplyr::one_of(input$yaxis)), list(yaxis_grouped = mean))
 
