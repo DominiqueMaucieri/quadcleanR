@@ -71,12 +71,10 @@ cover_calc <- function(data, spp, prop = TRUE, total = FALSE){
      }
    }
    if(prop == FALSE){
-     data[["total_pts"]] <- 100
-
-       total_i <- rowSums(data[,colnames(data) %in% spp_vector])
+     data[["total_pts"]] <- rowSums(data[,colnames(data) %in% spp_vector])
 
        for(j in 1:length(spp_vector)){
-         data[[spp_vector[j]]] <- (data[[spp_vector[j]]]/total_i) * 100
+         data[[spp_vector[j]]] <- (data[[spp_vector[j]]]/data[["total_pts"]]) * 100
 
       }
    }

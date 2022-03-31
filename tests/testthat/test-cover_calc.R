@@ -20,5 +20,5 @@ percent <- cover_calc(data = coral_cover, spp = names(coral_cover[3:6]), prop = 
 expect_equal(percent[1,3], prop[1,3]*100)
 
 percent_total <- cover_calc(data = coral_cover, spp = names(coral_cover[3:6]), prop = FALSE, total = TRUE)
-expect_equal(sum(percent_total[7]), 600)
+expect_equal(sum(percent_total[7]), 84)
 
