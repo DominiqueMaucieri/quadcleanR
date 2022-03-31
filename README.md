@@ -158,3 +158,4 @@ If you find a bug, please let me know by adding a reproducible example
 on [GitHub](https://github.com/DominiqueMaucieri/quadcleanR/issues).
 
 Additionally you can contact me with further inquiries at
+<dominiquemaucieri@gmail.com>
