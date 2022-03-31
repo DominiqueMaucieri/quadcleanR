@@ -86,42 +86,44 @@ maintaining the spatial relationships between points.</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>data</dt>
-<dd><p>A data frame containing annotations, in long format.</p></dd>
+<dd><p>A data frame containing annotations, in long format, such that all
+observations are contained in one column.</p></dd>
 <dt>row</dt>
-<dd><p>The column name in data which contains the row location of
-the annotated points</p></dd>
+<dd><p>The column name in <code>data</code> which contains the row locations of
+the annotated points.</p></dd>
 <dt>column</dt>
-<dd><p>The column name in data which contains the column location of
-the annotated points</p></dd>
+<dd><p>The column name in <code>data</code> which contains the column location of
+the annotated points.</p></dd>
 <dt>id</dt>
-<dd><p>The column name in data which contains the quadrat ID for
-the annotated points</p></dd>
+<dd><p>The column name in <code>data</code> which contains the quadrat ID for
+the annotated points.</p></dd>
 <dt>dim</dt>
 <dd><p>A vector with length of 2, containing the proportion of the row and
 columns to crop. First element will be the proportion of the rows and the
 second will be the proportion of the columns.</p></dd>
 <dt>obs_rm</dt>
-<dd><p>If obs_rm = FALSE, no quadrats will be removed from the returned
-data set. If obs_rm = TRUE, quadrats will be removed from the returned
-data set based on the number of annotated observations in the cropped area.</p></dd>
+<dd><p>If <code>obs_rm = FALSE</code>, no quadrats will be removed from the returned
+data set. If <code>obs_rm = TRUE</code>, quadrats will be removed from the returned
+data set based on the number of annotated observations in the cropped area
+as specified by <code>obs_range</code>.</p></dd>
 <dt>obs_range</dt>
 <dd><p>A vector with length of 2, specifying the min and max accepted
 number of annotated observations to retain in the data set.</p></dd>
 <dt>res</dt>
-<dd><p>If res = TRUE if the dimensions of each quadrat are known. These must
+<dd><p>If <code>res = TRUE</code> if the dimensions of each quadrat are known. These must
 be the same units as the row and column locations. If dimensions are not
-known, specify res = FALSE, and the function will estimate the max dimensions
+known, specify <code>res = FALSE</code>, and the function will estimate the max dimensions
 based off the max row and column location for the annotated points.</p></dd>
 <dt>res_dim_x</dt>
-<dd><p>The column name in data which contains the max column dimension
+<dd><p>The column name in <code>data</code> which contains the max column dimension
 for each quadrat.</p></dd>
 <dt>res_dim_y</dt>
-<dd><p>The column name in data which contains the max row dimension
+<dd><p>The column name in <code>data</code> which contains the max row dimension
 for each quadrat.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A data frame in long format with a subset of annotated points.</p>
+    <p>A data frame in of quadrat annotations with a subset of annotated points.</p>
     </div>
 
     <div class="section level2">
