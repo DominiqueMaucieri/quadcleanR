@@ -14,7 +14,6 @@ articles:
 
 reference:
 - title: Clean
-  desc: These function clean data
   contents:
   - change_names
   - change_values
