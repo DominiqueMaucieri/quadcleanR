@@ -17,7 +17,6 @@ reference:
   desc: These function clean data
   contents:
   - change_names
-    desc: change names description test
   - change_values
   - keep_rm
   - rm_chr
