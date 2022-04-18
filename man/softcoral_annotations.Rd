@@ -8,10 +8,10 @@
 A \code{data_frame} with 4 columns, which are:
 \describe{
 \item{Name}{Unique identification code for each quadrat.}
-\item{Row}{The pixel row where the annotation occured in the photo of the quadrat.}
+\item{Row}{The pixel row where the annotation occurred in the photo of the quadrat.}
 \item{Column}{The pixel column where the annotation occurred in the photo of
 the quadrat.}
-\item{Label}{The identification for the substrate below the annotaion location.}
+\item{Label}{The identification for the substrate below the annotation location.}
 }
 }
 \usage{

@@ -19,7 +19,8 @@ A data frame with summed columns.
 }
 \description{
 Select columns and attach a vector of their new names, then columns
-with matching names will have each row summed.
+with matching names will have each row summed. This is helpful to simplify
+your data quickly, like simplifying at a higher taxonomic group.
 }
 \examples{
 Sites <- as.factor(c("One", "One", "One", "Two", "Two", "Three"))

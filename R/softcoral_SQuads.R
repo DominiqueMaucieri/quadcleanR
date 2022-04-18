@@ -35,7 +35,7 @@
 #' \item{B_Echin}{Percent of total annotated points annotated for bleached Echinophyllia.}
 #' \item{B_FavHal}{Percent of total annotated points annotated for bleached Favites halicora.}
 #' \item{B_Favia}{Percent of total annotated points annotated for bleached_Favia.}
-#' \item{B_FaviaM}{Percent of total annotated points annotated for bleached Favia matthai.}
+#' \item{B_FaviaM}{Percent of total annotated points annotated for bleached Favia matthaii.}
 #' \item{B_FaviaS}{Percent of total annotated points annotated for bleached Favia speciosa.}
 #' \item{B_FaviaSt}{Percent of total annotated points annotated for bleached Goniastrea stelligera.}
 #' \item{B_Favites}{Percent of total annotated points annotated for bleached Favites.}
@@ -75,7 +75,7 @@
 #' \item{Fav}{Percent of total annotated points annotated for Favites.}
 #' \item{FavHal}{Percent of total annotated points annotated for Favites halicora.}
 #' \item{Favites halicora}{Percent of total annotated points annotated for Favia.}
-#' \item{FaviaM}{Percent of total annotated points annotated for Dipsastraea matthai.}
+#' \item{FaviaM}{Percent of total annotated points annotated for Dipsastraea matthaii.}
 #' \item{FaviaS}{Percent of total annotated points annotated for Favia speciosa.}
 #' \item{FaviaSt}{Percent of total annotated points annotated for Favia stelligera.}
 #' \item{FavPent}{Percent of total annotated points annotated for Favites pentagona.}

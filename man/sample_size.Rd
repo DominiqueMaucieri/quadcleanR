@@ -23,6 +23,7 @@ A data frame of sample sizes.
 }
 \description{
 Specify which columns to use to produce a table with sample sizes.
+Helpful to visualize number of samples in your data.
 }
 \examples{
 Year <- c("2000", "2000", "2000", "2000", "2000", "2001", "2001", "2001", "2001",

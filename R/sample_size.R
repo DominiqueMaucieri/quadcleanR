@@ -1,5 +1,6 @@
 #' @title Calculate sample sizes
 #' @description Specify which columns to use to produce a table with sample sizes.
+#'     Helpful to visualize number of samples in your data.
 #'
 #' @param data The data frame you want to calculate sample sizes for.
 #' @param dim_1 The first dimension to calculate sample sizes for. This will be the

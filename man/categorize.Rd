@@ -39,7 +39,8 @@ A data frame with new categorization column.
 Using a column within the data frame, categorize rows in a binary
 of yes or no, or customize with a set of category names. Data can be categorized
 based on the inclusion or lack of inclusion of parts of characters, or based on
-exact characters.
+exact characters. Especially useful for turning ID tags into useful categories
+for analysis such as morphology, bleaching, taxonomy etc.
 }
 \examples{
 Sites <- as.factor(c("One", "One", "One", "Two", "Two", "Three"))

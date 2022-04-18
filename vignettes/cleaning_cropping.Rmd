@@ -28,7 +28,7 @@ So this vignette will follow the following steps:
 
 3. Join the two together to produce a large, easy to use data frame for future analyses, with some further cleaning of this joint data set. 
 
-First lets load the package, the dplyr package, tidyr package and the data, plus a few extras used to create thsi vignette.
+First lets load the package, the dplyr package, tidyr package and the data, plus a few extras used to create this vignette.
 
 
 ```{r load package, message = FALSE, warning = FALSE}

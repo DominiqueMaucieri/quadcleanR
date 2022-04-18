@@ -18,7 +18,7 @@ will be scaled to the total observations in these columns for each quadrat.}
 \code{prop = FALSE}, the resulting cover will be in percentages.}
 
 \item{total}{If \code{total = TRUE}, a column containing the total number of observations
-at each sampling unit will be returned in a new column called total_pts. This will
+at each sampling unit will be returned in a new column called \code{total_pts}. This will
 not be returned if \code{total = FALSE}.}
 }
 \value{
@@ -27,7 +27,8 @@ A data frame containing scaled observation cover.
 \description{
 Convert the number of observations for each species or non-species
 to proportion or percent cover within each row based on the total number
-of observations in each row.
+of observations in each row. Useful for quadrats with varying numbers  of
+observations to calculate each row's percent cover all at once.
 }
 \examples{
 #create data set for example

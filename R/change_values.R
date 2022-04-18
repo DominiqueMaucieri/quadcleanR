@@ -1,6 +1,7 @@
 #' @title Change values within a column
 #' @description Using two vectors, change the values in one column to a new
-#'     set of values.
+#'     set of values. Helpful if you need to change many values at once, like
+#'     updating changes to site names or taxonomy.
 #'
 #' @param data A data frame.
 #' @param column The column in which to change values.

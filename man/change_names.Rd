@@ -23,6 +23,8 @@ A data frame containing new column names.
 }
 \description{
 Using a new data frame of labels, change column names in one function.
+Helpful if column names are shorthands or contain spaces and characters that
+are not supported in column names in R.
 }
 \examples{
 #creating data set

@@ -2,7 +2,8 @@
 #' @description Using a column within the data frame, categorize rows in a binary
 #'     of yes or no, or customize with a set of category names. Data can be categorized
 #'     based on the inclusion or lack of inclusion of parts of characters, or based on
-#'     exact characters.
+#'     exact characters. Especially useful for turning ID tags into useful categories
+#'     for analysis such as morphology, bleaching, taxonomy etc.
 #'
 #' @param data The data frame.
 #' @param column The column name which contains the data on which to categorize

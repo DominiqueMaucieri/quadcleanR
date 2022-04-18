@@ -41,6 +41,9 @@ A data frame containing summed unusable points.
 \description{
 Sum columns containing unusable observations and remove
 rows that contain more than the specified cutoff number of unusable points.
+Helpful if there are annotations that were unidentifiable and you want to
+remove them from the total usable observations, and you can remove quadrats
+with too many unusable observations.
 }
 \examples{
 #create data set for example

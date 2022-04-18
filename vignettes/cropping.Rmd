@@ -26,7 +26,7 @@ If the identification of substrate and organisms have already occurred for quadr
 
 - If the full area of the quadrat is identified, then the same effort will be applied to any area, though this method of cropping will not be of value. 
 
-Additionally, this method is beneficial because it still ensures spatial relationships between organisms within each quadrat. If a subset of the points was randomly selected, like 54 out of the 100 identified points, these points would still cover the whole quadrat and would therefore still be representative of a larger sampling effort, than 54 points out of the 100, but all aggregated in the bottom left corner of the quadrat. This is the method this vignette will explore, and both random and gridded points will be displayed.
+Additionally, this method is beneficial because it still ensures spatial relationships between organisms within each quadrat. If a subset of the points was randomly selected, like 54 out of the 100 identified points, these points would still cover the whole quadrat and would therefore still be representative of a larger sampling effort, than 54 points out of the 100, but all aggregated in the bottom left corner of the quadrat. This is the method this vignette will explore, and both random and uniform grid points will be displayed.
 
 First, some packages need to be loaded, the `quadcleanR` package and `ggplot2` to help you visualize the data and results. 
 

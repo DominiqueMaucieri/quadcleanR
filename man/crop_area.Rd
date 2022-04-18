@@ -59,7 +59,8 @@ A data frame in of quadrat annotations with a subset of annotated points.
 \description{
 Using the location of annotated points within quadrats and
 the size of the quadrat, crop quadrat data to a smaller area, while
-maintaining the spatial relationships between points.
+maintaining the spatial relationships between points. Useful for making
+different sized quadrat data comparable.
 }
 \examples{
 #Creating the data file

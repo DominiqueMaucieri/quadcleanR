@@ -1,7 +1,8 @@
 #' @title Calculate species cover
 #' @description Convert the number of observations for each species or non-species
 #'     to proportion or percent cover within each row based on the total number
-#'     of observations in each row.
+#'     of observations in each row. Useful for quadrats with varying numbers  of
+#'     observations to calculate each row's percent cover all at once.
 #'
 #' @param data A data frame with each row representing a sampling unit (ex. a
 #'     quadrat or photo).
@@ -11,7 +12,7 @@
 #' @param prop If `prop = TRUE`, the resulting cover will be proportions. If
 #'     `prop = FALSE`, the resulting cover will be in percentages.
 #' @param total If `total = TRUE`, a column containing the total number of observations
-#'     at each sampling unit will be returned in a new column called total_pts. This will
+#'     at each sampling unit will be returned in a new column called `total_pts`. This will
 #'     not be returned if `total = FALSE`.
 #'
 #' @return A data frame containing scaled observation cover.

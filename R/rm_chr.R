@@ -2,7 +2,9 @@
 #' @description Parts of characters can be removed based on a vector of removal
 #'     characters. When these characters are present in the data frame they will
 #'     be removed. Selection area can include the full data frame or a subset
-#'     of columns.
+#'     of columns. When working with images, this can be helpful to remove extra
+#'     characters from image IDs, or anywhere else where you want to remove specific
+#'     characters from your data.
 #'
 #' @param data A data frame.
 #' @param rm The parts of characters to be removed from the data frame. Can be a

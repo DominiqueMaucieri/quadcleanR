@@ -29,7 +29,8 @@ Using key identifying columns, add additional columns to an
 existing data frame. This function allows you to match new columns
 based on specified IDs and you can choose what columns to add. Additionally
 you can specify the column number at which to add the new columns, so they
-are not added to the end of the data frame.
+are not added to the end of the data frame. Helpful for adding environmental
+or taxonomic data to your quadrat data.
 }
 \examples{
 Sites <- as.factor(c("One", "One", "One", "Two", "Two", "Three"))

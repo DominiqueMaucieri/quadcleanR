@@ -1,6 +1,8 @@
 
 #' @title Change names of columns
 #' @description Using a new data frame of labels, change column names in one function.
+#'     Helpful if column names are shorthands or contain spaces and characters that
+#'     are not supported in column names in R.
 #'
 #' @param data The data frame that you want to change the column names of.
 #' @param labelset The data frame containing column names that you want to change and

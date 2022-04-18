@@ -1,7 +1,8 @@
 #' @title Crop quadrats based on area
 #' @description Using the location of annotated points within quadrats and
 #'     the size of the quadrat, crop quadrat data to a smaller area, while
-#'     maintaining the spatial relationships between points.
+#'     maintaining the spatial relationships between points. Useful for making
+#'     different sized quadrat data comparable.
 #'
 #' @param data A data frame containing annotations, in long format, such that all
 #'     observations are contained in one column.

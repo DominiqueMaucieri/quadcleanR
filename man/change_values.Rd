@@ -21,7 +21,8 @@ A data frame containing new values within the specified column.
 }
 \description{
 Using two vectors, change the values in one column to a new
-set of values.
+set of values. Helpful if you need to change many values at once, like
+updating changes to site names or taxonomy.
 }
 \examples{
 Sites <- c("One.jpg", "Two.jpg", "Three.jpg", "Four.jpg", "Five.jpg")

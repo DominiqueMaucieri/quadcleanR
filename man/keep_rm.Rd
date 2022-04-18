@@ -44,7 +44,9 @@ A data frame containing new selection of data.
 }
 \description{
 Using a character, or part of character select rows or columns
-of the data frame to either keep or remove.
+of the data frame to either keep or remove. A more customizable way to
+subset your data as you can keep or remove based on partial matches, or
+cells containing select characters.
 }
 \examples{
 # create data frame

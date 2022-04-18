@@ -2,6 +2,9 @@
 #' @title Extract usable observations
 #' @description Sum columns containing unusable observations and remove
 #'     rows that contain more than the specified cutoff number of unusable points.
+#'     Helpful if there are annotations that were unidentifiable and you want to
+#'     remove them from the total usable observations, and you can remove quadrats
+#'     with too many unusable observations.
 #'
 #' @param data A data frame with each row representing a sampling unit (ex. a
 #'     quadrat or photo).
