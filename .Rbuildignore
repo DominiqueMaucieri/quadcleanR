@@ -13,3 +13,4 @@
 ^inst/shiny$
 ^\.covrignore$
 ^revdep$
+^man/figures$
