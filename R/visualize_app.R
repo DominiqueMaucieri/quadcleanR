@@ -3,8 +3,8 @@
 #'     quadrat data.
 #'
 #' @param data A data frame containing cleaned quadrat data.
-#' @param independent The independent variable column names found in `data`.
-#' @param dependent The dependent variable column names found in `data`.
+#' @param yaxis The yaxis variable column names found in `data`.
+#' @param xaxis The xaxis variable column names found in `data`.
 #'
 #' @return A shiny app launched in your browser.
 #' @export
@@ -21,22 +21,22 @@
 #' coral <- data.frame(year, site, transect, species, cover)
 #'
 #'if (interactive()) {
-#' visualize_app(data = coral, independent = colnames(coral[,1:4]), dependent = "cover")
+#' visualize_app(data = coral, yaxis = colnames(coral[,1:4]), xaxis = "cover")
 #' }
 #'
-visualize_app <- function(data, dependent, independent) {
+visualize_app <- function(data, xaxis, yaxis) {
 
   ui <- shinydashboard::dashboardPage( skin = "purple",
              shinydashboard::dashboardHeader(title = "Data Visualization"),
               shinydashboard::dashboardSidebar(disable = TRUE),
               shinydashboard::dashboardBody(
                 shiny::fluidRow(
-                  shinydashboard::box(shiny::selectInput("yaxis", "Choose a y-axis variable:", dependent),
-                               shiny::selectInput("xaxis", "Choose an x-axis variable:", independent),
-                               shiny::selectInput("colour", "Choose a color variable:", independent, selected = independent[2]),
+                  shinydashboard::box(shiny::selectInput("yaxis", "Choose a y-axis variable:", xaxis),
+                               shiny::selectInput("xaxis", "Choose an x-axis variable:", yaxis),
+                               shiny::selectInput("colour", "Choose a color variable:", yaxis, selected = yaxis[2]),
                                shiny::checkboxInput("continuous", "Treat as discrete", value = TRUE),
-                               shiny::selectInput("facet", "Choose a facet variable:", c("no facet", independent), selected = "null"),
-                               shiny::checkboxGroupInput("group_by", "Choose variable(s) to group by and average:", independent, selected = independent),
+                               shiny::selectInput("facet", "Choose a facet variable:", c("no facet", yaxis), selected = "null"),
+                               shiny::checkboxGroupInput("group_by", "Choose variable(s) to group by and average:", yaxis, selected = yaxis),
                                width = 4,
                                title = "Customization",
                                solidHeader = FALSE,
@@ -71,7 +71,7 @@ visualize_app <- function(data, dependent, independent) {
         dplyr::summarise_at(dplyr::vars(dplyr::one_of(input$yaxis)), list(yaxis_grouped = mean))
 
 
-      if(length(input$group_by) != length(independent)){
+      if(length(input$group_by) != length(yaxis)){
         y_axis_name <- paste("mean_", input$yaxis)
       } else {
         y_axis_name <- input$yaxis
@@ -157,7 +157,7 @@ visualize_app <- function(data, dependent, independent) {
 
     output$subsetting <- shiny::renderUI({
 
-      if(length(input$group_by) != length(independent)){
+      if(length(input$group_by) != length(yaxis)){
         y_axis_name <- paste("mean_", input$yaxis, sep="")
 
         group_by_vector <- paste(input$group_by,collapse=", ")
@@ -169,7 +169,7 @@ visualize_app <- function(data, dependent, independent) {
           "group_by(", group_by_vector, ")"))
 
         paste(
-          "group_by(", independent, ")")
+          "group_by(", yaxis, ")")
 
         summarized_raw <- sprintf(paste(
           "summarize(%s = mean(%s))"),
@@ -185,7 +185,7 @@ visualize_app <- function(data, dependent, independent) {
     output$code <- shiny::renderText({
 
 
-      if(length(input$group_by) != length(independent)){
+      if(length(input$group_by) != length(yaxis)){
         y_axis_name <- paste("mean_", input$yaxis, sep = "")
       } else {
         y_axis_name <- input$yaxis
