@@ -27,7 +27,7 @@ A data frame containing scaled observation cover.
 \description{
 Convert the number of observations for each species or non-species
 to proportion or percent cover within each row based on the total number
-of observations in each row. Useful for quadrats with varying numbers  of
+of observations in each row. Useful for quadrats with varying numbers of
 observations to calculate each row's percent cover all at once.
 }
 \examples{

@@ -4,14 +4,14 @@
 \alias{visualize_app}
 \title{Visualize cleaned data}
 \usage{
-visualize_app(data, dependent, independent)
+visualize_app(data, xaxis, yaxis)
 }
 \arguments{
 \item{data}{A data frame containing cleaned quadrat data.}
 
-\item{dependent}{The dependent variable column names found in \code{data}.}
+\item{xaxis}{The xaxis variable column names found in \code{data}.}
 
-\item{independent}{The independent variable column names found in \code{data}.}
+\item{yaxis}{The yaxis variable column names found in \code{data}.}
 }
 \value{
 A shiny app launched in your browser.
@@ -32,7 +32,7 @@ cover <- sample(x = seq(from = 0, to = 1, by = 0.01), 1000, replace = TRUE)
 coral <- data.frame(year, site, transect, species, cover)
 
 if (interactive()) {
-visualize_app(data = coral, independent = colnames(coral[,1:4]), dependent = "cover")
+visualize_app(data = coral, yaxis = colnames(coral[,1:4]), xaxis = "cover")
 }
 
 }
