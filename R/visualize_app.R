@@ -236,7 +236,7 @@ visualize_app <- function(data, xaxis, yaxis) {
       if(!input$facet %in% "no facet"){
         code_code <- sprintf(paste(
           code_code, " +\n",
-          "facet_wrap(~ vars(%s))"),
+          "facet_wrap(vars(%s))"),
           input$facet)} else {
 
             code_code <- code_code
