@@ -345,7 +345,7 @@ Visualizing the data can be easy with a built in shiny app function. To see an e
 
 ```{r shiny app, eval= FALSE}
 
-visualize_app(data = AllQuads_cropclean, independent = colnames(AllQuads_cropclean[,1:13]), dependent = "prop_cover")
+visualize_app(data = AllQuads_cropclean, xaxis = colnames(AllQuads_cropclean[,1:13]), yaxis = "prop_cover")
 
 ```
 

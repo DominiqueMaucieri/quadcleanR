@@ -265,7 +265,7 @@ The data used in this example is this data set we have just cleaned. However thi
 
 ```{r shiny app, eval= FALSE}
 
-visualize_app(data = simple_cleaned, independent = colnames(simple_cleaned[,1:13]), dependent = "prop_cover")
+visualize_app(data = simple_cleaned, xaxis = colnames(simple_cleaned[,1:13]), yaxis = "prop_cover")
 
 ```
 
