@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# quadcleanR <a href='https://dominiquemaucieri.github.io/quadcleanR/'><img src='man/figures/logo.png' align="right" height="139" /></a>
+# quadcleanR <a href='https://dominiquemaucieri.com/quadcleanR/'><img src='man/figures/logo.png' align="right" height="139" /></a>
 
 <!-- badges: start -->
 

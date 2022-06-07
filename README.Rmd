@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# quadcleanR <a href='https://dominiquemaucieri.github.io/quadcleanR/'><img src='man/figures/logo.png' align="right" height="139" /></a>
+# quadcleanR <a href='https://dominiquemaucieri.com/quadcleanR/'><img src='man/figures/logo.png' align="right" height="139" /></a>
 
 <!-- badges: start -->
   [![R-CMD-check](https://github.com/DominiqueMaucieri/quadcleanR/workflows/R-CMD-check/badge.svg)](https://github.com/DominiqueMaucieri/quadcleanR/actions)

@@ -153,7 +153,7 @@ A \code{data_frame} that can be used with the cleaning vignette
 to show how quadrat data can be cleaned to produce easy to analyze data
 frames. Data was collected by the \href{https://www.juliakbaum.org/}{Baum Lab}
 and Kiritimati Field Teams. Data is the uncleaned version of data found in
-\href{https://doi.org/10.1016/j.biocon.2021.109328}{Maucieri and Baum 2021. Biological Conservation.}
+Maucieri and Baum 2021. Biological Conservation. \doi{10.1016/j.biocon.2021.109328}
 The data are from photo quadrats (1m by 1m) which were randomly annotated
 with 100 random points each. At each of these annotated points, the substrate
 was identified. Photo quadrats were collected on Kiritimati Island in the

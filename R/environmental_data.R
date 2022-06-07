@@ -4,7 +4,7 @@
 #'     Data vignette to show how environmental data can be easily added to quadrat data.
 #'     Data was collected and collated by the [Baum Lab](https://www.juliakbaum.org/).
 #'     Data was originally published with coral quadrat data in
-#'     [Maucieri and Baum 2021. Biological Conservation.](https://doi.org/10.1016/j.biocon.2021.109328).
+#'     Maucieri and Baum 2021. Biological Conservation \doi{10.1016/j.biocon.2021.109328}.
 #'
 #' @format A \code{data_frame} with 7 columns, which are:
 #' \describe{

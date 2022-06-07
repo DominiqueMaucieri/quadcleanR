@@ -21,7 +21,7 @@
 #' coral <- data.frame(year, site, transect, species, cover)
 #'
 #'if (interactive()) {
-#' visualize_app(data = coral, yaxis = colnames(coral[,1:4]), xaxis = "cover")
+#' visualize_app(data = coral, xaxis = colnames(coral[,1:4]), yaxis = "cover")
 #' }
 #'
 visualize_app <- function(data, xaxis, yaxis) {
@@ -31,12 +31,12 @@ visualize_app <- function(data, xaxis, yaxis) {
               shinydashboard::dashboardSidebar(disable = TRUE),
               shinydashboard::dashboardBody(
                 shiny::fluidRow(
-                  shinydashboard::box(shiny::selectInput("yaxis", "Choose a y-axis variable:", xaxis),
-                               shiny::selectInput("xaxis", "Choose an x-axis variable:", yaxis),
-                               shiny::selectInput("colour", "Choose a color variable:", yaxis, selected = yaxis[2]),
+                  shinydashboard::box(shiny::selectInput("yaxis", "Choose a y-axis variable:", yaxis),
+                               shiny::selectInput("xaxis", "Choose an x-axis variable:", xaxis),
+                               shiny::selectInput("colour", "Choose a color variable:", xaxis, selected = xaxis[2]),
                                shiny::checkboxInput("continuous", "Treat as discrete", value = TRUE),
-                               shiny::selectInput("facet", "Choose a facet variable:", c("no facet", yaxis), selected = "null"),
-                               shiny::checkboxGroupInput("group_by", "Choose variable(s) to group by and average:", yaxis, selected = yaxis),
+                               shiny::selectInput("facet", "Choose a facet variable:", c("no facet", xaxis), selected = "null"),
+                               shiny::checkboxGroupInput("group_by", "Choose variable(s) to group by and average:", xaxis, selected = xaxis),
                                width = 4,
                                title = "Customization",
                                solidHeader = FALSE,

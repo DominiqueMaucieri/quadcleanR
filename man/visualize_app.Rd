@@ -32,7 +32,7 @@ cover <- sample(x = seq(from = 0, to = 1, by = 0.01), 1000, replace = TRUE)
 coral <- data.frame(year, site, transect, species, cover)
 
 if (interactive()) {
-visualize_app(data = coral, yaxis = colnames(coral[,1:4]), xaxis = "cover")
+visualize_app(data = coral, xaxis = colnames(coral[,1:4]), yaxis = "cover")
 }
 
 }

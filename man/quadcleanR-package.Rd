@@ -4,9 +4,9 @@
 \name{quadcleanR-package}
 \alias{quadcleanR}
 \alias{quadcleanR-package}
-\title{quadcleanR: Cleanup And Visualization of Quadrat Data}
+\title{quadcleanR: Cleanup and Visualization of Quadrat Data}
 \description{
-\if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
 A customizable tool to clean up ecological data collected from quadrats.
 }
@@ -14,7 +14,7 @@ A customizable tool to clean up ecological data collected from quadrats.
 Useful links:
 \itemize{
   \item \url{https://github.com/DominiqueMaucieri/quadcleanR}
-  \item \url{https://dominiquemaucieri.github.io/quadcleanR/}
+  \item \url{https://dominiquemaucieri.com/quadcleanR/}
   \item Report bugs at \url{https://github.com/DominiqueMaucieri/quadcleanR/issues}
 }
 

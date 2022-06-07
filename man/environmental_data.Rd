@@ -24,6 +24,6 @@ A \code{data_frame} that can be used with the Simple Cleaning Quadrat
 Data vignette to show how environmental data can be easily added to quadrat data.
 Data was collected and collated by the \href{https://www.juliakbaum.org/}{Baum Lab}.
 Data was originally published with coral quadrat data in
-\href{https://doi.org/10.1016/j.biocon.2021.109328}{Maucieri and Baum 2021. Biological Conservation.}.
+Maucieri and Baum 2021. Biological Conservation \doi{10.1016/j.biocon.2021.109328}.
 }
 \keyword{datasets}
