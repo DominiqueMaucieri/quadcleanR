@@ -19,6 +19,7 @@ Suggests:
     gtools,
     kableExtra,
     knitr,
+    MASS,
     rmarkdown,
     shiny,
     shinydashboard,

@@ -5,6 +5,6 @@ There were no NOTEs, ERRORs or WARNINGs.
 There are currently no downstream dependencies for this package
 
 ## Test environments
-- Windows (on GitHub Actions), R 4.1.3 
-- Mac OS (on GitHub Actions), R 4.1.3
-- Ubuntu (on GitHub Actions), R 4.1.3 & devel
+- Windows (on GitHub Actions), R 4.2.0 
+- Mac OS (on GitHub Actions), R 4.2.0
+- Ubuntu (on GitHub Actions), R 4.2.0 & devel
