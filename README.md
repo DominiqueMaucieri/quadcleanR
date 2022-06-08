@@ -79,7 +79,6 @@ crop_area_coral <- crop_area(data = coral_annotations, row = "row",
                              column = "column", id = "rep", dim = c(0.5, 0.5))
 
 
-
 #Plotting each quadrat
 ggplot(coral_annotations[1:100, ], aes(x = column, y = row)) +
   geom_point() +
