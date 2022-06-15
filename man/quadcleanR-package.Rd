@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-A customizable tool to clean up ecological data collected from quadrats.
+A tool that can be customized to aid in the clean up of ecological data collected using quadrats and can crop quadrats to ensure comparability between quadrats collected under different methodologies.
 }
 \seealso{
 Useful links:

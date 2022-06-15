@@ -10,16 +10,20 @@
 coverage](https://codecov.io/gh/DominiqueMaucieri/quadcleanR/branch/main/graph/badge.svg)](https://app.codecov.io/gh/DominiqueMaucieri/quadcleanR?branch=main)
 [![License: GPL
 v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![Project Status: Active – The project has reached a stable, usable
+state and is being actively
+developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+
 <!-- badges: end -->
 
 ## Overview
 
-quadcleanR is a customizable tool to clean up ecological data collected
-from quadrats. This package will aid you in cleaning, processing and
-assessing your quadrat data, as well as provide intuitive ways to add
-additional information to your data sets. If you work with quadrat data
-(or similar data), this package will help to speed up the cleaning of
-your data so you can spend your time on further analyses.
+quadcleanR() is a customizable tool to clean up ecological data
+collected from quadrats. This package will aid you in cleaning,
+processing and assessing your quadrat data, as well as provide intuitive
+ways to add additional information to your data sets. If you work with
+quadrat data (or similar data), this package will help to speed up the
+cleaning of your data so you can spend your time on further analyses.
 
 ## Installation
 

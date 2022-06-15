@@ -36,7 +36,6 @@ First lets load the package, the dplyr package, tidyr package and the data, plus
 library(quadcleanR)
 library(dplyr)
 library(tidyr)
-library(gtools)
 library(shiny)
 library(knitr)
 library(kableExtra)
@@ -203,11 +202,13 @@ LQuad_removed <- usable_obs(LQuad_colnames, c("Shadow", "Transect_hardware", "Un
 
 With the large quadrats, only 4 photos needed to be removed because they had too many unusable points. 
 
-Alright, now we can join these data frames together, and continue with one large data set. As both data sets used the same label set of names, This is easy with the `smartbind()` function out of the `gtools` package
+Alright, now we can join these data frames together, and continue with one large data set. As both data sets used the same label set of names, This is easy with the bind_rows() function out of the `dplyr` package
 
 ```{r bind quad dfs}
 
-AllQuads <- smartbind(SQuad_usable, LQuad_usable, fill = 0) %>% select(-c(unusable))
+AllQuads <- bind_rows(SQuad_usable, LQuad_usable) %>% select(-c(unusable))
+
+AllQuads[, 4:131][is.na(AllQuads[, 4:131])] <- 0
 
 ```
 

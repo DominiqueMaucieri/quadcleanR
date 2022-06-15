@@ -28,7 +28,6 @@ First lets load the package, the dplyr package, tidyr package and the data, plus
 library(quadcleanR)
 library(dplyr)
 library(tidyr)
-library(gtools)
 library(shiny)
 library(knitr)
 library(kableExtra)
