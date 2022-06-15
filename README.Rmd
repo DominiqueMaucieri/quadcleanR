@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 # quadcleanR <a href='https://dominiquemaucieri.com/quadcleanR/'><img src='man/figures/logo.png' align="right" height="139" /></a>
 
 <!-- badges: start -->
-  [![R-CMD-check](https://github.com/DominiqueMaucieri/quadcleanR/workflows/R-CMD-check/badge.svg)](https://github.com/DominiqueMaucieri/quadcleanR/actions)
+[![R-CMD-check](https://github.com/DominiqueMaucieri/quadcleanR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/DominiqueMaucieri/quadcleanR/actions/workflows/R-CMD-check.yaml)
 [![Codecov test coverage](https://codecov.io/gh/DominiqueMaucieri/quadcleanR/branch/main/graph/badge.svg)](https://app.codecov.io/gh/DominiqueMaucieri/quadcleanR?branch=main)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
