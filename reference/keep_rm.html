@@ -81,32 +81,47 @@ cells containing select characters.</p>
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>data</dt>
 <dd><p>A data frame.</p></dd>
+
+
 <dt>values</dt>
 <dd><p>A vector containing the characters or parts of characters to base
 selection off of.</p></dd>
+
+
 <dt>select</dt>
 <dd><p>If <code>select = "row"</code>, rows containing the <code>values</code> will be selected
 for either being kept, or being removed, as specified by <code>keep</code>. If
 <code>select = "col"</code>, columns with names containing the <code>values</code> will either be
 kept or removed, as specified by <code>keep</code>.</p></dd>
+
+
 <dt>keep</dt>
 <dd><p>If <code>keep = TRUE</code> the presence of the <code>values</code> will cause the
 selected rows or columns to be kept. If <code>keep = FALSE</code> the presence of
 the <code>values</code> will cause the selected rows or columns to be removed.</p></dd>
+
+
 <dt>drop_levels</dt>
 <dd><p>If <code>drop_levels = TRUE</code>, factor levels that have been
 removed will be dropped. Only applicable when <code>select = "row"</code></p></dd>
+
+
 <dt>exact</dt>
 <dd><p>If <code>exact = TRUE</code> only exact matches will be selected. If
 <code>exact = FALSE</code> matches will be selected if they contain the characters in the
 <code>values</code> vector and will not be limited to exact matches only.</p></dd>
+
+
 <dt>colname</dt>
 <dd><p>If <code>select = "row"</code>, <code>colname</code> will specify the column to
 select rows from.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A data frame containing new selection of data.</p>
+    
+
+<p>A data frame containing new selection of data.</p>
     </div>
 
     <div class="section level2">
@@ -157,7 +172,7 @@ select rows from.</p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
     </footer></div>
