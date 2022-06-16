@@ -14,3 +14,4 @@
 ^\.covrignore$
 ^revdep$
 ^man/figures$
+^CRAN-SUBMISSION$
