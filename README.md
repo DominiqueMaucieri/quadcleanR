@@ -6,6 +6,8 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/DominiqueMaucieri/quadcleanR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/DominiqueMaucieri/quadcleanR/actions/workflows/R-CMD-check.yaml)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/quadcleanR)](https://CRAN.R-project.org/package=quadcleanR)
 [![Codecov test
 coverage](https://codecov.io/gh/DominiqueMaucieri/quadcleanR/branch/main/graph/badge.svg)](https://app.codecov.io/gh/DominiqueMaucieri/quadcleanR?branch=main)
 [![License: GPL
