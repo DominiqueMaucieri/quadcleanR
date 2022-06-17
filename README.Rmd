@@ -33,7 +33,9 @@ quadcleanR() is a customizable tool to clean up ecological data collected from q
 
 ```{r, eval = FALSE}
 
-#currently quadcleanR is in the development phase and can only be 
+#to download directly from CRAN
+install.packages("quadcleanR")
+
 #downloaded from GitHub directly:
 install.packages("devtools")
 devtools::install_github("DominiqueMaucieri/quadcleanR")

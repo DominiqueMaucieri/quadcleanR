@@ -30,7 +30,9 @@ cleaning of your data so you can spend your time on further analyses.
 ## Installation
 
 ``` r
-#currently quadcleanR is in the development phase and can only be 
+#to download directly from CRAN
+install.packages("quadcleanR")
+
 #downloaded from GitHub directly:
 install.packages("devtools")
 devtools::install_github("DominiqueMaucieri/quadcleanR")
