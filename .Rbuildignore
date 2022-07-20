@@ -15,3 +15,4 @@
 ^revdep$
 ^man/figures$
 ^CRAN-SUBMISSION$
+^manuscript$
