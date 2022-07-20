@@ -1,20 +1,21 @@
 ---
 title: 'quadcleanR: An R Package for the Cleanup and Visualization of Quadrat Data'
 tags:
-  - R
-  - ecology
-  - diversity
-  - quadrat
+- R
+- ecology
+- diversity
+- quadrat
+date: "5 July 2022"
+output: pdf_document
 authors:
-  - name: Dominique G. Maucieri
-    orcid: 0000-0003-1849-2472
-    equal-contrib: true
-    affiliation: "1"
-affiliations:
- - name: University of Victoria, Department of Biological Sciences, Canada
-   index: 1
-date: 5 July 2022
+- name: Dominique G. Maucieri
+  orcid: 0000-0003-1849-2472
+  equal-contrib: yes
+  affiliation: '1'
 bibliography: paper.bib
+affiliations:
+- name: University of Victoria, Department of Biological Sciences, Canada
+  index: 1
 ---
 
 # Summary
