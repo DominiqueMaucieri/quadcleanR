@@ -15,6 +15,7 @@ v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/li
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![status](https://joss.theoj.org/papers/613731dfb5cfe31aad5ce73b88280f6b/status.svg)](https://joss.theoj.org/papers/613731dfb5cfe31aad5ce73b88280f6b)
 
 <!-- badges: end -->
 
@@ -30,6 +31,7 @@ cleaning of your data so you can spend your time on further analyses.
 ## Installation
 
 ``` r
+
 #to download directly from CRAN
 install.packages("quadcleanR")
 
@@ -50,6 +52,7 @@ Quadrat Data vignette will produce data which can be explored with [this
 example shiny app](https://dominiquemaucieri.shinyapps.io/example/).
 
 ``` r
+
 library(quadcleanR)
 library(ggplot2)
 

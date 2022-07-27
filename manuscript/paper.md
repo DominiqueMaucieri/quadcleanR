@@ -10,7 +10,7 @@ output: pdf_document
 authors:
 - name: Dominique G. Maucieri
   orcid: 0000-0003-1849-2472
-  equal-contrib: yes
+  equal-contrib: no
   affiliation: '1'
 bibliography: paper.bib
 affiliations:
@@ -30,7 +30,7 @@ For collaborative quadrat analyses, it is crucial that quadrat data are being pr
 
 The [quadcleanR](https://dominiquemaucieri.com/quadcleanR/) R package provides tools to overcome issues associated with conducting analyses with quadrat or quadrat-like data, through functions to assist in standardizing quadrat areas and the cleanup of quadrat data. Additionally, this package incorporates a Shiny app [@shiny] that uses the user's own data to produce an interactive interface where researchers can examine variables and trends in their data, so they better understand what variables and the trends are important within their data.
 
-When employing random point photo quadrats to assist with quantifying biodiversity, the organisms that are being quantified will take up space, and by chance, multiple points can land on the same individual or colony. Species interactions and competition between species will influence what species can be found around others [@cooccurrence] and averaging the percent or proportion cover of different sized quadrats will increase sources of error and variation [@anderson1993effect]. To illustrate how the crop_area()` function tackles this issue, consider two quadrats of differing sizes, which have already had random points identified on them (Figure 1a). These quadrats have the same density of random points (1pt/0.1 m$^2$) with a differing number of random points in each quadrat (large = 10pts, small = 5pts). 
+When employing random point photo quadrats to assist with quantifying biodiversity, the organisms that are being quantified will take up space, and by chance, multiple points can land on the same individual or colony. Species interactions and competition between species will influence what species can be found around others [@cooccurrence] and averaging the percent or proportion cover of different sized quadrats will increase sources of error and variation [@anderson1993effect]. To illustrate how the crop_area() function tackles this issue, consider two quadrats of differing sizes, which have already had random points identified on them (Figure 1a). These quadrats have the same density of random points (1pt/0.1 m$^2$) with a differing number of random points in each quadrat (large = 10pts, small = 5pts). 
 
 ![Figure 1: How to process quadrats of different sizes to ensure they are comparable.\label{fig:1}](Figure1.png)
 
