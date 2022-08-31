@@ -5,7 +5,7 @@ library(ggplot2)
 library(viridis)
 library(dplyr)
 
-data <- read.csv("simple_cleaned.csv")
+data <- read.csv("final_cleaned.csv")
 
 data$TimeBlock <- factor(data$TimeBlock, levels = c("Before", "During", "After"))
 data$Site <- factor(data$Site, levels = paste("site", seq(1:40), sep = ""))

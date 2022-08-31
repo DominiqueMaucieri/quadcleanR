@@ -15,3 +15,9 @@ vignette: >
 ```{r setup}
 library(quadcleanR)
 ```
+
+
+# Introduction
+
+This vignette will walk you through the different functions for cleaning quadrat data within the 
+'quadcleanR' package. 
