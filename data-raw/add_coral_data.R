@@ -35,3 +35,7 @@ final_cleaned <- read.csv(here::here("data-raw", "final_cleaned.csv"))
 usethis::use_data(final_cleaned, overwrite = TRUE,
                   compress = "xz")
 
+corals <- read.csv(here::here("data-raw", "corals.csv"))
+
+usethis::use_data(corals, overwrite = TRUE, compress = "xz")
+
