@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="A complex walk through of how to clean up quadrat data using the `quadcleanR` package. This will go through all the functions inclusing the `crop_area()` function, as well as visualizing the resulting data. This vignette is good for those who have to crop quadrats and clean up the data. 
 ">
-<title>Cleaning and Cropping Quadrat Data • quadcleanR</title>
+<title>Cleaning and Cropping Quadrat Data from CoralNet • quadcleanR</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -18,7 +18,7 @@
 <link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Cleaning and Cropping Quadrat Data">
+<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Cleaning and Cropping Quadrat Data from CoralNet">
 <meta property="og:description" content="A complex walk through of how to clean up quadrat data using the `quadcleanR` package. This will go through all the functions inclusing the `crop_area()` function, as well as visualizing the resulting data. This vignette is good for those who have to crop quadrats and clean up the data. 
 ">
 <meta property="og:image" content="https://dominiquemaucieri.github.io/quadcleanR/logo.png">
@@ -77,14 +77,14 @@
 
 
 
-<script src="cleaning_cropping_files/accessible-code-block-0.0.1/empty-anchor.js"></script><script src="cleaning_cropping_files/kePrint-0.0.1/kePrint.js"></script><link href="cleaning_cropping_files/lightable-0.0.1/lightable.css" rel="stylesheet">
+<script src="cleaning_cropping_coral_files/accessible-code-block-0.0.1/empty-anchor.js"></script><script src="cleaning_cropping_coral_files/kePrint-0.0.1/kePrint.js"></script><link href="cleaning_cropping_coral_files/lightable-0.0.1/lightable.css" rel="stylesheet">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Cleaning and Cropping Quadrat Data</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Cleaning and Cropping Quadrat Data from CoralNet</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/DominiqueMaucieri/quadcleanR/blob/HEAD/vignettes/cleaning_cropping.Rmd" class="external-link"><code>vignettes/cleaning_cropping.Rmd</code></a></small>
-      <div class="d-none name"><code>cleaning_cropping.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/DominiqueMaucieri/quadcleanR/blob/HEAD/vignettes/cleaning_cropping_coral.Rmd" class="external-link"><code>vignettes/cleaning_cropping_coral.Rmd</code></a></small>
+      <div class="d-none name"><code>cleaning_cropping_coral.Rmd</code></div>
     </div>
 
     
@@ -92,7 +92,7 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>This vignette will walk you through cleaning up quadrat data to produce easy to analyze data frames.</p>
+<p>This vignette will walk you through cleaning up quadrat data from <a href="https://coralnet.ucsd.edu/" class="external-link">CoralNet</a> to produce easy to analyze data frames.</p>
 <p>A little about the data:</p>
 <p>The data being cleaned will be the <code>softcoral_SQuads</code> and this vignette will build off of the cropping vignette as well. Data was collected by the Baum Lab and Kiritimati Field Teams and is the uncleaned version of data found in Maucieri and Baum 2021. Biological Conservation. The <code>softcoral_SQuads</code> data are from photo quadrats (0.9m by 0.6m) which were randomly annotated with 54 random points each, while the <code>softcoral_annotations</code> data are from photo quadrats (1m by 1m) which were randomly annotated with 100 random points each. At each of these annotated points, the substrate was identified. Photo quadrats were collected on Kiritimati Island in the Republic of Kiribati and document coral cover over time and space. The annotations and output of the data frame were produced using <a href="https://coralnet.ucsd.edu/" class="external-link">CoralNet</a> and all annotations were done manually, by trained researchers.</p>
 <p>So this vignette will follow the following steps:</p>

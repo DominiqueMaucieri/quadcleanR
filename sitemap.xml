@@ -7,13 +7,16 @@
     <loc>https://dominiquemaucieri.github.io/quadcleanR/LICENSE.html</loc>
   </url>
   <url>
-    <loc>https://dominiquemaucieri.github.io/quadcleanR/articles/cleaning_cropping.html</loc>
+    <loc>https://dominiquemaucieri.github.io/quadcleanR/articles/cleaning_coral.html</loc>
   </url>
   <url>
-    <loc>https://dominiquemaucieri.github.io/quadcleanR/articles/cleaning_simple.html</loc>
+    <loc>https://dominiquemaucieri.github.io/quadcleanR/articles/cleaning_cropping_coral.html</loc>
   </url>
   <url>
     <loc>https://dominiquemaucieri.github.io/quadcleanR/articles/cropping.html</loc>
+  </url>
+  <url>
+    <loc>https://dominiquemaucieri.github.io/quadcleanR/articles/function_examples.html</loc>
   </url>
   <url>
     <loc>https://dominiquemaucieri.github.io/quadcleanR/articles/index.html</loc>
@@ -52,6 +55,9 @@
     <loc>https://dominiquemaucieri.github.io/quadcleanR/reference/environmental_data.html</loc>
   </url>
   <url>
+    <loc>https://dominiquemaucieri.github.io/quadcleanR/reference/final_cleaned.html</loc>
+  </url>
+  <url>
     <loc>https://dominiquemaucieri.github.io/quadcleanR/reference/index.html</loc>
   </url>
   <url>
@@ -68,9 +74,6 @@
   </url>
   <url>
     <loc>https://dominiquemaucieri.github.io/quadcleanR/reference/sample_size.html</loc>
-  </url>
-  <url>
-    <loc>https://dominiquemaucieri.github.io/quadcleanR/reference/simple_cleaned.html</loc>
   </url>
   <url>
     <loc>https://dominiquemaucieri.github.io/quadcleanR/reference/softcoral_LQuads.html</loc>

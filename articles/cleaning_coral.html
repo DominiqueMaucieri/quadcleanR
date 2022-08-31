@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="A simple walk through of how to clean up quadrat data using the `quadcleanR` package. This will go through all the functions except the `crop_area()` function, as well as visualizing the resulting data.
 ">
-<title>Simple Cleaning Quadrat Data • quadcleanR</title>
+<title>Cleaning Quadrat Data from CoralNet • quadcleanR</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -18,7 +18,7 @@
 <link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Simple Cleaning Quadrat Data">
+<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Cleaning Quadrat Data from CoralNet">
 <meta property="og:description" content="A simple walk through of how to clean up quadrat data using the `quadcleanR` package. This will go through all the functions except the `crop_area()` function, as well as visualizing the resulting data.
 ">
 <meta property="og:image" content="https://dominiquemaucieri.github.io/quadcleanR/logo.png">
@@ -77,14 +77,14 @@
 
 
 
-<script src="cleaning_simple_files/accessible-code-block-0.0.1/empty-anchor.js"></script><script src="cleaning_simple_files/kePrint-0.0.1/kePrint.js"></script><link href="cleaning_simple_files/lightable-0.0.1/lightable.css" rel="stylesheet">
+<script src="cleaning_coral_files/accessible-code-block-0.0.1/empty-anchor.js"></script><script src="cleaning_coral_files/kePrint-0.0.1/kePrint.js"></script><link href="cleaning_coral_files/lightable-0.0.1/lightable.css" rel="stylesheet">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Simple Cleaning Quadrat Data</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Cleaning Quadrat Data from CoralNet</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/DominiqueMaucieri/quadcleanR/blob/HEAD/vignettes/cleaning_simple.Rmd" class="external-link"><code>vignettes/cleaning_simple.Rmd</code></a></small>
-      <div class="d-none name"><code>cleaning_simple.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/DominiqueMaucieri/quadcleanR/blob/HEAD/vignettes/cleaning_coral.Rmd" class="external-link"><code>vignettes/cleaning_coral.Rmd</code></a></small>
+      <div class="d-none name"><code>cleaning_coral.Rmd</code></div>
     </div>
 
     
@@ -92,7 +92,7 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>This vignette will walk you through cleaning up quadrat data to produce an easy to analyze data frame.</p>
+<p>This vignette will walk you through cleaning up quadrat data from <a href="https://coralnet.ucsd.edu/" class="external-link">CoralNet</a> to produce an easy to analyze data frame.</p>
 <p>A little about the data:</p>
 <p>The data being cleaned will be the <code>softcoral_LQuads</code> and this vignette will build off of the cropping vignette as well. Data was collected by the Baum Lab and Kiritimati Field Teams. The <code>softcoral_LQuads</code> data are from photo quadrats (1m by 1m) which were randomly annotated with 100 random points each. At each of these annotated points, the substrate was identified. Photo quadrats were collected on Kiritimati Island in the Republic of Kiribati and document coral cover over time and space. The annotations and output of the data frame were produced using <a href="https://coralnet.ucsd.edu/" class="external-link">CoralNet</a> and all annotations were done manually, by trained researchers.</p>
 </div>
@@ -3204,14 +3204,14 @@ Not_Coral
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">B_LQuad_timeblock</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/categorize.html">categorize</a></span><span class="op">(</span><span class="va">B_LQuad_enviro</span>, column <span class="op">=</span> <span class="st">"Field.Season"</span>, values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">B_LQuad_enviro</span><span class="op">$</span><span class="va">Field.Season</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"TimeBlock"</span>, binary <span class="op">=</span> <span class="cn">FALSE</span>, exact <span class="op">=</span> <span class="cn">TRUE</span>, categories <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Before"</span>, times <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"During"</span>, times <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"After"</span>, times <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">simple_cleaned</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/keep_rm.html">keep_rm</a></span><span class="op">(</span><span class="va">B_LQuad_timeblock</span>, values <span class="op">=</span> <span class="st">"Soft_coral"</span>, select <span class="op">=</span> <span class="st">"row"</span>, colname <span class="op">=</span> <span class="st">"functional_group"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">final_cleaned</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/keep_rm.html">keep_rm</a></span><span class="op">(</span><span class="va">B_LQuad_timeblock</span>, values <span class="op">=</span> <span class="st">"Soft_coral"</span>, select <span class="op">=</span> <span class="st">"row"</span>, colname <span class="op">=</span> <span class="st">"functional_group"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="exploration">Exploration<a class="anchor" aria-label="anchor" href="#exploration"></a>
 </h2>
 <p>This data has now been sufficiently cleaned and can be used for many different analyses. Often once data has been cleaned, the first step is to start exploring the data. One thing we can look at is the sample sizes, to see how many quadrats I have over the different sites and years.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/sample_size.html">sample_size</a></span><span class="op">(</span><span class="va">simple_cleaned</span>, dim_1 <span class="op">=</span> <span class="st">"Site"</span>, dim_2 <span class="op">=</span> <span class="st">"Field.Season"</span>, count <span class="op">=</span> <span class="st">"Quadrat"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/sample_size.html">sample_size</a></span><span class="op">(</span><span class="va">final_cleaned</span>, dim_1 <span class="op">=</span> <span class="st">"Site"</span>, dim_2 <span class="op">=</span> <span class="st">"Field.Season"</span>, count <span class="op">=</span> <span class="st">"Quadrat"</span><span class="op">)</span></span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:100%; ">
 <table class="table table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -4438,7 +4438,7 @@ site7
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/runUrl.html" class="external-link">runGitHub</a></span><span class="op">(</span><span class="st">"quadcleanR"</span>, username <span class="op">=</span> <span class="st">"DominiqueMaucieri"</span>, subdir <span class="op">=</span> <span class="st">"inst/shiny/example"</span>, ref <span class="op">=</span> <span class="st">"main"</span><span class="op">)</span></span></code></pre></div>
 <p>The data used in this example is this data set we have just cleaned. However this does not help you as this is not your own data. You can use the following code to produce a shiny app of your data, which you can then explore your data.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/visualize_app.html">visualize_app</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">simple_cleaned</span>, xaxis <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">simple_cleaned</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">13</span><span class="op">]</span><span class="op">)</span>, yaxis <span class="op">=</span> <span class="st">"prop_cover"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/visualize_app.html">visualize_app</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">final_cleaned</span>, xaxis <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">final_cleaned</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">13</span><span class="op">]</span><span class="op">)</span>, yaxis <span class="op">=</span> <span class="st">"prop_cover"</span><span class="op">)</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
