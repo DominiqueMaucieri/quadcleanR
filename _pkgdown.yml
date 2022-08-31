@@ -8,9 +8,10 @@ deploy:
 articles:
 - title: Vignettes
   contents:
-  - cleaning_simple
+  - function_examples
+  - cleaning_coral
   - cropping
-  - cleaning_cropping
+  - cleaning_cropping_coral
 
 reference:
 - title: Clean
@@ -41,7 +42,7 @@ reference:
   contents:
   - coral_labelset
   - environmental_data
-  - simple_cleaned
+  - final_cleaned
   - softcoral_LQuads
   - softcoral_SQuads
   - softcoral_annotations
