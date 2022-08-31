@@ -1,0 +1,17 @@
+---
+title: "Simple Examples of Functions"
+description: >
+  Examples of how to use the `quadcleanR` package functions for data cleaning. 
+  This vignette will go through all the functions except the `crop_area()`
+  function, which is explained in further details in the Why to Crop Quadrats by Area
+  vignette.
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Simple Examples of Functions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup}
+library(quadcleanR)
+```

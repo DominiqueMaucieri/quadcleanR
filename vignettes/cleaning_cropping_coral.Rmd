@@ -1,5 +1,5 @@
 ---
-title: "Cleaning and Cropping Quadrat Data"
+title: "Cleaning and Cropping Quadrat Data from CoralNet"
 description: >
   A complex walk through of how to clean up quadrat data using the `quadcleanR`
   package. This will go through all the functions inclusing the `crop_area()`
@@ -7,14 +7,14 @@ description: >
   for those who have to crop quadrats and clean up the data. 
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Cleaning and Cropping Quadrat Data}
+  %\VignetteIndexEntry{Cleaning and Cropping Quadrat Data from CoralNet}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
 # Introduction
 
-This vignette will walk you through cleaning up quadrat data to produce easy to analyze data frames.
+This vignette will walk you through cleaning up quadrat data from [CoralNet](https://coralnet.ucsd.edu/) to produce easy to analyze data frames.
 
 A little about the data:
 
