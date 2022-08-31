@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="Examples of how to use the `quadcleanR` package functions for data cleaning.  This vignette will go through all the functions except the `crop_area()` function, which is explained in further details in the Why to Crop Quadrats by Area vignette.
+<meta name="description" content="Examples of how to use the `quadcleanR` package functions for data  cleaning and processing. This vignette will go through all the functions  except the `crop_area()` function, which is explained in further details  in the Why to Crop Quadrats by Area vignette.
 ">
 <title>Simple Examples of Functions • quadcleanR</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -19,7 +19,7 @@
 <script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Simple Examples of Functions">
-<meta property="og:description" content="Examples of how to use the `quadcleanR` package functions for data cleaning.  This vignette will go through all the functions except the `crop_area()` function, which is explained in further details in the Why to Crop Quadrats by Area vignette.
+<meta property="og:description" content="Examples of how to use the `quadcleanR` package functions for data  cleaning and processing. This vignette will go through all the functions  except the `crop_area()` function, which is explained in further details  in the Why to Crop Quadrats by Area vignette.
 ">
 <meta property="og:image" content="https://dominiquemaucieri.github.io/quadcleanR/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -88,14 +88,128 @@
 
     
     
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/DominiqueMaucieri/quadcleanR" class="external-link">quadcleanR</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <p>This vignette will walk you through the different functions for cleaning quadrat data within the ‘quadcleanR’ package.</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/DominiqueMaucieri/quadcleanR" class="external-link">quadcleanR</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"corals"</span><span class="op">)</span></span></code></pre></div>
 </div>
-  </main>
+<div class="section level2">
+<h2 id="cleaning-functions">Cleaning Functions<a class="anchor" aria-label="anchor" href="#cleaning-functions"></a>
+</h2>
+<p>There are 5 cleaning functions within quadcleanR.</p>
+<div class="section level3">
+<h3 id="change_names">1. change_names()<a class="anchor" aria-label="anchor" href="#change_names"></a>
+</h3>
+<p>Using a new data frame of labels, change column names in one function. Helpful if column names are shorthands or contain spaces and characters that are not supported in column names in R.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"coral_labelset"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">corals_change_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/change_names.html">change_names</a></span><span class="op">(</span><span class="va">corals</span>, <span class="va">coral_labelset</span>, from <span class="op">=</span> <span class="st">"short_name"</span>, to <span class="op">=</span> <span class="st">"full_name"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="change_values">2. change_values()<a class="anchor" aria-label="anchor" href="#change_values"></a>
+</h3>
+<p>Using two vectors, change the values in one column to a new set of values. Helpful if you need to change many values at once, like updating changes to site names or taxonomy.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">corals_change_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/change_values.html">change_values</a></span><span class="op">(</span><span class="va">corals_change_names</span>, <span class="st">"Field.Season"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"KI2015a"</span>, <span class="st">"KI2016a"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"KI2015"</span>, <span class="st">"KI2016"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="keep_rm">3. keep_rm()<a class="anchor" aria-label="anchor" href="#keep_rm"></a>
+</h3>
+<p>Using a character, or part of character select rows or columns of the data frame to either keep or remove. A more customizable way to subset your data as you can keep or remove based on partial matches, or cells containing select characters.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">corals_keep_rm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/keep_rm.html">keep_rm</a></span><span class="op">(</span><span class="va">corals_change_values</span>, <span class="st">"DEEP"</span> , select <span class="op">=</span> <span class="st">"row"</span>, keep <span class="op">=</span> <span class="cn">FALSE</span>, drop_levels <span class="op">=</span> <span class="cn">TRUE</span>, exact <span class="op">=</span> <span class="cn">FALSE</span>, <span class="st">"Site"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="rm_chr">4. rm_chr()<a class="anchor" aria-label="anchor" href="#rm_chr"></a>
+</h3>
+<p>Parts of characters can be removed based on a vector of removal characters. When workingwith images, this can be helpful to remove extra characters from image IDs, or anywhere else where you want to remove specific characters from your data.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">corals_rm_chr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rm_chr.html">rm_chr</a></span><span class="op">(</span><span class="va">corals_keep_rm</span>, rm <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">".jpg"</span>, <span class="st">".jpeg"</span><span class="op">)</span>, full_selection <span class="op">=</span> <span class="cn">FALSE</span>, cols <span class="op">=</span> <span class="st">"Quadrat"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="sum_cols">5. sum_cols()<a class="anchor" aria-label="anchor" href="#sum_cols"></a>
+</h3>
+<p>Select columns and attach a vector of their new names, then columns with matching names will have each row summed. This is helpful to simplify your data quickly, like simplifying at a higher taxonomic group.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">corals_sum_cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sum_cols.html">sum_cols</a></span><span class="op">(</span><span class="va">corals_rm_chr</span>, from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Acropora_corymbose"</span>, <span class="st">"Acropora_digitate"</span>, <span class="st">"Acropora_tabulate"</span><span class="op">)</span>, to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Acropora_spp"</span>, <span class="st">"Acropora_spp"</span>, <span class="st">"Acropora_spp"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="adding-functions">Adding Functions<a class="anchor" aria-label="anchor" href="#adding-functions"></a>
+</h2>
+<p>There are 2 adding functions within quadcleanR.</p>
+<div class="section level3">
+<h3 id="add_data">1. add_data()<a class="anchor" aria-label="anchor" href="#add_data"></a>
+</h3>
+<p>Using key identifying columns, add additional columns to an existing data frame. Helpful for adding environmental or taxonomic data to your quadrat data</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"environmental_data"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">corals_add_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/add_data.html">add_data</a></span><span class="op">(</span><span class="va">corals_sum_cols</span>, <span class="va">environmental_data</span>, cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"HD_Cat"</span>, <span class="st">"HD_Cont"</span><span class="op">)</span>, data_id <span class="op">=</span> <span class="st">"Site"</span>, add_id <span class="op">=</span> <span class="st">"Site"</span>, number <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="categorize">2. categorize()<a class="anchor" aria-label="anchor" href="#categorize"></a>
+</h3>
+<p>Using a column within the data frame, categorize rows in a binary of yes or no, or customize with a set of category names. Especially useful for turning ID tags into useful categories for analysis such as morphology, taxonomy etc.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">corals_categorize</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/categorize.html">categorize</a></span><span class="op">(</span><span class="va">corals_add_data</span>, <span class="st">"Field.Season"</span>, values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2015"</span>, <span class="st">"2016"</span>, <span class="st">"2017"</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"ElNino"</span>, binary <span class="op">=</span> <span class="cn">FALSE</span>, exact <span class="op">=</span> <span class="cn">FALSE</span>, categories <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Before"</span>, <span class="st">"During"</span>, <span class="st">"After"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="processing-functions">Processing Functions<a class="anchor" aria-label="anchor" href="#processing-functions"></a>
+</h2>
+<p>There are 3 processing functions within quadcleanR.</p>
+<div class="section level3">
+<h3 id="cover_calc">1. cover_calc()<a class="anchor" aria-label="anchor" href="#cover_calc"></a>
+</h3>
+<p>Convert the number of observations for each species or non-species to proportion or percent cover within each row based on the total number of observations in each row. Useful for quadrats with varying numbers of observations to calculate each row’s percent cover all at once.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">corals_cover_calc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cover_calc.html">cover_calc</a></span><span class="op">(</span><span class="va">corals_categorize</span>, spp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">corals_categorize</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">7</span><span class="op">:</span><span class="fl">15</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>, prop <span class="op">=</span> <span class="cn">TRUE</span>, total <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="crop_area">2. crop_area()<a class="anchor" aria-label="anchor" href="#crop_area"></a>
+</h3>
+<p>Using the location of annotated points within quadrats and the size of the quadrat, crop quadrat data to a smaller area, while maintaining the spatial relationships between points. Useful for making different sized quadrat data comparable.</p>
+<p>This function is covered in depth with the Why to Crop Quadrats by Area vignette.</p>
+</div>
+<div class="section level3">
+<h3 id="usable_obs">3. usable_obs()<a class="anchor" aria-label="anchor" href="#usable_obs"></a>
+</h3>
+<p>Sum columns containing unusable observations and remove rows that contain more than the specified cutoff number of unusable points. Helpful if there are annotations that were unidentifiable and you want to remove them from the total usable observations, and you can remove quadrats with too many unusable observations.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">corals_usable_obs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/usable_obs.html">usable_obs</a></span><span class="op">(</span><span class="va">corals_cover_calc</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Unclear"</span>, <span class="st">"Shadow"</span><span class="op">)</span>, max <span class="op">=</span> <span class="cn">TRUE</span>, cutoff <span class="op">=</span> <span class="fl">0.9</span>, print_max <span class="op">=</span> <span class="cn">FALSE</span>, rm_unusable <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="assessing-functions">Assessing Functions<a class="anchor" aria-label="anchor" href="#assessing-functions"></a>
+</h2>
+<p>There are 2 assessing functions within quadcleanR.</p>
+<div class="section level3">
+<h3 id="sample_size">1. sample_size()<a class="anchor" aria-label="anchor" href="#sample_size"></a>
+</h3>
+<p>Specify which columns to use to produce a table with sample sizes. Helpful to visualize number of samples in your data.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># corals_sample_size &lt;- sample_size(corals_usable_obs, dim_1 = "Field.Season", dim_2 = "Site", count = "Quadrat")</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="visualize_app">2. visualize_app()<a class="anchor" aria-label="anchor" href="#visualize_app"></a>
+</h3>
+<p>Using an interactive shiny app, visualize and explore cleaned quadrat data.</p>
+</div>
+<div class="section level3">
+<h3 id="a-good-combination-to-examine-this-shiny-with-is">A good combination to examine this shiny with is :<a class="anchor" aria-label="anchor" href="#a-good-combination-to-examine-this-shiny-with-is"></a>
+</h3>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/visualize_app.html">visualize_app</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">corals_usable_obs</span>, xaxis <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">corals_usable_obs</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>, yaxis <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">corals_usable_obs</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">7</span><span class="op">:</span><span class="fl">13</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
