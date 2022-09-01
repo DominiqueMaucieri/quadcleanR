@@ -26,3 +26,17 @@ expect_equal(nrow(test3), 4)
 test4 <- usable_obs(coral_cover, c("Blurry", "Unk"), max = TRUE, cutoff = 8, print_max = TRUE)
 expect_equal(nrow(test4), 2)
 
+
+Sites <- as.factor(c("One"))
+Blurry <- c(3)
+Unk <- c(NA)
+coral_cover_2 <- data.frame(Sites, Blurry, Unk)
+
+expect_error(usable_obs(coral_cover_2, c("Blurry", "Unk")))
+
+Sites <- as.factor(c("One"))
+Blurry <- c(3)
+Unk <- c(NaN)
+coral_cover_3 <- data.frame(Sites, Blurry, Unk)
+
+expect_error(usable_obs(coral_cover_3, c("Blurry", "Unk")))

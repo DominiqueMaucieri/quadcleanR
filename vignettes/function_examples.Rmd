@@ -14,8 +14,7 @@ vignette: >
 
 # Introduction
 
-This vignette will walk you through the different functions for cleaning quadrat data within the 
-'quadcleanR' package. 
+This vignette will walk you through the different functions for cleaning quadrat data within the 'quadcleanR' package. 
 
 ```{r setup, warning=FALSE, message=FALSE}
 
@@ -151,7 +150,7 @@ Specify which columns to use to produce a table with sample sizes. Helpful to vi
 
 ```{r sample_size, warning=FALSE, message=FALSE}
 
-# corals_sample_size <- sample_size(corals_usable_obs, dim_1 = "Field.Season", dim_2 = "Site", count = "Quadrat")
+corals_sample_size <- sample_size(corals_usable_obs, dim_1 = "Site", dim_2 = "Field.Season", count = "Quadrat")
 
 ```
 
@@ -159,9 +158,18 @@ Specify which columns to use to produce a table with sample sizes. Helpful to vi
 Using an interactive shiny app, visualize and explore cleaned quadrat data.
 
 A good combination to examine this shiny with is :
-- 
+  - y-axis: Sarcophyton
+  - x-axis: Field.Season
+  - color: ElNino (treat as discrete)
+  - facet: HD_cat
+  - group by: Field.Season, ElNino, Sit and HD_Cat
+  - view as a violin plot
 
 ```{r visualize_app, eval= FALSE}
+
+corals_usable_obs$ElNino <- factor(corals_usable_obs$ElNino, levels = c("Before", "During", "After"))
+corals_usable_obs$HD_Cat <- factor(corals_usable_obs$HD_Cat, levels = c("Very High", "High", "Medium", "Low", "Very Low"))
+
 
 visualize_app(data = corals_usable_obs, xaxis = colnames(corals_usable_obs[,c(1:6)]), yaxis = colnames(corals_usable_obs[,c(7:13)]))
 

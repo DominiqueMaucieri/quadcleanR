@@ -58,6 +58,8 @@ usable_obs <- function(data, unusable, max = FALSE, cutoff, print_max = FALSE, r
 
   data$unusable <- rowSums(data[,colnames(data) %in% unusable_vector])
 
+  if(sum(is.na(data$unusable)) > 0){stop("unusable observations contain NA or NaN")}
+
   if(rm_unusable == TRUE){
     data <- data[!colnames(data) %in% unusable_vector]
 
