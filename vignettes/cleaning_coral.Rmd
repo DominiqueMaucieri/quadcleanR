@@ -134,7 +134,7 @@ LQuad_usable <- usable_obs(LQuad_colnames, c("Shadow", "Transect_hardware", "Unc
                             max = TRUE, cutoff = 10)
 
 LQuad_removed <- usable_obs(LQuad_colnames, c("Shadow", "Transect_hardware", "Unclear"),
-                             max = TRUE, cutoff = 10, print_max = TRUE)
+                             max = TRUE, cutoff = 10, above_cutoff = TRUE)
 
 ```
 
@@ -253,6 +253,15 @@ knitr::kable(sample_size(final_cleaned, dim_1 = "Site", dim_2 = "Field.Season", 
 
 
 Visualizing the data can be easy with a built in shiny app function. To see an example shiny app you can go [here](https://dominiquemaucieri.shinyapps.io/example/) or the following code.
+
+A good combination to examine this shiny with is :
+  - y-axis: prop_cover
+  - x-axis: Field.Season
+  - color: TimeBlock (treat as discrete)
+  - facet: HD_cat
+  - group by: Field.Season, TimeBlock, Site and HD_Cat
+  - view as a box plot
+
 
 ```{r shiny app from git, eval = FALSE}
 

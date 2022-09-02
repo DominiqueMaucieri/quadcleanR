@@ -136,7 +136,7 @@ Sum columns containing unusable observations and remove rows that contain more t
 
 ```{r usable_obs, warning=FALSE, message=FALSE}
 
-corals_usable_obs <- usable_obs(corals_cover_calc, c("Unclear", "Shadow"), max = TRUE, cutoff = 0.9, print_max = FALSE, rm_unusable = TRUE)
+corals_usable_obs <- usable_obs(corals_cover_calc, c("Unclear", "Shadow"), max = TRUE, cutoff = 0.9, above_cutoff = FALSE, rm_unusable = TRUE)
 
 ```
 
@@ -162,7 +162,7 @@ A good combination to examine this shiny with is :
   - x-axis: Field.Season
   - color: ElNino (treat as discrete)
   - facet: HD_cat
-  - group by: Field.Season, ElNino, Sit and HD_Cat
+  - group by: Field.Season, ElNino, Site and HD_Cat
   - view as a violin plot
 
 ```{r visualize_app, eval= FALSE}

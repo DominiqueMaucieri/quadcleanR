@@ -45,7 +45,7 @@ devtools::install_github("DominiqueMaucieri/quadcleanR")
 
 ## Cheat Sheet
 
-<a href="https://github.com/DominiqueMaucieri/quadcleanR/blob/main/man/figures/quadcleanR_cheatsheet_V1.0.0.pdf"><img src='man/figures/cheatsheet_small.png' width="630"/></a>  
+<a href="https://github.com/DominiqueMaucieri/quadcleanR/blob/main/man/figures/quadcleanR_cheatsheet_V1.1.0.pdf"><img src='man/figures/cheatsheet_small.png' width="630"/></a>  
 
 
 ## Example Usage
