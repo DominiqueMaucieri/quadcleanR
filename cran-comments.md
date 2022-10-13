@@ -1,5 +1,8 @@
+## Release Summary
+Minor release after peer review with JOSS
+
 ## R CMD check results
-There are no ERRORs or WARNINGs, but there were 2 NOTEs:
+There are no ERRORs or WARNINGs, but there was 1 NOTE:
 
 #### Found only on windows-x86_64-devel:
 
@@ -27,7 +30,7 @@ There are currently no downstream dependencies for this package
 
 
 ## Test environments
-- Windows Server 2022, R-devel, 64 bit (windows-x86_64-devel), rhub, R 4.2.0 
-- Ubuntu Linux 20.04.1 LTS, R-devel, GCC (ubuntu-gcc-release), rhub, R 4.2.0
-- Fedora Linux, R-devel, clang, gfortran (fedora-clang-devel), rhub, R 4.2.0
-- macOS 10.13.6 High Sierra, R-release, CRAN's setup (macos-highsierra-release-cran), rhub, R 4.2.0
+- Windows Server 2022, R-devel, 64 bit (windows-x86_64-devel), rhub, R 4.2.1 
+- Ubuntu Linux 20.04.1 LTS, R-devel, GCC (ubuntu-gcc-release), rhub, R 4.2.1
+- Fedora Linux, R-devel, clang, gfortran (fedora-clang-devel), rhub, R 4.2.1
+- macOS 10.13.6 High Sierra, R-release, CRAN's setup (macos-highsierra-release-cran), rhub, R 4.2.1
