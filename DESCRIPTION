@@ -1,6 +1,6 @@
 Package: quadcleanR
 Title: Cleanup and Visualization of Quadrat Data
-Version: 1.0.0.9000
+Version: 1.1.0
 Authors@R: 
     person("Dominique", "Maucieri", role = c("aut", "cre"), email = "dominiquemaucieri@gmail.com",
            comment = c(ORCID = "0000-0003-1849-2472"))

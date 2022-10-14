@@ -1,4 +1,4 @@
-# quadcleanR 1.0.0.9000
+# quadcleanR 1.1.0
 
 * Manuscript submitted to the Journal of Open Source Software with reviewer comments leading to package updates.
 
