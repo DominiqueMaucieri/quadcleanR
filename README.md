@@ -16,6 +16,7 @@ v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/li
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![status](https://joss.theoj.org/papers/613731dfb5cfe31aad5ce73b88280f6b/status.svg)](https://joss.theoj.org/papers/613731dfb5cfe31aad5ce73b88280f6b)
+[![DOI](https://zenodo.org/badge/452488782.svg)](https://zenodo.org/badge/latestdoi/452488782)
 
 <!-- badges: end -->
 

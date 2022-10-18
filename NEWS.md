@@ -1,3 +1,7 @@
+# quadcleanR 1.1.1
+
+* Archived on Zenodo [![DOI](https://zenodo.org/badge/452488782.svg)](https://zenodo.org/badge/latestdoi/452488782)
+
 # quadcleanR 1.1.0
 
 * Manuscript submitted to the Journal of Open Source Software with reviewer comments leading to package updates.
